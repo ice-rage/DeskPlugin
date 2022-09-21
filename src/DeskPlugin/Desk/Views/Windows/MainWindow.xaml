@@ -18,9 +18,9 @@
     mc:Ignorable="d"
     Background="#f0f0f0">
 
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <viewModel:MainWindowViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Window.Resources>
         <ResourceDictionary>
@@ -34,12 +34,12 @@
 
             <converters:LegTypeToImageSourceConverter x:Key="LegTypeToImageSourceConverter"/>
 
-            <ObjectDataProvider x:Key="LegTypeEnumData" MethodName="GetValues" ObjectType="{x:Type 
+            <!--<ObjectDataProvider x:Key="LegTypeEnumData" MethodName="GetValues" ObjectType="{x:Type 
                 system:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="enums:LegType"/>
                 </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
+            </ObjectDataProvider>-->
 
         </ResourceDictionary>
     </Window.Resources>
@@ -80,9 +80,9 @@
                     <ComboBox 
                         x:Name="LegTypeComboBox" 
                         Margin="5,0,5,5"
-                        ItemsSource="{Binding Source={StaticResource LegTypeEnumData}}"
                         SelectedItem="{Binding Parameters.LegType, Mode=TwoWay}"
                         IsEditable="False"/>
+                    <!--ItemsSource="{Binding Source={StaticResource LegTypeEnumData}}"-->
                     <ItemsControl ItemsSource="{Binding Parameters[1].Parameters}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
