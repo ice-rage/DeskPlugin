@@ -47,6 +47,30 @@ namespace DeskParameters
         {
             LegType = LegType.Round;
             ParameterGroups.Clear();
+
+            ParameterGroups.Add(new ParameterGroup(ParameterGroupType.Worktop,
+                new List<Parameter>
+                {
+                    new Parameter(ParameterType.WorktopLength, 800, 1200, 1000),
+                    new Parameter(ParameterType.WorktopWidth, 500, 750, 625),
+                    new Parameter(ParameterType.WorktopHeight, 30, 40, 35)
+                }));
+
+            ParameterGroups.Add(new ParameterGroup(ParameterGroupType.Legs,
+                new List<Parameter>
+                {
+                    LegType == LegType.Round
+                        ? new Parameter(ParameterType.LegBaseDiameter, 50, 70, 60)
+                        : new Parameter(ParameterType.LegBaseLength, 50, 70, 60),
+                    new Parameter(ParameterType.LegHeight, 690, 740, 715)
+                }));
+
+            ParameterGroups.Add(new ParameterGroup(ParameterGroupType.Drawers,
+                new List<Parameter>
+                {
+                    new Parameter(ParameterType.DrawerNumber, 3, 5, 4),
+                    new Parameter(ParameterType.DrawerLength, 250, 333, 291)
+                }));
         }
 
         #endregion
