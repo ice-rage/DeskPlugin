@@ -11,8 +11,66 @@
     FontSize="12"
     mc:Ignorable="d"
     Background="#f0f0f0">
-	
+
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <GroupBox 
+                Grid.Row="0" 
+                Grid.Column="1" 
+                Header="Legs">
+                <StackPanel>
+                    <TextBlock Margin="5,10,0,7" Text="Type"/>
+                    <ComboBox 
+                        x:Name="LegTypeComboBox" 
+                        Margin="5,0,5,5"
+                        IsEditable="False" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox 
+                Grid.Row="1" 
+                Grid.Column="1" 
+                Header="Default Parameters">
+                <StackPanel>
+                    <Button Content="Minimum"/>
+                    <Button Content="Average"/>
+                    <Button Content="Maximum"/>
+                </StackPanel>
+            </GroupBox>
+
+            <Button 
+                Grid.Row="2" 
+                Grid.Column="0" 
+                Grid.ColumnSpan="2" 
+                Content="Build 3D-model"/>
+
+        </Grid>
+
+        <Border 
+            Grid.Column="1" 
+            Margin="10,14" 
+            BorderThickness="1" 
+            CornerRadius="5"
+            Background="White">
+
+            <Image Stretch="Uniform"/>
+        </Border>
 
     </Grid>
 </Window>
