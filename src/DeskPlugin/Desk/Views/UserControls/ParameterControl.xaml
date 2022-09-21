@@ -6,6 +6,8 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:behaviors="clr-namespace:Desk.Behaviors"
+    xmlns:parameters="clr-namespace:DeskParameters;assembly=DeskParameters"
+    d:DataContext="{d:DesignInstance parameters:Parameter}"
     Width="160"
     Height="60"
     FontSize="12"
@@ -26,7 +28,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Margin="5,10,0,5" Width="Auto" HorizontalAlignment="Left" 
-                   Background="Transparent"/>
+                   Text="{Binding Description, Mode=OneWay}" Background="Transparent"/>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -42,7 +44,8 @@
             </TextBox>
 
             <TextBlock Grid.Column="1" Margin="10,6,5,0" Height="14" VerticalAlignment="Top" 
-                       Foreground="#676767" Background="Transparent"/>
+                       Foreground="#676767" Background="Transparent" Text="{Binding 
+                AcceptableRange, Mode=OneWay}"/>
         </Grid>
 
     </Grid>
