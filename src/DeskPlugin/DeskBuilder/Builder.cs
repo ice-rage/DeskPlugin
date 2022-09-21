@@ -1,4 +1,5 @@
-﻿using Autodesk.AutoCAD.DatabaseServices;
+﻿using System.Collections.Generic;
+using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using DeskParameters;
 using DeskParameters.Enums;
@@ -262,7 +263,122 @@ namespace DeskBuilder
         /// относительно краев стола.</param>
         private static void BuildLegs(LegType legType, int legBase, int legHeight, int worktopWidth)
         {
-            
+            // Создаем словари, содержащие в качестве ключа порядковый номер ножки, а в качестве
+            // значения - одну из координат ее основания.
+            //
+            var x = new Dictionary<int, double>();
+            var y = new Dictionary<int, double>();
+
+            // Строим основания ножек.
+            DBObjectCollection legBases = legType == LegType.Round
+                ? CreateRoundLegBases(legBase, worktopWidth, x, y)
+                : CreateSquareLegBases(legBase, worktopWidth, x, y);
+
+            // Создаем области из каждого замкнутого цикла, образованного массивом оснований ножек.
+            DBObjectCollection legBasesRegions = Region.CreateFromCurves(legBases);
+
+            // Выдавливаем каждую полученную область на заданную высоту и добавляем полученный
+            // объект в блок 3D-модели письменного стола.
+            foreach (Region region in legBasesRegions)
+            {
+                var leg = new Solid3d();
+                leg.Extrude(region, -legHeight, 0);
+                AddObjectInBlock(leg, DeskBlockName);
+
+                region.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Метод для создания круглых оснований ножек письменного стола (если выбран тип ножек
+        /// <see cref="LegType.Round"/>).
+        /// </summary>
+        /// <param name="baseDiameter"> Диаметр основания ножек.</param>
+        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета положения ножек
+        /// относительно краев стола.</param>
+        /// <param name="x"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
+        /// в качестве значения - x-координату центра окружности основания ножки.</param>
+        /// <param name="y"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
+        /// в качестве значения - y-координату центра окружности основания ножки.</param>
+        /// <returns> Массив круглых оснований ножек.</returns>
+        private static DBObjectCollection CreateRoundLegBases(int baseDiameter, int worktopWidth,
+            IDictionary<int, double> x, IDictionary<int, double> y)
+        {
+            var roundLegBases = new DBObjectCollection();
+
+            // В каждый словарь оснований добавляем координату центра окружности основания
+            // соответствующей ножки.
+            //
+            int baseCenterCoordinate = Parameters.DistanceFromWorktopCorner + (baseDiameter / 2);
+            x.Add(0, baseCenterCoordinate);
+            y.Add(0, baseCenterCoordinate);
+
+            x.Add(1, baseCenterCoordinate);
+            y.Add(1, worktopWidth - baseCenterCoordinate);
+
+            // Создаем окружности основания ножек и добавляем их в массив.
+            for (var i = 0; i < x.Count; i++)
+            {
+                var baseCircle = new Circle();
+                baseCircle.SetDatabaseDefaults();
+                baseCircle.Center = new Point3d(x[i], y[i], 0);
+                baseCircle.Diameter = baseDiameter;
+                roundLegBases.Add(baseCircle);
+            }
+
+            return roundLegBases;
+        }
+
+        /// <summary>
+        /// Метод для создания квадратных оснований ножек письменного стола (если выбран тип ножек
+        /// <see cref="LegType.Square"/>).
+        /// </summary>
+        /// <param name="baseLength"> Длина основания ножек.</param>
+        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета положения ножек
+        /// относительно краев стола.</param>
+        /// <param name="x"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
+        /// в качестве значения - x-координату левого нижнего угла квадрата основания ножки.</param>
+        /// <param name="y"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
+        /// в качестве значения - y-координату левого нижнего угла квадрата основания ножки.</param>
+        /// <returns> Массив квадратных оснований ножек.</returns>
+        private static DBObjectCollection CreateSquareLegBases(int baseLength, int worktopWidth,
+            IDictionary<int, double> x, IDictionary<int, double> y)
+        {
+            var squareLegBases = new DBObjectCollection();
+
+            // В каждый словарь оснований добавляем координату левого нижнего угла квадрата
+            // основания соответствующей ножки.
+            //
+            x.Add(0, Parameters.DistanceFromWorktopCorner);
+            y.Add(0, Parameters.DistanceFromWorktopCorner);
+
+            x.Add(1, Parameters.DistanceFromWorktopCorner);
+            y.Add(1, worktopWidth - Parameters.DistanceFromWorktopCorner - baseLength);
+
+            // Создаем квадраты оснований ножек и добавляем их в массив.
+            for (var i = 0; i < x.Count; i++)
+            {
+                var baseSquare = new Polyline();
+                baseSquare.SetDatabaseDefaults();
+
+                var baseSquareVertices = new[]
+                {
+                    new Point2d(x[i], y[i]),
+                    new Point2d(x[i], y[i] + baseLength),
+                    new Point2d(x[i] + baseLength, y[i] + baseLength),
+                    new Point2d(x[i] + baseLength, y[i])
+                };
+
+                for (var j = 0; j < baseSquareVertices.Length; j++)
+                {
+                    baseSquare.AddVertexAt(j, baseSquareVertices[j], 0, 0, 0);
+                }
+
+                baseSquare.Closed = true;
+                squareLegBases.Add(baseSquare);
+            }
+
+            return squareLegBases;
         }
 
         /// <summary>
