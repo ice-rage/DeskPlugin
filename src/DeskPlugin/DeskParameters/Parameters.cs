@@ -23,6 +23,70 @@ namespace DeskParameters
 
         #region PublicProperties
 
+        #region StaticProperties
+
+        /// <summary>
+        /// Расстояние от края столешницы до некоторого объекта (ножек стола, углов ящиков и т.п.).
+        /// </summary>
+        public static int DistanceFromWorktopCorner => 20;
+
+        /// <summary>
+        /// Разница в ширине между столешницей и ящиком для канцелярии.
+        /// </summary>
+        public static int WorktopDrawerWidthDifference => 40;
+
+        /// <summary>
+        /// Разница в длине между внешним и внутренним пространством ящика для канцелярии.
+        /// </summary>
+        public static int OuterInnerDrawerLengthDifference => 40;
+
+        /// <summary>
+        /// Разница в ширине между внешним и внутренним пространством ящика для канцелярии.
+        /// </summary>
+        public static int OuterInnerDrawerWidthDifference => 40;
+
+        /// <summary>
+        /// Разница в высоте между внешним и внутренним пространством ящика для канцелярии.
+        /// </summary>
+        public static int OuterInnerDrawerHeightDifference => 20;
+
+        /// <summary>
+        /// Разница в длине между ящиком для канцелярии и его дверцей.
+        /// </summary>
+        public static int DrawerDoorLengthDifference => 40;
+
+        /// <summary>
+        /// Ширина дверцы ящика для канцелярии.
+        /// </summary>
+        public static int DoorWidth => 20;
+
+        /// <summary>
+        /// Разница в высоте между ящиком для канцелярии и его дверцей.
+        /// </summary>
+        public static int DrawerDoorHeightDifference => 20;
+
+        /// <summary>
+        /// Высота ручки ящика для канцелярии.
+        /// </summary>
+        public static int HandleHeight => 20;
+
+        /// <summary>
+        /// Разница в длине между внешним и внутренним пространством ручки ящика для канцелярии.
+        /// </summary>
+        public static int OuterInnerHandleLengthDifference => 40;
+
+        /// <summary>
+        /// Ширина внешнего пространства ручки ящика для канцелярии.
+        /// </summary>
+        public static int OuterHandleWidth => 40;
+
+        /// <summary>
+        /// Ширина внутреннего пространства ручки ящика для канцелярии.
+        /// </summary>
+        public static int InnerHandleWidth => 20;
+
+        #endregion
+
         /// <summary>
         /// Список параметров письменного стола.
         /// </summary>
