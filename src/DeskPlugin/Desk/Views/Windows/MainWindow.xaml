@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="clr-namespace:Desk.Converters"
+    xmlns:userControls="clr-namespace:Desk.Views.UserControls"
     Title="Desk Plugin"
     Width="700" Height="490"
     MinWidth="700" MinHeight="490"
@@ -50,18 +51,36 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
+            <userControls:ParameterGroupControl 
+                Grid.Row="0" 
+                Grid.Column="0" 
+                DataContext="{Binding Parameters.ParameterGroups[0]}"/>
+
             <GroupBox 
                 Grid.Row="0" 
                 Grid.Column="1" 
-                Header="Legs">
+                Header="{Binding Parameters[1].Name}">
                 <StackPanel>
                     <TextBlock Margin="5,10,0,7" Text="Type"/>
                     <ComboBox 
                         x:Name="LegTypeComboBox" 
                         Margin="5,0,5,5"
-                        IsEditable="False" />
+                        SelectedItem="{Binding Parameters.LegType, Mode=TwoWay}"
+                        IsEditable="False"/>
+                    <ItemsControl ItemsSource="{Binding Parameters[1].Parameters}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <userControls:ParameterControl/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
             </GroupBox>
+
+            <userControls:ParameterGroupControl 
+                Grid.Row="1" 
+                Grid.Column="0" 
+                DataContext="{Binding Parameters.ParameterGroups[2]}"/>
 
             <GroupBox 
                 Grid.Row="1" 
