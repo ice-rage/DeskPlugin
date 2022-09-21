@@ -96,8 +96,6 @@ namespace DeskParameters
 
         #endregion
 
-        #region Methods
-
         /// <summary>
         /// Обновляет параметр, хранящий размер основания ножек письменного стола, в зависимости от
         /// их типа.
@@ -115,8 +113,6 @@ namespace DeskParameters
                 previousParameter.Min, previousParameter.Max, previousParameter.Value);
             this[ParameterGroupType.Legs][updatedLegBaseType].DataValidChanged += DataValidChanged;
         }
-
-        #endregion
 
         #region Indexers
 
