@@ -32,6 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AcCoreMgd">
+      <HintPath>..\Libraries\AcCoreMgd.dll</HintPath>
+    </Reference>
+    <Reference Include="AcDbMgd">
+      <HintPath>..\Libraries\AcDbMgd.dll</HintPath>
+    </Reference>
+    <Reference Include="AcMgd">
+      <HintPath>..\Libraries\AcMgd.dll</HintPath>
+    </Reference>
     <Reference Include="CommunityToolkit.Mvvm">
       <HintPath>..\packages\CommunityToolkit.Mvvm.8.0.0\lib\netstandard2.0\CommunityToolkit.Mvvm.dll</HintPath>
     </Reference>
@@ -49,6 +58,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Builder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeskParameters\DeskParameters.csproj">
+      <Project>{237249ef-409d-4697-ba53-46c6ed457d09}</Project>
+      <Name>DeskParameters</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DeskBuilder;
 using DeskParameters;
 
 namespace DeskViewModel
@@ -14,6 +15,11 @@ namespace DeskViewModel
     public class MainWindowViewModel : ObservableObject
     {
         #region PrivateFields
+
+        /// <summary>
+        /// Объект для построения 3D-модели письменного стола.
+        /// </summary>
+        private readonly Builder _builder = new Builder();
 
         /// <summary>
         /// Переменная для хранения значения, показывающего, корректны ли введенные данные.
@@ -72,6 +78,8 @@ namespace DeskViewModel
         /// </summary>
         public MainWindowViewModel()
         {
+            BuildModelCommand = new RelayCommand<Parameters>(_builder.BuildDesk);
+
             SetMinimumParametersCommand = new RelayCommand(() =>
                 SetDefaultParameters(parameter => parameter.Value = parameter.Min));
             SetAverageParametersCommand = new RelayCommand(() =>
@@ -127,10 +135,10 @@ namespace DeskViewModel
         /// </summary>
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
-        private void OnDataValidChanged(object sender, EventArgs e) => IsDataValid = !Parameters
-            .ParameterGroups
-            .Any(group => group.Parameters
-                .Any(parameter => parameter.HasErrors));
+        private void OnDataValidChanged(object sender, EventArgs e) => 
+            IsDataValid = !Parameters.ParameterGroups
+                .Any(group => group.Parameters
+                    .Any(parameter => parameter.HasErrors));
 
         #endregion
 
