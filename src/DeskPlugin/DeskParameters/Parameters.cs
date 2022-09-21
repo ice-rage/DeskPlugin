@@ -92,9 +92,27 @@ namespace DeskParameters
                     new Parameter(ParameterType.DrawerNumber, 3, 5, 4),
                     new Parameter(ParameterType.DrawerLength, 250, 333, 291)
                 }));
+
+            // Подписываемся на событие изменения текущего значения длины столешницы, т.к. от этого
+            // параметра зависит несколько других параметров письменного стола (ширина столешницы
+            // и длина ящиков для канцелярии).
+            this[ParameterGroupType.Worktop][ParameterType.WorktopLength].ValueChanged +=
+                OnWorktopLengthChanged;
+
+            // Для уведомления модели представления главного окна об изменении корректности каждого
+            // параметра используем делегат-"посредник".
+            ParameterGroups
+                .ForEach(group =>
+                {
+                    group.Parameters
+                        .ToList()
+                        .ForEach(parameter => parameter.DataValidChanged += DataValidChanged);
+                });
         }
 
         #endregion
+
+        #region Methods
 
         /// <summary>
         /// Обновляет параметр, хранящий размер основания ножек письменного стола, в зависимости от
@@ -113,6 +131,35 @@ namespace DeskParameters
                 previousParameter.Min, previousParameter.Max, previousParameter.Value);
             this[ParameterGroupType.Legs][updatedLegBaseType].DataValidChanged += DataValidChanged;
         }
+
+        /// <summary>
+        /// Обработчик события изменения значения длины столешницы.
+        /// <para>Для зависимых параметров устанавливаются новые ограничения.</para>
+        /// </summary>
+        /// <param name="sender"> Отправитель события.</param>
+        /// <param name="e"> Аргументы события.</param>
+        private void OnWorktopLengthChanged(object sender, EventArgs e)
+        {
+            int worktopLength = this[ParameterGroupType.Worktop][ParameterType.WorktopLength].Value;
+
+            Parameter worktopWidthParameter = this[ParameterGroupType.Worktop]
+                [ParameterType.WorktopWidth];
+            this[ParameterGroupType.Worktop][ParameterType.WorktopWidth] =
+                new Parameter(worktopWidthParameter.Name, worktopLength / 2,
+                    worktopWidthParameter.Max, worktopWidthParameter.Value);
+            this[ParameterGroupType.Worktop][ParameterType.WorktopWidth].DataValidChanged +=
+                DataValidChanged;
+
+            Parameter drawerLengthParameter = this[ParameterGroupType.Drawers]
+                [ParameterType.DrawerLength];
+            this[ParameterGroupType.Drawers][ParameterType.DrawerLength] =
+                new Parameter(drawerLengthParameter.Name, drawerLengthParameter.Min,
+                    worktopLength / 3, drawerLengthParameter.Value);
+            this[ParameterGroupType.Drawers][ParameterType.DrawerLength].DataValidChanged +=
+                DataValidChanged;
+        }
+
+        #endregion
 
         #region Indexers
 
