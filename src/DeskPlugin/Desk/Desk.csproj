@@ -94,6 +94,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\LegTypeToImageSourceConverter.cs" />
     <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -125,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Behaviors\" />
-    <Folder Include="Converters\" />
     <Folder Include="Dictionaries\" />
     <Folder Include="Extensions\" />
     <Folder Include="ValidationRules\" />
@@ -135,6 +135,12 @@
     <Resource Include="Resources\desk.ico" />
     <Resource Include="Resources\DeskWithRoundLegs.png" />
     <Resource Include="Resources\DeskWithSquareLegs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeskParameters\DeskParameters.csproj">
+      <Project>{237249ef-409d-4697-ba53-46c6ed457d09}</Project>
+      <Name>DeskParameters</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets" Condition="Exists('..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets')" />

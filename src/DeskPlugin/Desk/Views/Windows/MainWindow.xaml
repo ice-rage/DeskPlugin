@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:Desk.Converters"
     Title="Desk Plugin"
     Width="700" Height="490"
     MinWidth="700" MinHeight="490"
@@ -12,6 +13,12 @@
     Icon="../../Resources/desk.ico"
     mc:Ignorable="d"
     Background="#f0f0f0">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:LegTypeToImageSourceConverter x:Key="LegTypeToImageSourceConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -70,7 +77,8 @@
             CornerRadius="5"
             Background="White">
 
-            <Image Stretch="Uniform"/>
+            <Image Stretch="Uniform" Source="{Binding ElementName=LegTypeComboBox, 
+                Path=SelectedItem, Converter={StaticResource LegTypeToImageSourceConverter}}"/>
         </Border>
 
     </Grid>
