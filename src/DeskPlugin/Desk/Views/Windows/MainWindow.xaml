@@ -16,6 +16,10 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Dictionaries/BrushesDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
             <converters:LegTypeToImageSourceConverter x:Key="LegTypeToImageSourceConverter"/>
         </ResourceDictionary>
     </Window.Resources>
