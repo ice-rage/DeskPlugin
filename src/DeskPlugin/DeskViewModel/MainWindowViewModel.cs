@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DeskParameters;
 
@@ -68,8 +70,35 @@ namespace DeskViewModel
         /// </summary>
         public MainWindowViewModel()
         {
+            // Подписываемся на событие изменения корректности данных, вводимых пользователем,
+            // чтобы иметь возможность отслеживать это событие и определять, корректен ли ввод
+            // в целом (необходимо для отключения/включения кнопки построения 3D-модели).
+            //
+            Parameters.DataValidChanged += OnDataValidChanged;
 
+            Parameters.ParameterGroups
+                .ForEach(group => group.Parameters
+                    .ToList()
+                    .ForEach(parameter => parameter.DataValidChanged += OnDataValidChanged));
         }
+
+        #endregion
+
+        #region Methods
+
+        #region EventHandlers
+
+        /// <summary>
+        /// Обработчик события изменения корректности введенных данных.
+        /// </summary>
+        /// <param name="sender"> Отправитель события.</param>
+        /// <param name="e"> Аргументы события.</param>
+        private void OnDataValidChanged(object sender, EventArgs e) => IsDataValid = !Parameters
+            .ParameterGroups
+            .Any(group => group.Parameters
+                .Any(parameter => parameter.HasErrors));
+
+        #endregion
 
         #endregion
     }
