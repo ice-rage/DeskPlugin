@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="clr-namespace:Desk.Converters"
     xmlns:userControls="clr-namespace:Desk.Views.UserControls"
+    xmlns:viewModel="clr-namespace:DeskViewModel;assembly=DeskViewModel"
     Title="Desk Plugin"
     Width="700" Height="490"
     MinWidth="700" MinHeight="490"
@@ -14,6 +15,10 @@
     Icon="../../Resources/desk.ico"
     mc:Ignorable="d"
     Background="#f0f0f0">
+
+    <Window.DataContext>
+        <viewModel:MainWindowViewModel/>
+    </Window.DataContext>
 
     <Window.Resources>
         <ResourceDictionary>

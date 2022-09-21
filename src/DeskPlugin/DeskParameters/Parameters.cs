@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DeskParameters.Enums;
+using DeskParameters.Enums.Extensions;
 
 namespace DeskParameters
 {
@@ -33,8 +35,27 @@ namespace DeskParameters
         {
             get => _legType;
 
-            set => SetProperty(ref _legType, value);
+            set
+            {
+                if (!ParameterGroups.Any())
+                {
+                    SetProperty(ref _legType, value);
+
+                    return;
+                }
+
+                UpdateLegBaseParameter(value);
+            }
         }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Событие, уведомляющее об изменении корректности данных, введенных пользователем.
+        /// </summary>
+        public event EventHandler DataValidChanged;
 
         #endregion
 
@@ -71,6 +92,28 @@ namespace DeskParameters
                     new Parameter(ParameterType.DrawerNumber, 3, 5, 4),
                     new Parameter(ParameterType.DrawerLength, 250, 333, 291)
                 }));
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Обновляет параметр, хранящий размер основания ножек письменного стола, в зависимости от
+        /// их типа.
+        /// </summary>
+        /// <param name="legType"> Тип ножек письменного стола.</param>
+        private void UpdateLegBaseParameter(LegType legType)
+        {
+            ParameterType previousLegBaseType = LegType.GetLegBaseType();
+            SetProperty(ref _legType, legType);
+            ParameterType updatedLegBaseType = LegType.GetLegBaseType();
+
+            Parameter previousParameter = this[ParameterGroupType.Legs][previousLegBaseType];
+
+            this[ParameterGroupType.Legs][previousLegBaseType] = new Parameter(updatedLegBaseType,
+                previousParameter.Min, previousParameter.Max, previousParameter.Value);
+            this[ParameterGroupType.Legs][updatedLegBaseType].DataValidChanged += DataValidChanged;
         }
 
         #endregion
