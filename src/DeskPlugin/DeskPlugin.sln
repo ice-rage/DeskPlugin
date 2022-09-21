@@ -6,6 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCadConnector", "AutoCadConnector\AutoCadConnector.csproj", "{61B4FF82-5072-49B9-9666-E40DEE3AD1AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{FFEA6504-72D6-4D2F-9604-A7110510A1CB}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\AcCoreMgd.dll = Libraries\AcCoreMgd.dll
+		Libraries\AcDbMgd.dll = Libraries\AcDbMgd.dll
+		Libraries\AcMgd.dll = Libraries\AcMgd.dll
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desk", "Desk\Desk.csproj", "{73ECBB3B-0F72-43DF-8C96-9B6C2F37A8DC}"
 EndProject
