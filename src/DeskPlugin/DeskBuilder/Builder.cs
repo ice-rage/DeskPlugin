@@ -398,7 +398,97 @@ namespace DeskBuilder
             int worktopLength,
             int worktopWidth)
         {
-            
+            for (var i = 0; i < drawerNumber; i++)
+            {
+                // Строим ящик для канцелярии.
+                BuildCompositeBox(
+                    drawerLength,
+                    worktopWidth - Parameters.WorktopDrawerWidthDifference,
+                    drawerHeight,
+                    new Point3d(
+                        worktopLength - Parameters.DistanceFromWorktopCorner,
+                        worktopWidth - Parameters.DistanceFromWorktopCorner,
+                        -drawerHeight * i),
+                    drawerLength - Parameters.OuterInnerDrawerLengthDifference,
+                    worktopWidth - Parameters.WorktopDrawerWidthDifference -
+                    Parameters.OuterInnerDrawerWidthDifference,
+                    drawerHeight - Parameters.OuterInnerDrawerHeightDifference,
+                    new Point3d(
+                        worktopLength - Parameters.OuterInnerDrawerLengthDifference,
+                        worktopWidth - Parameters.OuterInnerDrawerWidthDifference,
+                        -drawerHeight * i));
+
+                // Строим дверцу ящика.
+                Solid3d door = CreateAndDisplaceBox(
+                    drawerLength - Parameters.DrawerDoorLengthDifference,
+                    Parameters.DoorWidth,
+                    drawerHeight - Parameters.DrawerDoorHeightDifference,
+                    new Point3d(
+                        worktopLength - Parameters.DrawerDoorLengthDifference,
+                        Parameters.DoorWidth + Parameters.DistanceFromWorktopCorner,
+                        -drawerHeight * i));
+                AddObjectInBlock(door, DeskBlockName);
+
+                // Строим ручку ящика.
+                BuildCompositeBox(
+                    (double)drawerLength / 2,
+                    Parameters.OuterHandleWidth,
+                    Parameters.HandleHeight,
+                    new Point3d(
+                        worktopLength - Parameters.DistanceFromWorktopCorner - drawerLength / 4,
+                        Parameters.DistanceFromWorktopCorner,
+                        -drawerHeight * i - drawerHeight / 2 +
+                        (double)Parameters.HandleHeight / 2),
+                    drawerLength / 2 - Parameters.OuterInnerHandleLengthDifference,
+                    Parameters.InnerHandleWidth,
+                    Parameters.HandleHeight,
+                    new Point3d(
+                        worktopLength - Parameters.DistanceFromWorktopCorner - drawerLength / 4 -
+                        Parameters.OuterInnerHandleLengthDifference / 2,
+                        Parameters.DistanceFromWorktopCorner,
+                        -drawerHeight * i - drawerHeight / 2 +
+                        (double)Parameters.HandleHeight / 2));
+            }
+        }
+
+        /// <summary>
+        /// Метод, который создает два 3D-примитива типа "ящик", вычитает второй ящик из первого,
+        /// а затем добавляет результат вычитания в блок 3D-модели письменного стола.
+        /// </summary>
+        /// <param name="firstBoxLength"> Длина первого ящика.</param>
+        /// <param name="firstBoxWidth"> Ширина первого ящика.</param>
+        /// <param name="firstBoxHeight"> Высота первого ящика.</param>
+        /// <param name="firstBoxDisplacementEndpoint"> Точка чертежа, в которую необходимо
+        /// переместить первый ящик.</param>
+        /// <param name="secondBoxLength"> Длина второго ящика.</param>
+        /// <param name="secondBoxWidth"> Ширина второго ящика.</param>
+        /// <param name="secondBoxHeight"> Высота второго ящика.</param>
+        /// <param name="secondBoxDisplacementEndpoint"> Точка чертежа, в которую необходимо
+        /// переместить второй ящик.</param>
+        private static void BuildCompositeBox(
+            double firstBoxLength,
+            double firstBoxWidth,
+            double firstBoxHeight,
+            Point3d firstBoxDisplacementEndpoint,
+            double secondBoxLength,
+            double secondBoxWidth,
+            double secondBoxHeight,
+            Point3d secondBoxDisplacementEndpoint)
+        {
+            // Строим внешний объект типа "ящик".
+            Solid3d objectToSubstructFrom = CreateAndDisplaceBox(firstBoxLength, firstBoxWidth,
+                firstBoxHeight, firstBoxDisplacementEndpoint);
+
+            // Внутри внешнего объекта строим еще один объект того же типа.
+            Solid3d substructedObject = CreateAndDisplaceBox(secondBoxLength, secondBoxWidth,
+                secondBoxHeight, secondBoxDisplacementEndpoint);
+
+            // Вычитаем внутренний объект из внешнего, добавляем результат в блок 3D-модели
+            // письменного стола.
+            //
+            objectToSubstructFrom.BooleanOperation(BooleanOperationType.BoolSubtract,
+                substructedObject);
+            AddObjectInBlock(objectToSubstructFrom, DeskBlockName);
         }
 
         #endregion
