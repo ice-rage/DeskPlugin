@@ -1,4 +1,4 @@
-﻿namespace DeskPlugin
+﻿namespace Desk.Views.Windows
 {
     public partial class MainWindow
     {

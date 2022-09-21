@@ -1,0 +1,18 @@
+﻿<Window
+    x:Class="Desk.Views.Windows.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Desk Plugin"
+    Width="700" Height="490"
+    MinWidth="700" MinHeight="490"
+    MaxWidth="700" MaxHeight="490"
+    FontSize="12"
+    mc:Ignorable="d"
+    Background="#f0f0f0">
+	
+    <Grid>
+
+    </Grid>
+</Window>

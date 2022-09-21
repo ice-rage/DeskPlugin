@@ -1,4 +1,4 @@
-﻿namespace DeskPlugin
+﻿namespace Desk
 {
     public partial class App
     {
