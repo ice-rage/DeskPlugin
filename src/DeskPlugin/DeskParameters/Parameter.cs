@@ -14,7 +14,7 @@ namespace DeskParameters
     /// </summary>
     public class Parameter : ObservableObject, INotifyDataErrorInfo, ICloneable
     {
-        #region PrivateFields
+        #region Fields
 
         /// <summary>
         /// Текущее значение параметра.
@@ -33,7 +33,7 @@ namespace DeskParameters
 
         #endregion
 
-        #region PublicProperties
+        #region Properties
 
         /// <summary>
         /// Название параметра.

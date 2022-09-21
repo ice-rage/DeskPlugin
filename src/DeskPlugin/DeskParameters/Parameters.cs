@@ -12,7 +12,7 @@ namespace DeskParameters
     /// </summary>
     public class Parameters : ObservableObject
     {
-        #region PrivateFields
+        #region Fields
 
         /// <summary>
         /// Тип ножек письменного стола.
@@ -21,9 +21,9 @@ namespace DeskParameters
 
         #endregion
 
-        #region PublicProperties
+        #region Properties
 
-        #region StaticProperties
+        #region Static
 
         /// <summary>
         /// Расстояние от края столешницы до некоторого объекта (ножек стола, углов ящиков и т.п.).

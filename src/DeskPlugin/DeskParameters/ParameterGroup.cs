@@ -10,7 +10,7 @@ namespace DeskParameters
     /// </summary>
     public class ParameterGroup
     {
-        #region PublicProperties
+        #region Properties
 
         /// <summary>
         /// Название группы параметров.

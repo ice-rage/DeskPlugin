@@ -9,6 +9,8 @@ namespace AutoCadConnector
     /// </summary>
     public class Connector : IExtensionApplication
     {
+        #region Methods
+
         [CommandMethod("StartDeskPlugin")]
         public static void StartDeskPlugin() => Application.ShowModelessWindow(new MainWindow());
 
@@ -21,5 +23,7 @@ namespace AutoCadConnector
         public void Terminate()
         {
         }
+
+        #endregion
     }
 }

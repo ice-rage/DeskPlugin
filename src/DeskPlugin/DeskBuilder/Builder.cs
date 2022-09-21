@@ -11,6 +11,15 @@ namespace DeskBuilder
     /// </summary>
     public class Builder
     {
+        #region Fields
+
+        /// <summary>
+        /// Имя блока, содержащего 3D-модель письменного стола.              
+        /// </summary>
+        private const string DeskBlockName = "Desk";
+
+        #endregion
+
         #region Methods
 
         /// <summary>

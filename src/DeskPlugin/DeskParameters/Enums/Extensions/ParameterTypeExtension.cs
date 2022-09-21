@@ -9,6 +9,8 @@ namespace DeskParameters.Enums.Extensions
     /// </summary>
     public static class ParameterTypeExtension
     {
+        #region Methods
+
         /// <summary>
         /// Метод для получения описания параметра письменного стола.
         /// </summary>
@@ -21,12 +23,14 @@ namespace DeskParameters.Enums.Extensions
             FieldInfo fieldInfo = parameter.GetType().GetField(parameter.ToString());
 
             if (fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false) 
-                is DescriptionAttribute[] attributes && attributes.Any())
+                    is DescriptionAttribute[] attributes && attributes.Any())
             {
                 description = attributes.First().Description;
             }
 
             return description;
         }
+
+        #endregion
     }
 }

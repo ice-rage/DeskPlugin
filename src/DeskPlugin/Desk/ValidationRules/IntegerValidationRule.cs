@@ -8,6 +8,8 @@ namespace Desk.ValidationRules
     /// </summary>
     public class IntegerValidationRule : ValidationRule
     {
+        #region Methods
+
         /// <inheritdoc/>
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
@@ -17,5 +19,7 @@ namespace Desk.ValidationRules
                 ? new ValidationResult(true, null)
                 : new ValidationResult(false, "Value must be an integer");
         }
+
+        #endregion
     }
 }

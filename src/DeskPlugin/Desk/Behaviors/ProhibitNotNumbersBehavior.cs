@@ -12,7 +12,7 @@ namespace Desk.Behaviors
     /// </summary>
     internal class ProhibitNotNumbersBehavior : Behavior<TextBox>
     {
-        #region PrivateFields
+        #region Fields
 
         /// <summary>
         /// Регулярное выражение, соответствующее запрещенным символам ввода (т.е. всем символам,

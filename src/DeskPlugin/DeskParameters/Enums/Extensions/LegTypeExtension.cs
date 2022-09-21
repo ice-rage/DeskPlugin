@@ -5,6 +5,8 @@
     /// </summary>
     public static class LegTypeExtension
     {
+        #region Methods
+
         /// <summary>
         /// Метод для получения типа основания ножек, хранящегося в перечислении
         /// <see cref="ParameterType"/>.
@@ -16,5 +18,7 @@
         public static ParameterType GetLegBaseType(this LegType legType) => legType == LegType.Round
             ? ParameterType.LegBaseDiameter
             : ParameterType.LegBaseLength;
+
+        #endregion
     }
 }

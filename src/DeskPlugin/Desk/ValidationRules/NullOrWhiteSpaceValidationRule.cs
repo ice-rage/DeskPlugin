@@ -8,14 +8,18 @@ namespace Desk.ValidationRules
     /// </summary>
     public class NullOrWhiteSpaceValidationRule : ValidationRule
     {
+        #region Methods
+
         /// <inheritdoc/>
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             var stringValue = value as string;
 
-            return string.IsNullOrWhiteSpace(stringValue) 
-                ? new ValidationResult(false, "Value may not be blank or white-spaces") 
+            return string.IsNullOrWhiteSpace(stringValue)
+                ? new ValidationResult(false, "Value may not be blank or white-spaces")
                 : ValidationResult.ValidResult;
         }
+
+        #endregion
     }
 }
