@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DeskParameters.Enums;
 using DeskParameters.Enums.Extensions;
@@ -8,7 +12,7 @@ namespace DeskParameters
     /// <summary>
     /// Класс <see cref="Parameter"/> хранит информацию о параметре письменного стола.
     /// </summary>
-    public class Parameter : ObservableObject, ICloneable
+    public class Parameter : ObservableObject, INotifyDataErrorInfo, ICloneable
     {
         #region PrivateFields
 
@@ -97,6 +101,9 @@ namespace DeskParameters
             }
         }
 
+        /// <inheritdoc/>
+        public bool HasErrors => GetErrors(null).OfType<object>().Any();
+
         #endregion
 
         #region Events
@@ -110,6 +117,9 @@ namespace DeskParameters
         /// Событие изменения текущего значения параметра.
         /// </summary>
         public event EventHandler ValueChanged;
+
+        /// <inheritdoc/>
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         #endregion
 
@@ -141,6 +151,8 @@ namespace DeskParameters
                 : $"({Min}-{Max} mm)";
         }
 
+        #endregion
+
         #region Methods
 
         /// <inheritdoc/>
@@ -161,6 +173,48 @@ namespace DeskParameters
 
         /// <inheritdoc/>
         public object Clone() => MemberwiseClone();
+
+        #region EventInvocators
+
+        /// <summary>
+        /// Обработчик события, возникающего при изменении ошибки валидации для свойства.
+        /// </summary>
+        /// <param name="e"> Аргумент события.</param>
+        private void OnErrorsChanged(DataErrorsChangedEventArgs e)
+        {
+            ErrorsChanged?.Invoke(this, e);
+        }
+
+        #endregion
+
+        #region Validators
+
+        /// <inheritdoc/>
+        public IEnumerable GetErrors([CallerMemberName] string propertyName = null)
+        {
+            if (!string.IsNullOrEmpty(propertyName) && propertyName != nameof(Value))
+            {
+                yield break;
+            }
+
+            var error = string.Empty;
+
+            if (Value < Min)
+            {
+                error = $"Parameter \"{Description}\" must be greater than or equal to {Min}";
+
+                yield return error;
+            }
+
+            if (Value > Max)
+            {
+                error = $"Parameter \"{Description}\" must be less than or equal to {Max}";
+
+                yield return error;
+            }
+
+            IsDataValid = error == string.Empty;
+        }
 
         #endregion
 
