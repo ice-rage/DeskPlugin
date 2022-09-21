@@ -6,6 +6,7 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:behaviors="clr-namespace:Desk.Behaviors"
+    xmlns:validationRules="clr-namespace:Desk.ValidationRules"
     xmlns:parameters="clr-namespace:DeskParameters;assembly=DeskParameters"
     d:DataContext="{d:DesignInstance parameters:Parameter}"
     Width="160"
@@ -41,6 +42,16 @@
                 <b:Interaction.Behaviors>
                     <behaviors:ProhibitNotNumbersBehavior/>
                 </b:Interaction.Behaviors>
+                <TextBox.Text>
+                    <Binding Path="Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                             ValidatesOnDataErrors="True" NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <validationRules:NullOrWhiteSpaceValidationRule 
+                                ValidatesOnTargetUpdated="True"/>
+                            <validationRules:IntegerValidationRule ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
             </TextBox>
 
             <TextBlock Grid.Column="1" Margin="10,6,5,0" Height="14" VerticalAlignment="Top" 

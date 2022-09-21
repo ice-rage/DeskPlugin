@@ -133,6 +133,8 @@
     <Compile Include="Behaviors\ShowWindowMenuBehavior.cs" />
     <Compile Include="Converters\LegTypeToImageSourceConverter.cs" />
     <Compile Include="Extensions\DependencyObjectExtension.cs" />
+    <Compile Include="ValidationRules\IntegerValidationRule.cs" />
+    <Compile Include="ValidationRules\NullOrWhiteSpaceValidationRule.cs" />
     <Compile Include="Views\UserControls\ParameterControl.xaml.cs">
       <DependentUpon>ParameterControl.xaml</DependentUpon>
     </Compile>
@@ -168,9 +170,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ValidationRules\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\desk.ico" />
     <Resource Include="Resources\DeskWithRoundLegs.png" />
