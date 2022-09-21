@@ -18,6 +18,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Dictionaries/BrushesDictionary.xaml"/>
+                <ResourceDictionary Source="../../Dictionaries/ComboBoxStylesDictionary.xaml"/>
+                <ResourceDictionary Source="../../Dictionaries/ButtonStylesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <converters:LegTypeToImageSourceConverter x:Key="LegTypeToImageSourceConverter"/>
@@ -70,6 +72,7 @@
                 Grid.Row="2" 
                 Grid.Column="0" 
                 Grid.ColumnSpan="2" 
+                Style="{StaticResource BuildModelButtonStyle}"
                 Content="Build 3D-model"/>
 
         </Grid>
@@ -78,6 +81,7 @@
             Grid.Column="1" 
             Margin="10,14" 
             BorderThickness="1" 
+            BorderBrush="{StaticResource GraySolidColorBrush}"
             CornerRadius="5"
             Background="White">
 
