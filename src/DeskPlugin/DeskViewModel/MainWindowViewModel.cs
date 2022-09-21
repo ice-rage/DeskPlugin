@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -70,6 +72,14 @@ namespace DeskViewModel
         /// </summary>
         public MainWindowViewModel()
         {
+            SetMinimumParametersCommand = new RelayCommand(() =>
+                SetDefaultParameters(parameter => parameter.Value = parameter.Min));
+            SetAverageParametersCommand = new RelayCommand(() =>
+                SetDefaultParameters(parameter => parameter.Value =
+                    (parameter.Min + parameter.Max) / 2));
+            SetMaximumParametersCommand = new RelayCommand(() =>
+                SetDefaultParameters(parameter => parameter.Value = parameter.Max));
+
             // Подписываемся на событие изменения корректности данных, вводимых пользователем,
             // чтобы иметь возможность отслеживать это событие и определять, корректен ли ввод
             // в целом (необходимо для отключения/включения кнопки построения 3D-модели).
@@ -85,6 +95,30 @@ namespace DeskViewModel
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Метод, устанавливающий значения по умолчанию (минимальные, средние или максимальные)
+        /// для параметров письменного стола.
+        /// </summary>
+        /// <param name="action"> Делегат, используемый для передачи соответствующего метода
+        /// установки значений по умолчанию.</param>
+        public void SetDefaultParameters(Action<Parameter> action)
+        {
+            List<ParameterGroup> parameterGroups = Parameters.ParameterGroups;
+
+            for (var i = 0; i < parameterGroups.Count; i++)
+            {
+                ObservableCollection<Parameter> parameters = parameterGroups[i].Parameters;
+
+                for (var j = 0; j < parameters.Count; j++)
+                {
+                    action?.Invoke(parameters[j]);
+                    parameters[j].DataValidChanged += OnDataValidChanged;
+                }
+            }
+
+            OnDataValidChanged(this, EventArgs.Empty);
+        }
 
         #region EventHandlers
 

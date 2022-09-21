@@ -103,9 +103,9 @@
                 Grid.Column="1" 
                 Header="Default Parameters">
                 <StackPanel>
-                    <Button Content="Minimum"/>
-                    <Button Content="Average"/>
-                    <Button Content="Maximum"/>
+                    <Button Content="Minimum" Command="{Binding SetMinimumParametersCommand}"/>
+                    <Button Content="Average" Command="{Binding SetAverageParametersCommand}"/>
+                    <Button Content="Maximum" Command="{Binding SetMaximumParametersCommand}"/>
                 </StackPanel>
             </GroupBox>
 
