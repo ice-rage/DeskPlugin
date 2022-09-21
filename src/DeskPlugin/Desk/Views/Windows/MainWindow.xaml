@@ -19,6 +19,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Dictionaries/BrushesDictionary.xaml"/>
                 <ResourceDictionary Source="../../Dictionaries/ComboBoxStylesDictionary.xaml"/>
+                <ResourceDictionary Source="../../Dictionaries/GroupBoxStylesDictionary.xaml"/>
                 <ResourceDictionary Source="../../Dictionaries/ButtonStylesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
