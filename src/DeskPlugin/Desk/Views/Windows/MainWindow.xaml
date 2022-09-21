@@ -114,7 +114,9 @@
                 Grid.Column="0" 
                 Grid.ColumnSpan="2" 
                 Style="{StaticResource BuildModelButtonStyle}"
-                Content="Build 3D-model"/>
+                Content="Build 3D-model" 
+                Command="{Binding BuildModelCommand}" CommandParameter="{Binding Parameters}" 
+                IsEnabled="{Binding IsDataValid, UpdateSourceTrigger=PropertyChanged}"/>
 
         </Grid>
 

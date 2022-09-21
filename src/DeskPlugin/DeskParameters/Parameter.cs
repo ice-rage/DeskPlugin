@@ -8,7 +8,7 @@ namespace DeskParameters
     /// <summary>
     /// Класс <see cref="Parameter"/> хранит информацию о параметре письменного стола.
     /// </summary>
-    public class Parameter : ObservableObject
+    public class Parameter : ObservableObject, ICloneable
     {
         #region PrivateFields
 
@@ -140,6 +140,29 @@ namespace DeskParameters
                 ? $"({Min}-{Max} pcs)" 
                 : $"({Min}-{Max} mm)";
         }
+
+        #region Methods
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Parameter parameter))
+            {
+                return false;
+            }
+
+            return parameter.Name == Name && parameter.Min == Min && parameter.Max == Max &&
+                   parameter.Value == Value;
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode() => HashCode.Combine(Name, Description, Min, Max, Value,
+            AcceptableRange, IsDataValid);
+
+        /// <inheritdoc/>
+        public object Clone() => MemberwiseClone();
+
+        #endregion
 
         #endregion
     }
