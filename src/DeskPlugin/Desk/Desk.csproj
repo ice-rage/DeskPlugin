@@ -128,9 +128,13 @@
     <Folder Include="Converters\" />
     <Folder Include="Dictionaries\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Resources\" />
     <Folder Include="ValidationRules\" />
     <Folder Include="Views\UserControls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\desk.ico" />
+    <Resource Include="Resources\DeskWithRoundLegs.png" />
+    <Resource Include="Resources\DeskWithSquareLegs.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets" Condition="Exists('..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets')" />
