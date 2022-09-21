@@ -102,6 +102,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Dictionaries\MainWindowStyleDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\UserControls\ParameterGroupControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -114,7 +118,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Behaviors\CloseWindowBehavior.cs" />
+    <Compile Include="Behaviors\MaximizeWindowBehavior.cs" />
+    <Compile Include="Behaviors\MinimizeWindowBehavior.cs" />
+    <Compile Include="Behaviors\ProhibitNotNumbersBehavior.cs" />
+    <Compile Include="Behaviors\ShowWindowMenuBehavior.cs" />
     <Compile Include="Converters\LegTypeToImageSourceConverter.cs" />
+    <Compile Include="Extensions\DependencyObjectExtension.cs" />
     <Compile Include="Views\UserControls\ParameterGroupControl.xaml.cs">
       <DependentUpon>ParameterGroupControl.xaml</DependentUpon>
     </Compile>
@@ -148,8 +158,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Behaviors\" />
-    <Folder Include="Extensions\" />
     <Folder Include="ValidationRules\" />
   </ItemGroup>
   <ItemGroup>
