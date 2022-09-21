@@ -216,7 +216,39 @@ namespace DeskBuilder
         /// <param name="worktopHeight"> Высота столешницы.</param>
         private static void BuildWorktop(int worktopLength, int worktopWidth, int worktopHeight)
         {
-            
+            Solid3d worktop = CreateAndDisplaceBox(
+                worktopLength,
+                worktopWidth,
+                worktopHeight,
+                new Point3d(worktopLength, worktopWidth, worktopHeight));
+            AddObjectInBlock(worktop, DeskBlockName);
+        }
+
+        /// <summary>
+        /// Метод для создания 3D-примитива "ящик" и его перемещения в указанную точку чертежа.
+        /// </summary>
+        /// <param name="boxLength"> Длина ящика.</param>
+        /// <param name="boxWidth"> Ширина ящика.</param>
+        /// <param name="boxHeight"> Высота ящика.</param>
+        /// <param name="displacementEndPoint"> Точка чертежа, в которую необходимо переместить
+        /// ящик.</param>
+        /// <returns> Созданный ящик.</returns>
+        private static Solid3d CreateAndDisplaceBox(
+            double boxLength,
+            double boxWidth,
+            double boxHeight,
+            Point3d displacementEndPoint)
+        {
+            var box = new Solid3d();
+            box.CreateBox(boxLength, boxWidth, boxHeight);
+
+            Extents3d boxExtents = box.Bounds.GetValueOrDefault();
+            var displacementStartPoint = new Point3d(boxExtents.MaxPoint.X, boxExtents.MaxPoint.Y,
+                boxExtents.MaxPoint.Z);
+            Vector3d displacementVector = displacementStartPoint.GetVectorTo(displacementEndPoint);
+            box.TransformBy(Matrix3d.Displacement(displacementVector));
+
+            return box;
         }
 
         /// <summary>
