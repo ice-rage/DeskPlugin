@@ -98,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\UserControls\ParameterGroupControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -107,6 +111,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\LegTypeToImageSourceConverter.cs" />
+    <Compile Include="Views\UserControls\ParameterGroupControl.xaml.cs">
+      <DependentUpon>ParameterGroupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -140,7 +147,6 @@
     <Folder Include="Behaviors\" />
     <Folder Include="Extensions\" />
     <Folder Include="ValidationRules\" />
-    <Folder Include="Views\UserControls\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\desk.ico" />
