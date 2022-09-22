@@ -1,8 +1,5 @@
-﻿using DeskParameters.Enums;
-using DeskViewModel;
+﻿using System.Windows;
 using Microsoft.Xaml.Behaviors;
-using System.Windows;
-using System;
 
 namespace Desk.Views.Windows
 {
@@ -12,14 +9,9 @@ namespace Desk.Views.Windows
         {
             InitializeComponent();
 
-            //TODO: костыли?..
+            //TODO: костыль?..
             var _ = new DefaultTriggerAttribute(typeof(Trigger), 
                 typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
-
-            DataContext = new MainWindowViewModel();
-
-            Array legTypeEnumDataSource = Enum.GetValues(typeof(LegType));
-            LegTypeComboBox.ItemsSource = legTypeEnumDataSource;
         }
     }
 }

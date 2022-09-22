@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:behaviors="clr-namespace:Desk.Behaviors">
-
+    
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="BrushesDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
@@ -42,8 +42,8 @@
         </Setter>
         <Style.Resources>
             <Style TargetType="{x:Type Path}">
-                <Setter Property="Stroke" Value="{Binding Foreground, 
-                    RelativeSource={RelativeSource AncestorType=Button}}"/>
+                <Setter Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource 
+                    AncestorType=Button}}"/>
                 <Setter Property="StrokeThickness" Value="1"/>
                 <Setter Property="Stretch" Value="None"/>
                 <Setter Property="RenderOptions.EdgeMode" Value="Aliased"/>
@@ -56,8 +56,8 @@
         <Setter Property="Foreground" Value="Red"/>
         <Style.Resources>
             <Style TargetType="{x:Type Path}">
-                <Setter Property="Stroke" Value="{Binding Foreground, 
-                    RelativeSource={RelativeSource AncestorType=Button}}"/>
+                <Setter Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource 
+                    AncestorType=Button}}"/>
                 <Setter Property="StrokeThickness" Value="2"/>
                 <Setter Property="Stretch" Value="None"/>
                 <Setter Property="RenderOptions.EdgeMode" Value="Aliased"/>
@@ -69,7 +69,7 @@
         <Border x:Name="PART_Container" BorderThickness="10">
             <Grid TextOptions.TextRenderingMode="ClearType" 
                   TextOptions.TextFormattingMode="Display">
-                <Border
+                <Border 
                     x:Name="PART_Border"
                     Width="Auto"
                     Height="Auto"
@@ -148,12 +148,12 @@
             <Trigger Property="WindowState" Value="Maximized">
                 <Setter TargetName="PART_MaxButton_Path" Property="Data" 
                         Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8"/>
-                <Setter TargetName="PART_Container" Property="BorderThickness" Value="{x:Static 
-                    SystemParameters.WindowResizeBorderThickness}"/>
+                <Setter TargetName="PART_Container" Property="BorderThickness" 
+                        Value="{x:Static SystemParameters.WindowResizeBorderThickness}"/>
             </Trigger>
             <Trigger Property="IsActive" Value="False">
-                <Setter TargetName="PART_TitleBar" Property="Background" Value="{StaticResource 
-                    InactiveWindowTitleBarBackgroundBrush}"/>
+                <Setter TargetName="PART_TitleBar" Property="Background" 
+                        Value="{StaticResource InactiveWindowTitleBarBackgroundBrush}"/>
                 <Setter TargetName="PART_Border" Property="Effect" Value="{x:Null}"/>
             </Trigger>
         </ControlTemplate.Triggers>
