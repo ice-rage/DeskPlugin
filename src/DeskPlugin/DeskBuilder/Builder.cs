@@ -153,7 +153,7 @@ namespace DeskBuilder
                 OpenMode.ForRead);
 
             ObjectIdCollection deskBlockReferenceIds = deskBlockTableRecord
-                .GetBlockReferenceIds(true, true);
+                .GetBlockReferenceIds(true, false);
 
             if (deskBlockReferenceIds != null && deskBlockReferenceIds.Count > 0)
             {
@@ -167,7 +167,7 @@ namespace DeskBuilder
 
             // После удаления всех вхождений блока из поля чертежа удаляем его определение.
             //
-            deskBlockReferenceIds = deskBlockTableRecord.GetBlockReferenceIds(true, true);
+            deskBlockReferenceIds = deskBlockTableRecord.GetBlockReferenceIds(true, false);
 
             if (deskBlockReferenceIds != null && deskBlockReferenceIds.Count != 0)
             {
