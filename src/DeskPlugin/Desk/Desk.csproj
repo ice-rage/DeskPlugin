@@ -136,7 +136,6 @@
     <Compile Include="Behaviors\ShowWindowMenuBehavior.cs" />
     <Compile Include="Converters\LegTypeToImageSourceConverter.cs" />
     <Compile Include="Extensions\DependencyObjectExtension.cs" />
-    <Compile Include="ValidationRules\IntegerValidationRule.cs" />
     <Compile Include="ValidationRules\NullOrWhiteSpaceValidationRule.cs" />
     <Compile Include="Views\UserControls\ParameterControl.xaml.cs">
       <DependentUpon>ParameterControl.xaml</DependentUpon>

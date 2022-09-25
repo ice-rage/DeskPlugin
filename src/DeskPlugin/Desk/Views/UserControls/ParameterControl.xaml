@@ -43,12 +43,12 @@
                     <behaviors:ProhibitNotNumbersBehavior/>
                 </b:Interaction.Behaviors>
                 <TextBox.Text>
-                    <Binding Path="Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                             ValidatesOnDataErrors="True" NotifyOnValidationError="True">
+                    <Binding Path="Value" Mode="TwoWay" NotifyOnValidationError="True" 
+                             ValidatesOnNotifyDataErrors="True" 
+                             UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <validationRules:NullOrWhiteSpaceValidationRule 
                                 ValidatesOnTargetUpdated="True"/>
-                            <validationRules:IntegerValidationRule ValidatesOnTargetUpdated="True"/>
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
