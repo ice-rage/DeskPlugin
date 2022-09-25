@@ -26,11 +26,6 @@ namespace DeskParameters
         /// </summary>
         private string _acceptableRange;
 
-        /// <summary>
-        /// Хранит значение, показывающее, корректны ли введенные данные.
-        /// </summary>
-        private bool _isDataValid = true;
-
         #endregion
 
         #region Properties
@@ -70,6 +65,7 @@ namespace DeskParameters
                 }
 
                 ValueChanged?.Invoke(this, EventArgs.Empty);
+                DataValidChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -81,24 +77,6 @@ namespace DeskParameters
             get => _acceptableRange;
 
             private set => SetProperty(ref _acceptableRange, value);
-        }
-
-        /// <summary>
-        /// Проверяет, корректны ли введенные данные.
-        /// </summary>
-        public bool IsDataValid
-        {
-            get => _isDataValid;
-
-            set
-            {
-                if (!SetProperty(ref _isDataValid, value))
-                {
-                    return;
-                }
-
-                DataValidChanged?.Invoke(this, EventArgs.Empty);
-            }
         }
 
         /// <inheritdoc/>
@@ -169,7 +147,7 @@ namespace DeskParameters
 
         /// <inheritdoc/>
         public override int GetHashCode() => HashCode.Combine(Name, Description, Min, Max, Value,
-            AcceptableRange, IsDataValid);
+            AcceptableRange, HasErrors);
 
         /// <inheritdoc/>
         public object Clone() => MemberwiseClone();
@@ -197,23 +175,15 @@ namespace DeskParameters
                 yield break;
             }
 
-            var error = string.Empty;
-
             if (Value < Min)
             {
-                error = $"Parameter \"{Description}\" must be greater than or equal to {Min}";
-
-                yield return error;
+                yield return $"Parameter \"{Description}\" must be greater than or equal to {Min}";
             }
 
             if (Value > Max)
             {
-                error = $"Parameter \"{Description}\" must be less than or equal to {Max}";
-
-                yield return error;
+                yield return $"Parameter \"{Description}\" must be less than or equal to {Max}";
             }
-
-            IsDataValid = error == string.Empty;
         }
 
         #endregion

@@ -135,10 +135,10 @@ namespace DeskViewModel
         /// </summary>
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
-        private void OnDataValidChanged(object sender, EventArgs e) => 
-            IsDataValid = !Parameters.ParameterGroups
-                .Any(group => group.Parameters
-                    .Any(parameter => parameter.HasErrors));
+        private void OnDataValidChanged(object sender, EventArgs e) => IsDataValid = !Parameters
+            .ParameterGroups
+            .Any(group => group.Parameters
+                .Any(parameter => parameter.HasErrors));
 
         #endregion
 
