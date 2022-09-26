@@ -67,14 +67,14 @@
             </Grid.ColumnDefinitions>
 
             <userControls:ParameterGroupControl 
-                Grid.Row="0" 
-                Grid.Column="0" 
-                DataContext="{Binding Parameters.ParameterGroups[0]}"/>
+                Grid.Row="0"
+                Grid.Column="0"
+                DataContext="{Binding Parameters[Worktop]}"/>
 
             <GroupBox 
                 Grid.Row="0" 
-                Grid.Column="1" 
-                Header="{Binding Parameters[1].Name}">
+                Grid.Column="1"
+                Header="{Binding Parameters[Legs].Key}">
                 <StackPanel>
                     <TextBlock Margin="5,10,0,7" Text="Type"/>
                     <ComboBox 
@@ -83,7 +83,7 @@
                         ItemsSource="{Binding Source={StaticResource LegTypeEnumData}}"
                         SelectedItem="{Binding Parameters.LegType, Mode=TwoWay}"
                         IsEditable="False"/>
-                    <ItemsControl ItemsSource="{Binding Parameters[1].Parameters}">
+                    <ItemsControl ItemsSource="{Binding Parameters[Legs].Value}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <userControls:ParameterControl/>
@@ -94,9 +94,9 @@
             </GroupBox>
 
             <userControls:ParameterGroupControl 
-                Grid.Row="1" 
-                Grid.Column="0" 
-                DataContext="{Binding Parameters.ParameterGroups[2]}"/>
+                Grid.Row="1"
+                Grid.Column="0"
+                DataContext="{Binding Parameters[Drawers]}"/>
 
             <GroupBox 
                 Grid.Row="1" 
