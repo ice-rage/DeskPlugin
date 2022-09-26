@@ -89,7 +89,7 @@ namespace DeskParameters
         #endregion
 
         /// <summary>
-        /// 
+        /// Группа параметров и соответствующий ей список параметров.
         /// </summary>
         public Dictionary<ParameterGroupType, ObservableCollection<Parameter>> ParametersByGroup
         { get; } = new Dictionary<ParameterGroupType, ObservableCollection<Parameter>>();
