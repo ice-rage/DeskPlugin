@@ -152,19 +152,6 @@ namespace DeskParameters
         /// <inheritdoc/>
         public object Clone() => MemberwiseClone();
 
-        #region EventInvocators
-
-        /// <summary>
-        /// Обработчик события, возникающего при изменении ошибки валидации для свойства.
-        /// </summary>
-        /// <param name="e"> Аргумент события.</param>
-        private void OnErrorsChanged(DataErrorsChangedEventArgs e)
-        {
-            ErrorsChanged?.Invoke(this, e);
-        }
-
-        #endregion
-
         #region Validators
 
         /// <inheritdoc/>
