@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -14,7 +13,7 @@ namespace DeskViewModel
     /// </summary>
     public class MainWindowViewModel : ObservableObject
     {
-        #region PrivateFields
+        #region Fields
 
         /// <summary>
         /// Объект для построения 3D-модели письменного стола.
@@ -28,7 +27,7 @@ namespace DeskViewModel
 
         #endregion
 
-        #region PublicProperties
+        #region Properties
 
         /// <summary>
         /// Список параметров письменного стола.
@@ -94,8 +93,9 @@ namespace DeskViewModel
             //
             Parameters.DataValidChanged += OnDataValidChanged;
 
-            Parameters.ParameterGroups
-                .ForEach(group => group.Parameters
+            Parameters.ParametersByGroup.Values
+                .ToList()
+                .ForEach(parameters => parameters
                     .ToList()
                     .ForEach(parameter => parameter.DataValidChanged += OnDataValidChanged));
         }
@@ -112,12 +112,9 @@ namespace DeskViewModel
         /// установки значений по умолчанию.</param>
         public void SetDefaultParameters(Action<Parameter> action)
         {
-            List<ParameterGroup> parameterGroups = Parameters.ParameterGroups;
-
-            for (var i = 0; i < parameterGroups.Count; i++)
+            foreach (ObservableCollection<Parameter> parameters in Parameters.ParametersByGroup
+                         .Values)
             {
-                ObservableCollection<Parameter> parameters = parameterGroups[i].Parameters;
-
                 for (var j = 0; j < parameters.Count; j++)
                 {
                     action?.Invoke(parameters[j]);
@@ -136,8 +133,8 @@ namespace DeskViewModel
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
         private void OnDataValidChanged(object sender, EventArgs e) => IsDataValid = !Parameters
-            .ParameterGroups
-            .Any(group => group.Parameters
+            .ParametersByGroup.Values
+            .Any(parameters => parameters
                 .Any(parameter => parameter.HasErrors));
 
         #endregion

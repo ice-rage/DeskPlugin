@@ -43,23 +43,23 @@ namespace DeskBuilder
 
                         // Получаем параметры стола.
                         //
-                        int worktopLength = parameters[ParameterGroupType.Worktop]
-                            [ParameterType.WorktopLength].Value;
-                        int worktopWidth = parameters[ParameterGroupType.Worktop]
-                            [ParameterType.WorktopWidth].Value;
-                        int worktopHeight = parameters[ParameterGroupType.Worktop]
-                            [ParameterType.WorktopHeight].Value;
-                        int legHeight = parameters[ParameterGroupType.Legs]
-                            [ParameterType.LegHeight].Value;
-                        int drawerNumber = parameters[ParameterGroupType.Drawers]
-                            [ParameterType.DrawerNumber].Value;
-                        int drawerLength = parameters[ParameterGroupType.Drawers]
-                            [ParameterType.DrawerLength].Value;
+                        int worktopLength = parameters[ParameterGroupType.Worktop,
+                            ParameterType.WorktopLength].Value;
+                        int worktopWidth = parameters[ParameterGroupType.Worktop,
+                            ParameterType.WorktopWidth].Value;
+                        int worktopHeight = parameters[ParameterGroupType.Worktop,
+                            ParameterType.WorktopHeight].Value;
+                        int legHeight = parameters[ParameterGroupType.Legs,
+                            ParameterType.LegHeight].Value;
+                        int drawerNumber = parameters[ParameterGroupType.Drawers,
+                            ParameterType.DrawerNumber].Value;
+                        int drawerLength = parameters[ParameterGroupType.Drawers,
+                            ParameterType.DrawerLength].Value;
                         double drawerHeight = (double)legHeight / drawerNumber;
 
                         LegType legType = parameters.LegType;
-                        int legBaseValue = parameters[ParameterGroupType.Legs]
-                            [parameters.LegType.GetLegBaseType()].Value;
+                        int legBaseValue = parameters[ParameterGroupType.Legs,
+                            parameters.LegType.GetLegBaseType()].Value;
 
                         // Строим столешницу.
                         BuildWorktop(worktopLength, worktopWidth, worktopHeight);

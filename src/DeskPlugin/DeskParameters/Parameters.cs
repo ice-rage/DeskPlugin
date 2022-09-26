@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DeskParameters.Enums;
@@ -88,9 +89,10 @@ namespace DeskParameters
         #endregion
 
         /// <summary>
-        /// Список параметров письменного стола.
+        /// 
         /// </summary>
-        public List<ParameterGroup> ParameterGroups { get; } = new List<ParameterGroup>();
+        public Dictionary<ParameterGroupType, ObservableCollection<Parameter>> ParametersByGroup
+        { get; } = new Dictionary<ParameterGroupType, ObservableCollection<Parameter>>();
 
         /// <summary>
         /// Тип ножек письменного стола.
@@ -101,7 +103,7 @@ namespace DeskParameters
 
             set
             {
-                if (!ParameterGroups.Any())
+                if (!ParametersByGroup.Any())
                 {
                     SetProperty(ref _legType, value);
 
@@ -131,47 +133,44 @@ namespace DeskParameters
         public Parameters()
         {
             LegType = LegType.Round;
-            ParameterGroups.Clear();
+            ParametersByGroup.Clear();
 
-            ParameterGroups.Add(new ParameterGroup(ParameterGroupType.Worktop,
-                new List<Parameter>
-                {
-                    new Parameter(ParameterType.WorktopLength, 800, 1200, 1000),
-                    new Parameter(ParameterType.WorktopWidth, 500, 750, 625),
-                    new Parameter(ParameterType.WorktopHeight, 30, 40, 35)
-                }));
+            ParametersByGroup.Add(ParameterGroupType.Worktop, new ObservableCollection<Parameter>
+            {
+                new Parameter(ParameterType.WorktopLength, 800, 1200, 1000),
+                new Parameter(ParameterType.WorktopWidth, 500, 750, 625),
+                new Parameter(ParameterType.WorktopHeight, 30, 40, 35)
+            });
 
-            ParameterGroups.Add(new ParameterGroup(ParameterGroupType.Legs,
-                new List<Parameter>
-                {
-                    LegType == LegType.Round
-                        ? new Parameter(ParameterType.LegBaseDiameter, 50, 70, 60)
-                        : new Parameter(ParameterType.LegBaseLength, 50, 70, 60),
-                    new Parameter(ParameterType.LegHeight, 690, 740, 715)
-                }));
+            ParametersByGroup.Add(ParameterGroupType.Legs, new ObservableCollection<Parameter>
+            {
+                LegType == LegType.Round
+                    ? new Parameter(ParameterType.LegBaseDiameter, 50, 70, 60)
+                    : new Parameter(ParameterType.LegBaseLength, 50, 70, 60),
+                new Parameter(ParameterType.LegHeight, 690, 740, 715)
+            });
 
-            ParameterGroups.Add(new ParameterGroup(ParameterGroupType.Drawers,
-                new List<Parameter>
-                {
-                    new Parameter(ParameterType.DrawerNumber, 3, 5, 4),
-                    new Parameter(ParameterType.DrawerLength, 250, 333, 291)
-                }));
+            ParametersByGroup.Add(ParameterGroupType.Drawers, new ObservableCollection<Parameter>
+            {
+                new Parameter(ParameterType.DrawerNumber, 3, 5, 4),
+                new Parameter(ParameterType.DrawerLength, 250, 333, 291)
+            });
 
             // Подписываемся на событие изменения текущего значения длины столешницы, т.к. от этого
             // параметра зависит несколько других параметров письменного стола (ширина столешницы
             // и длина ящиков для канцелярии).
-            this[ParameterGroupType.Worktop][ParameterType.WorktopLength].ValueChanged +=
+            this[ParameterGroupType.Worktop, ParameterType.WorktopLength].ValueChanged +=
                 OnWorktopLengthChanged;
 
             // Для уведомления модели представления главного окна об изменении корректности каждого
             // параметра используем делегат-"посредник".
-            ParameterGroups
-                .ForEach(group =>
-                {
-                    group.Parameters
-                        .ToList()
-                        .ForEach(parameter => parameter.DataValidChanged += DataValidChanged);
-                });
+            ParametersByGroup.Values
+                .ToList()
+                .ForEach(parameters => parameters
+                    .ToList()
+                    .ForEach(parameter => parameter.DataValidChanged += DataValidChanged));
+
+            string value = Enum.GetNames(typeof(ParameterGroupType))[0];
         }
 
         #endregion
@@ -189,11 +188,11 @@ namespace DeskParameters
             SetProperty(ref _legType, legType);
             ParameterType updatedLegBaseType = LegType.GetLegBaseType();
 
-            Parameter previousParameter = this[ParameterGroupType.Legs][previousLegBaseType];
+            Parameter previousParameter = this[ParameterGroupType.Legs, previousLegBaseType];
 
-            this[ParameterGroupType.Legs][previousLegBaseType] = new Parameter(updatedLegBaseType,
+            this[ParameterGroupType.Legs, previousLegBaseType] = new Parameter(updatedLegBaseType,
                 previousParameter.Min, previousParameter.Max, previousParameter.Value);
-            this[ParameterGroupType.Legs][updatedLegBaseType].DataValidChanged += DataValidChanged;
+            this[ParameterGroupType.Legs, updatedLegBaseType].DataValidChanged += DataValidChanged;
         }
 
         /// <summary>
@@ -204,22 +203,22 @@ namespace DeskParameters
         /// <param name="e"> Аргументы события.</param>
         private void OnWorktopLengthChanged(object sender, EventArgs e)
         {
-            int worktopLength = this[ParameterGroupType.Worktop][ParameterType.WorktopLength].Value;
+            int worktopLength = this[ParameterGroupType.Worktop, ParameterType.WorktopLength].Value;
 
-            Parameter worktopWidthParameter = this[ParameterGroupType.Worktop]
-                [ParameterType.WorktopWidth];
-            this[ParameterGroupType.Worktop][ParameterType.WorktopWidth] =
-                new Parameter(worktopWidthParameter.Name, worktopLength / 2,
+            Parameter worktopWidthParameter = this[ParameterGroupType.Worktop, 
+                ParameterType.WorktopWidth];
+            this[ParameterGroupType.Worktop, ParameterType.WorktopWidth] =
+                new Parameter(worktopWidthParameter.Name, worktopLength / 2, 
                     worktopWidthParameter.Max, worktopWidthParameter.Value);
-            this[ParameterGroupType.Worktop][ParameterType.WorktopWidth].DataValidChanged +=
+            this[ParameterGroupType.Worktop, ParameterType.WorktopWidth].DataValidChanged +=
                 DataValidChanged;
 
-            Parameter drawerLengthParameter = this[ParameterGroupType.Drawers]
-                [ParameterType.DrawerLength];
-            this[ParameterGroupType.Drawers][ParameterType.DrawerLength] =
+            Parameter drawerLengthParameter = this[ParameterGroupType.Drawers, 
+                ParameterType.DrawerLength];
+            this[ParameterGroupType.Drawers, ParameterType.DrawerLength] =
                 new Parameter(drawerLengthParameter.Name, drawerLengthParameter.Min,
                     worktopLength / 3, drawerLengthParameter.Value);
-            this[ParameterGroupType.Drawers][ParameterType.DrawerLength].DataValidChanged +=
+            this[ParameterGroupType.Drawers, ParameterType.DrawerLength].DataValidChanged +=
                 DataValidChanged;
         }
 
@@ -228,18 +227,30 @@ namespace DeskParameters
         #region Indexers
 
         /// <summary>
+        /// Индексатор, позволяющий получить группу параметров и соответствующий список параметров
+        /// по указанной группе параметров./>
+        /// </summary>
+        /// <param name="index"> Группа параметров.</param>
+        /// <returns> Пара "ключ-значение", образованная группой параметров и соответствующим
+        /// списком параметров.</returns>
+        public KeyValuePair<ParameterGroupType, ObservableCollection<Parameter>>
+            this[ParameterGroupType index] => new KeyValuePair<ParameterGroupType,
+            ObservableCollection<Parameter>>(index, ParametersByGroup[index]);
+
+        /// <summary>
         /// Индексатор, позволяющий получить группу параметров письменного стола по ее наименованию.
         /// </summary>
-        /// <param name="index"> Наименование группы параметров, определенный в перечислении
-        /// <see cref="ParameterGroupType"/>.</param>
-        /// <returns> Объект <see cref="ParameterGroup"/>, который представляет найденную группу
+        /// <param name="firstIndex"> Группа параметров.</param>
+        /// <param name="secondIndex"> Тип определенного параметра.</param>
+        /// <returns> Объект <see cref="Parameter"/>, который представляет найденную группу
         /// параметров.</returns>
-        public ParameterGroup this[ParameterGroupType index]
+        public Parameter this[ParameterGroupType firstIndex, ParameterType secondIndex]
         {
-            get => ParameterGroups.First(group => group.Name == index);
+            get => ParametersByGroup[firstIndex].First(parameter => parameter.Name == secondIndex);
 
-            set => ParameterGroups[ParameterGroups.IndexOf(ParameterGroups.First(group => 
-                group.Name == index))] = value;
+            set => ParametersByGroup[firstIndex][ParametersByGroup[firstIndex]
+                .IndexOf(ParametersByGroup[firstIndex]
+                    .First(parameter => parameter.Name == secondIndex))] = value;
         }
 
         #endregion
