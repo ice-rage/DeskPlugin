@@ -80,21 +80,21 @@ namespace Parameters
         }
 
         /// <inheritdoc/>
-        public bool HasErrors => GetErrors(null).OfType<object>().Any();
+        public bool HasErrors => GetErrors(null).OfType<string>().Any();
 
         #endregion
 
         #region Events
 
         /// <summary>
-        /// Событие, уведомляющее об изменении корректности введенных данных.
-        /// </summary>
-        public event EventHandler DataValidChanged;
-
-        /// <summary>
         /// Событие изменения текущего значения параметра.
         /// </summary>
         public event EventHandler ValueChanged;
+
+        /// <summary>
+        /// Событие, уведомляющее об изменении корректности введенных данных.
+        /// </summary>
+        public event EventHandler DataValidChanged;
 
         /// <inheritdoc/>
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
