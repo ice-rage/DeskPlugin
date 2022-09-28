@@ -146,8 +146,23 @@ namespace DeskParameters
         }
 
         /// <inheritdoc/>
-        public override int GetHashCode() => HashCode.Combine(Name, Description, Min, Max, Value,
-            AcceptableRange, HasErrors);
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hash = 17;
+                
+                hash = hash * 23 + Name.GetHashCode();
+                hash = hash * 23 + Description.GetHashCode();
+                hash = hash * 23 + Min.GetHashCode();
+                hash = hash * 23 + Max.GetHashCode();
+                hash = hash * 23 + Value.GetHashCode();
+                hash = hash * 23 + AcceptableRange.GetHashCode();
+                hash = hash * 23 + HasErrors.GetHashCode();
+
+                return hash;
+            }
+        }
 
         /// <inheritdoc/>
         public object Clone() => MemberwiseClone();
