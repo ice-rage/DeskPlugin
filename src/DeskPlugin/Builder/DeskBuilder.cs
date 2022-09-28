@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
-using DeskParameters;
-using DeskParameters.Enums;
-using DeskParameters.Enums.Extensions;
+using Parameters;
+using Parameters.Enums;
+using Parameters.Enums.Extensions;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
-namespace DeskBuilder
+namespace Builder
 {
     /// <summary>
     /// Класс для построения 3D-модели письменного стола.
     /// </summary>
-    public class Builder
+    public class DeskBuilder
     {
         #region Fields
 
@@ -28,7 +28,7 @@ namespace DeskBuilder
         /// Метод для построения 3D-модели письменного стола.
         /// </summary>
         /// <param name="parameters"> Параметры, необходимые для построения 3D-модели.</param>
-        public void BuildDesk(Parameters parameters)
+        public void BuildDesk(DeskParameters parameters)
         {
             using (Application.DocumentManager.MdiActiveDocument.LockDocument())
             {
@@ -43,22 +43,22 @@ namespace DeskBuilder
 
                         // Получаем параметры стола.
                         //
-                        int worktopLength = parameters[ParameterGroupType.Worktop,
-                            ParameterType.WorktopLength].Value;
-                        int worktopWidth = parameters[ParameterGroupType.Worktop,
-                            ParameterType.WorktopWidth].Value;
-                        int worktopHeight = parameters[ParameterGroupType.Worktop,
-                            ParameterType.WorktopHeight].Value;
-                        int legHeight = parameters[ParameterGroupType.Legs,
-                            ParameterType.LegHeight].Value;
-                        int drawerNumber = parameters[ParameterGroupType.Drawers,
-                            ParameterType.DrawerNumber].Value;
-                        int drawerLength = parameters[ParameterGroupType.Drawers,
-                            ParameterType.DrawerLength].Value;
+                        int worktopLength = parameters[DeskParameterGroupType.Worktop,
+                            DeskParameterType.WorktopLength].Value;
+                        int worktopWidth = parameters[DeskParameterGroupType.Worktop,
+                            DeskParameterType.WorktopWidth].Value;
+                        int worktopHeight = parameters[DeskParameterGroupType.Worktop,
+                            DeskParameterType.WorktopHeight].Value;
+                        int legHeight = parameters[DeskParameterGroupType.Legs,
+                            DeskParameterType.LegHeight].Value;
+                        int drawerNumber = parameters[DeskParameterGroupType.Drawers,
+                            DeskParameterType.DrawerNumber].Value;
+                        int drawerLength = parameters[DeskParameterGroupType.Drawers,
+                            DeskParameterType.DrawerLength].Value;
                         double drawerHeight = (double)legHeight / drawerNumber;
 
                         LegType legType = parameters.LegType;
-                        int legBaseValue = parameters[ParameterGroupType.Legs,
+                        int legBaseValue = parameters[DeskParameterGroupType.Legs,
                             parameters.LegType.GetLegBaseType()].Value;
 
                         // Строим столешницу.
@@ -309,7 +309,8 @@ namespace DeskBuilder
             // В каждый словарь оснований добавляем координату центра окружности основания
             // соответствующей ножки.
             //
-            int baseCenterCoordinate = Parameters.DistanceFromWorktopCorner + (baseDiameter / 2);
+            int baseCenterCoordinate = DeskParameters.DistanceFromWorktopCorner + 
+                (baseDiameter / 2);
             x.Add(0, baseCenterCoordinate);
             y.Add(0, baseCenterCoordinate);
 
@@ -349,11 +350,11 @@ namespace DeskBuilder
             // В каждый словарь оснований добавляем координату левого нижнего угла квадрата
             // основания соответствующей ножки.
             //
-            x.Add(0, Parameters.DistanceFromWorktopCorner);
-            y.Add(0, Parameters.DistanceFromWorktopCorner);
+            x.Add(0, DeskParameters.DistanceFromWorktopCorner);
+            y.Add(0, DeskParameters.DistanceFromWorktopCorner);
 
-            x.Add(1, Parameters.DistanceFromWorktopCorner);
-            y.Add(1, worktopWidth - Parameters.DistanceFromWorktopCorner - baseLength);
+            x.Add(1, DeskParameters.DistanceFromWorktopCorner);
+            y.Add(1, worktopWidth - DeskParameters.DistanceFromWorktopCorner - baseLength);
 
             // Создаем квадраты оснований ножек и добавляем их в массив.
             for (var i = 0; i < x.Count; i++)
@@ -403,51 +404,53 @@ namespace DeskBuilder
                 // Строим ящик для канцелярии.
                 BuildCompositeBox(
                     drawerLength,
-                    worktopWidth - Parameters.WorktopDrawerWidthDifference,
+                    worktopWidth - DeskParameters.WorktopDrawerWidthDifference,
                     drawerHeight,
                     new Point3d(
-                        worktopLength - Parameters.DistanceFromWorktopCorner,
-                        worktopWidth - Parameters.DistanceFromWorktopCorner,
+                        worktopLength - DeskParameters.DistanceFromWorktopCorner,
+                        worktopWidth - DeskParameters.DistanceFromWorktopCorner,
                         -drawerHeight * i),
-                    drawerLength - Parameters.OuterInnerDrawerLengthDifference,
-                    worktopWidth - Parameters.WorktopDrawerWidthDifference -
-                    Parameters.OuterInnerDrawerWidthDifference,
-                    drawerHeight - Parameters.OuterInnerDrawerHeightDifference,
+                    drawerLength - DeskParameters.OuterInnerDrawerLengthDifference,
+                    worktopWidth - DeskParameters.WorktopDrawerWidthDifference -
+                    DeskParameters.OuterInnerDrawerWidthDifference,
+                    drawerHeight - DeskParameters.OuterInnerDrawerHeightDifference,
                     new Point3d(
-                        worktopLength - Parameters.OuterInnerDrawerLengthDifference,
-                        worktopWidth - Parameters.OuterInnerDrawerWidthDifference,
+                        worktopLength - DeskParameters.OuterInnerDrawerLengthDifference,
+                        worktopWidth - DeskParameters.OuterInnerDrawerWidthDifference,
                         -drawerHeight * i));
 
                 // Строим дверцу ящика.
                 Solid3d door = CreateAndDisplaceBox(
-                    drawerLength - Parameters.DrawerDoorLengthDifference,
-                    Parameters.DoorWidth,
-                    drawerHeight - Parameters.DrawerDoorHeightDifference,
+                    drawerLength - DeskParameters.DrawerDoorLengthDifference,
+                    DeskParameters.DoorWidth,
+                    drawerHeight - DeskParameters.DrawerDoorHeightDifference,
                     new Point3d(
-                        worktopLength - Parameters.DrawerDoorLengthDifference,
-                        Parameters.DoorWidth + Parameters.DistanceFromWorktopCorner,
+                        worktopLength - DeskParameters.DrawerDoorLengthDifference,
+                        DeskParameters.DoorWidth + DeskParameters.DistanceFromWorktopCorner,
                         -drawerHeight * i));
                 AddObjectInBlock(door, DeskBlockName);
 
                 // Строим ручку ящика.
                 BuildCompositeBox(
                     (double)drawerLength / 2,
-                    Parameters.OuterHandleWidth,
-                    Parameters.HandleHeight,
+                    DeskParameters.OuterHandleWidth,
+                    DeskParameters.HandleHeight,
                     new Point3d(
-                        worktopLength - Parameters.DistanceFromWorktopCorner - drawerLength / 4,
-                        Parameters.DistanceFromWorktopCorner,
-                        -drawerHeight * i - drawerHeight / 2 +
-                        (double)Parameters.HandleHeight / 2),
-                    drawerLength / 2 - Parameters.OuterInnerHandleLengthDifference,
-                    Parameters.InnerHandleWidth,
-                    Parameters.HandleHeight,
+                        worktopLength - DeskParameters.DistanceFromWorktopCorner - 
+                        drawerLength / 4,
+                        DeskParameters.DistanceFromWorktopCorner,
+                        -drawerHeight * i - drawerHeight / 2 + 
+                        (double)DeskParameters.HandleHeight / 2),
+                    drawerLength / 2 - 
+                    DeskParameters.OuterInnerHandleLengthDifference,
+                    DeskParameters.InnerHandleWidth,
+                    DeskParameters.HandleHeight,
                     new Point3d(
-                        worktopLength - Parameters.DistanceFromWorktopCorner - drawerLength / 4 -
-                        Parameters.OuterInnerHandleLengthDifference / 2,
-                        Parameters.DistanceFromWorktopCorner,
-                        -drawerHeight * i - drawerHeight / 2 +
-                        (double)Parameters.HandleHeight / 2));
+                        worktopLength - DeskParameters.DistanceFromWorktopCorner - 
+                        drawerLength / 4 - DeskParameters.OuterInnerHandleLengthDifference / 2,
+                        DeskParameters.DistanceFromWorktopCorner,
+                        -drawerHeight * i - drawerHeight / 2 + 
+                        (double)DeskParameters.HandleHeight / 2));
             }
         }
 

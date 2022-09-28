@@ -7,8 +7,8 @@
     <ProjectGuid>{237249EF-409D-4697-BA53-46C6ED457D09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DeskParameters</RootNamespace>
-    <AssemblyName>DeskParameters</AssemblyName>
+    <RootNamespace>Parameters</RootNamespace>
+    <AssemblyName>Parameters</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -80,12 +80,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\Extensions\LegTypeExtension.cs" />
-    <Compile Include="Enums\Extensions\ParameterTypeExtension.cs" />
+    <Compile Include="Enums\Extensions\DeskParameterTypeExtension.cs" />
     <Compile Include="Enums\LegType.cs" />
-    <Compile Include="Enums\ParameterGroupType.cs" />
-    <Compile Include="Enums\ParameterType.cs" />
-    <Compile Include="Parameter.cs" />
-    <Compile Include="Parameters.cs" />
+    <Compile Include="Enums\DeskParameterGroupType.cs" />
+    <Compile Include="Enums\DeskParameterType.cs" />
+    <Compile Include="DeskParameter.cs" />
+    <Compile Include="DeskParameters.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets" Condition="Exists('..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets')" />

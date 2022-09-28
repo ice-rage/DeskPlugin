@@ -1,4 +1,4 @@
-﻿namespace DeskParameters.Enums
+﻿namespace Parameters.Enums
 {
     /// <summary>
     /// Перечисление, содержащее типы ножек стола.

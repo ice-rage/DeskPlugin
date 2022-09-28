@@ -1,9 +1,9 @@
-﻿namespace DeskParameters.Enums
+﻿namespace Parameters.Enums
 {
     /// <summary>
     /// Перечисление, содержащее типы групп параметров письменного стола.
     /// </summary>
-    public enum ParameterGroupType
+    public enum DeskParameterGroupType
     {
         /// <summary>
         /// Столешница.

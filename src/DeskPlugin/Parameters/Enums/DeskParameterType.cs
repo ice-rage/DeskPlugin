@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 
-namespace DeskParameters.Enums
+namespace Parameters.Enums
 {
     /// <summary>
     /// Перечисление, содержащее типы параметров письменного стола.
     /// </summary>
-    public enum ParameterType
+    public enum DeskParameterType
     {
         /// <summary>
         /// Длина столешницы.

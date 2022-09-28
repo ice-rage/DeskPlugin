@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCadConnector", "AutoCadConnector\AutoCadConnector.csproj", "{61B4FF82-5072-49B9-9666-E40DEE3AD1AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connector", "Connector\Connector.csproj", "{61B4FF82-5072-49B9-9666-E40DEE3AD1AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{FFEA6504-72D6-4D2F-9604-A7110510A1CB}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,11 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desk", "Desk\Desk.csproj", "{73ECBB3B-0F72-43DF-8C96-9B6C2F37A8DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskBuilder", "DeskBuilder\DeskBuilder.csproj", "{0EC9A5FF-AE96-455B-8F02-2E629DB57D48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builder", "Builder\Builder.csproj", "{0EC9A5FF-AE96-455B-8F02-2E629DB57D48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskParameters", "DeskParameters\DeskParameters.csproj", "{237249EF-409D-4697-BA53-46C6ED457D09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parameters", "Parameters\Parameters.csproj", "{237249EF-409D-4697-BA53-46C6ED457D09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeskViewModel", "DeskViewModel\DeskViewModel.csproj", "{246E1EC6-1ED9-47D1-9A5E-C45D4295F6DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModel", "ViewModel\ViewModel.csproj", "{246E1EC6-1ED9-47D1-9A5E-C45D4295F6DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

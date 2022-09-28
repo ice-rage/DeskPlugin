@@ -2,12 +2,12 @@
 using Desk.Views.Windows;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
-namespace AutoCadConnector
+namespace Connector
 {
     /// <summary>
     /// Класс, предназначенный для взаимодействия AutoCAD с плагином.
     /// </summary>
-    public class Connector : IExtensionApplication
+    public class AutoCadConnector : IExtensionApplication
     {
         #region Methods
 

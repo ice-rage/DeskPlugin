@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Builder;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DeskBuilder;
-using DeskParameters;
+using Parameters;
 
-namespace DeskViewModel
+namespace ViewModel
 {
     /// <summary>
     /// Модель представления главного окна плагина.
@@ -18,7 +18,7 @@ namespace DeskViewModel
         /// <summary>
         /// Объект для построения 3D-модели письменного стола.
         /// </summary>
-        private readonly Builder _builder = new Builder();
+        private readonly DeskBuilder _builder = new DeskBuilder();
 
         /// <summary>
         /// Переменная для хранения значения, показывающего, корректны ли введенные данные.
@@ -32,7 +32,7 @@ namespace DeskViewModel
         /// <summary>
         /// Список параметров письменного стола.
         /// </summary>
-        public Parameters Parameters { get; } = new Parameters();
+        public DeskParameters Parameters { get; } = new DeskParameters();
 
         /// <summary>
         /// Проверяет, корректны ли введенные данные.
@@ -49,7 +49,7 @@ namespace DeskViewModel
         /// <summary>
         /// Команда для построения 3D-модели письменного стола в AutoCAD.
         /// </summary>
-        public RelayCommand<Parameters> BuildModelCommand { get; }
+        public RelayCommand<DeskParameters> BuildModelCommand { get; }
 
         /// <summary>
         /// Команда, задающая минимальные значения параметров.
@@ -77,7 +77,7 @@ namespace DeskViewModel
         /// </summary>
         public MainWindowViewModel()
         {
-            BuildModelCommand = new RelayCommand<Parameters>(_builder.BuildDesk);
+            BuildModelCommand = new RelayCommand<DeskParameters>(_builder.BuildDesk);
 
             SetMinimumParametersCommand = new RelayCommand(() =>
                 SetDefaultParameters(parameter => parameter.Value = parameter.Min));
@@ -110,9 +110,9 @@ namespace DeskViewModel
         /// </summary>
         /// <param name="action"> Делегат, используемый для передачи соответствующего метода
         /// установки значений по умолчанию.</param>
-        public void SetDefaultParameters(Action<Parameter> action)
+        public void SetDefaultParameters(Action<DeskParameter> action)
         {
-            foreach (ObservableCollection<Parameter> parameters in Parameters.ParametersByGroup
+            foreach (ObservableCollection<DeskParameter> parameters in Parameters.ParametersByGroup
                          .Values)
             {
                 for (var j = 0; j < parameters.Count; j++)

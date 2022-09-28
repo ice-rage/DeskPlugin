@@ -4,15 +4,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DeskParameters.Enums;
-using DeskParameters.Enums.Extensions;
+using Parameters.Enums;
+using Parameters.Enums.Extensions;
 
-namespace DeskParameters
+namespace Parameters
 {
     /// <summary>
-    /// Класс <see cref="Parameter"/> хранит информацию о параметре письменного стола.
+    /// Класс <see cref="DeskParameter"/> хранит информацию о параметре письменного стола.
     /// </summary>
-    public class Parameter : ObservableObject, INotifyDataErrorInfo, ICloneable
+    public class DeskParameter : ObservableObject, INotifyDataErrorInfo, ICloneable
     {
         #region Fields
 
@@ -33,7 +33,7 @@ namespace DeskParameters
         /// <summary>
         /// Название параметра.
         /// </summary>
-        public ParameterType Name { get; }
+        public DeskParameterType Name { get; }
 
         /// <summary>
         /// Текстовое описание параметра.
@@ -104,13 +104,13 @@ namespace DeskParameters
         #region Constructors
 
         /// <summary>
-        /// Создает экземпляр класса <see cref="Parameter"/>.
+        /// Создает экземпляр класса <see cref="DeskParameter"/>.
         /// </summary>
         /// <param name="name"> Имя параметра.</param>
         /// <param name="min"> Минимальное значение параметра.</param>
         /// <param name="max"> Максимальное значение параметра.</param>
         /// <param name="value"> Текущее значение параметра.</param>
-        public Parameter(ParameterType name, int min, int max, int value)
+        public DeskParameter(DeskParameterType name, int min, int max, int value)
         {
             Name = name;
             Min = min;
@@ -124,7 +124,7 @@ namespace DeskParameters
                 return;
             }
 
-            AcceptableRange = Name == ParameterType.DrawerNumber 
+            AcceptableRange = Name == DeskParameterType.DrawerNumber 
                 ? $"({Min}-{Max} pcs)" 
                 : $"({Min}-{Max} mm)";
         }
@@ -136,7 +136,7 @@ namespace DeskParameters
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {
-            if (!(obj is Parameter parameter))
+            if (!(obj is DeskParameter parameter))
             {
                 return false;
             }

@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Reflection;
 
-namespace DeskParameters.Enums.Extensions
+namespace Parameters.Enums.Extensions
 {
     /// <summary>
-    /// Класс, расширяющий перечисление типов параметров <see cref="ParameterType"/>.
+    /// Класс, расширяющий перечисление типов параметров <see cref="DeskParameterType"/>.
     /// </summary>
-    public static class ParameterTypeExtension
+    public static class DeskParameterTypeExtension
     {
         #region Methods
 
@@ -17,7 +17,7 @@ namespace DeskParameters.Enums.Extensions
         /// <param name="parameter"> Параметр, описание которого необходимо получить.
         /// </param>
         /// <returns> Строка, содержащая описание параметра.</returns>
-        public static string GetDescription(this ParameterType parameter)
+        public static string GetDescription(this DeskParameterType parameter)
         {
             var description = parameter.ToString();
             FieldInfo fieldInfo = parameter.GetType().GetField(parameter.ToString());
