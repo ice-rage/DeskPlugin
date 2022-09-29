@@ -46,9 +46,11 @@ namespace TestParameters
             };
 
         
-
+        /// <summary>
+        /// Названия модульных тестов статических свойств класса <see cref="DeskParameters"/>.
+        /// </summary>
         private const string TestStaticProperty_GoodScenario_TestName = "Позитивный тест геттера " + 
-                                                                        "статического свойства {0}";
+            "статического свойства {0}";
 
         #endregion
 
@@ -216,6 +218,11 @@ namespace TestParameters
 
         #region Test Case Sources
 
+        /// <summary>
+        /// Метод-источников тестовых случаев для тестирования статических свойств класса
+        /// <see cref="DeskParameters"/>.
+        /// </summary>
+        /// <returns>Перечисление тестовых случаев <see cref="TestCaseData"/>.</returns>
         private static IEnumerable<TestCaseData> GetStaticPropertiesTestCases()
         {
             yield return new TestCaseData(nameof(DeskParameters.DistanceFromWorktopCorner), 20)
