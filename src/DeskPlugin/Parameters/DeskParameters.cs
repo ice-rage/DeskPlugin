@@ -169,8 +169,6 @@ namespace Parameters
                 .ForEach(parameters => parameters
                     .ToList()
                     .ForEach(parameter => parameter.DataValidChanged += DataValidChanged));
-
-            string value = Enum.GetNames(typeof(DeskParameterGroupType))[0];
         }
 
         #endregion
