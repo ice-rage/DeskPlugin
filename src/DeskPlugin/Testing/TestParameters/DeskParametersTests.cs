@@ -58,7 +58,7 @@ namespace TestParameters
 
         #region Test Static Properties
 
-        [TestCaseSource(nameof(GetStaticPropertiesTestCases))]
+        [TestCaseSource(nameof(GetStaticPropertyTestCases))]
         public void TestStaticPropertiesGet_GoodScenario(string staticPropertyName, int expected)
         {
             // Act
@@ -120,11 +120,11 @@ namespace TestParameters
         public void TestConstructor_CheckAcceptableRange_ReturnsValue()
         {
             // Arrange
+            var parameters = new DeskParameters();
             Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>> expected = 
                 _testParametersByGroup;
 
             // Act
-            var parameters = new DeskParameters();
             Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>> actual = 
                 parameters.ParametersByGroup;
 
@@ -223,7 +223,7 @@ namespace TestParameters
         /// <see cref="DeskParameters"/>.
         /// </summary>
         /// <returns>Перечисление тестовых случаев <see cref="TestCaseData"/>.</returns>
-        private static IEnumerable<TestCaseData> GetStaticPropertiesTestCases()
+        private static IEnumerable<TestCaseData> GetStaticPropertyTestCases()
         {
             yield return new TestCaseData(nameof(DeskParameters.DistanceFromWorktopCorner), 20)
                 .SetName(TestStaticProperty_GoodScenario_TestName);

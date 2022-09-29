@@ -40,16 +40,6 @@ namespace TestParameters
         private const string TestGetErrors_ValueGreaterThanMax_ErrorMessage =
             "Parameter \"Length (L1)\" must be less than or equal to 1200";
 
-        private const string TestGetErrors_ValidValue_ReturnsEmptyEnumerable_TestName = "При " +
-            "вызове валидатора для свойства {0} и значения {1} возвращается пустое перечисление";
-
-        /// <summary>
-        /// Название модульного теста для метода <see cref="DeskParameter.GetErrors"/>
-        /// с некорректным значением параметра.
-        /// </summary>
-        private const string TestGetErrors_InvalidValue_ReturnsEnumerableWithErrorMessage_TestName =
-            "При вызове валидатора для значения {0} возвращается текст ошибки {1}";
-
         #endregion
 
         #region Test Properties
