@@ -7,13 +7,45 @@ using Parameters.Enums.Extensions;
 
 namespace TestParameters
 {
+    /// <summary>
+    /// Класс, содержащий модульные тесты для класса <see cref="DeskParameter"/>.
+    /// </summary>
     [TestFixture]
     internal class DeskParameterTests
     {
         #region Constants
 
+        /// <summary>
+        /// Тестовый параметр.
+        /// </summary>
         private readonly DeskParameter _testParameter = new DeskParameter(DeskParameterType
             .WorktopLength, 800, 1200, 1000);
+
+        /// <summary>
+        /// Название модульного теста для конструктора.
+        /// </summary>
+        private const string TestConstructor_CheckAcceptableRange_ReturnsValue_TestName =
+            "При вызове конструктора для параметра {0} с ограничениями от {1} до {2} строка " +
+            "с ограничениями равна {4}";
+
+        /// <summary>
+        /// Ожидаемое сообщение об ошибке, когда значение параметра меньше допустимого минимума.
+        /// </summary>
+        private const string TestGetErrors_ValueLessThanMin_ErrorMessage =
+            "Parameter \"Length (L1)\" must be greater than or equal to 800";
+
+        /// <summary>
+        /// Ожидаемое сообщение об ошибке, когда значение параметра больше допустимого максимума.
+        /// </summary>
+        private const string TestGetErrors_ValueGreaterThanMax_ErrorMessage =
+            "Parameter \"Length (L1)\" must be less than or equal to 1200";
+
+        /// <summary>
+        /// Название модульного теста для метода <see cref="DeskParameter.GetErrors"/>
+        /// с некорректным значением параметра.
+        /// </summary>
+        private const string TestGetErrors_InvalidValue_ReturnsEnumerableWithErrorMessage_TestName =
+            "При вызове валидатора для значения {0} возвращается текст ошибки {1}";
 
         #endregion
 
@@ -58,33 +90,23 @@ namespace TestParameters
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(1000, false, false, TestName = "Позитивный тест геттера " +
-                                          "и сеттера Value с тем же значением параметра")]
-        [TestCase(1100, true, true, TestName = "Позитивный тест геттера " +
-                                         "и сеттера Value с новым значением параметра")]
-        public void TestValueGetSet_GoodScenario(int expectedValue,
-            bool isValueChangedExpectedToBeInvoked, bool isDataValidChangedExpectedToBeInvoked)
+        [TestCase(1000, TestName = "Позитивный тест геттера и сеттера Value с тем же значением " +
+                                   "параметра")]
+        [TestCase(1100, TestName = "Позитивный тест геттера и сеттера Value с новым значением " +
+                                   "параметра")]
+        public void TestValueGetSet_GoodScenario(int expected)
         {
-            // Arrange
-            var isValueChangedInvoked = false;
-            var isDataValidChangedInvoked = false;
-
             // Act
             if (!(_testParameter.Clone() is DeskParameter parameter))
             {
                 return;
             }
 
-            parameter.ValueChanged += (s, e) => isValueChangedInvoked = true;
-            parameter.DataValidChanged += (s, e) => isDataValidChangedInvoked = true;
-
-            parameter.Value = expectedValue;
+            parameter.Value = expected;
             int actual = parameter.Value;
 
             // Assert
-            Assert.AreEqual(expectedValue, actual);
-            Assert.AreEqual(isValueChangedExpectedToBeInvoked, isValueChangedInvoked);
-            Assert.AreEqual(isDataValidChangedExpectedToBeInvoked, isDataValidChangedInvoked);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase(TestName = "Позитивный тест геттера Description")]
@@ -127,73 +149,56 @@ namespace TestParameters
 
         #region Test Constructors
 
-        private const string TestConstructor_CheckMinMaxAcceptableRange_ReturnsValue_TestName =
-            "При вызове конструктора для параметра {0} с ограничениями от {1} до {2} строка " +
-            "с ограничениями равна {4}";
-
         [TestCase(DeskParameterType.WorktopLength, 1200, 800, 900, "Error",
-            TestName = TestConstructor_CheckMinMaxAcceptableRange_ReturnsValue_TestName)]
+            TestName = TestConstructor_CheckAcceptableRange_ReturnsValue_TestName)]
         [TestCase(DeskParameterType.WorktopLength, 1000, 1000, 900, "Error",
-            TestName = TestConstructor_CheckMinMaxAcceptableRange_ReturnsValue_TestName)]
+            TestName = TestConstructor_CheckAcceptableRange_ReturnsValue_TestName)]
         [TestCase(DeskParameterType.DrawerNumber, 3, 5, 4, "(3-5 pcs)",
-            TestName = TestConstructor_CheckMinMaxAcceptableRange_ReturnsValue_TestName)]
+            TestName = TestConstructor_CheckAcceptableRange_ReturnsValue_TestName)]
         [TestCase(DeskParameterType.WorktopLength, 800, 1200, 900, "(800-1200 mm)",
-            TestName = TestConstructor_CheckMinMaxAcceptableRange_ReturnsValue_TestName)]
-        public void TestConstructor_CheckMinMaxLimits_ReturnsValue(DeskParameterType name, int min,
-            int max, int value, string expectedAcceptableRange)
+            TestName = TestConstructor_CheckAcceptableRange_ReturnsValue_TestName)]
+        public void TestConstructor_CheckAcceptableRange_ReturnsValue(DeskParameterType name, 
+            int min, int max, int value, string expected)
         {
             // Act
             var parameter = new DeskParameter(name, min, max, value);
             string actual = parameter.AcceptableRange;
 
             // Assert
-            Assert.AreEqual(expectedAcceptableRange, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion
 
         #region Test Validators
 
-        private const string TestIndexerReturnsValueMinErrorMessage =
-            "Parameter \"Length (L1)\" must be greater than or equal to 800";
-
-        private const string TestIndexerReturnsValueMaxErrorMessage =
-            "Parameter \"Length (L1)\" must be less than or equal to 1200";
-
-        private const string TestIndexerReturnsValueTestName =
-            "При вызове валидатора для значения {0} возвращается текст ошибки {1}";
-
-        [TestCase(955, TestName = "При вызове валидатора для значения {0} возвращается пустое " +
+        [TestCase(TestName = "При вызове валидатора для корректного значения возвращается пустое " +
                              "перечисление")]
-        public void TestGetErrors_ValidValue_ReturnsEmptyEnumerable(int value)
+        public void TestGetErrors_ValidValue_ReturnsEmptyEnumerable()
         {
             // Act
-            var parameter = new DeskParameter(DeskParameterType.WorktopLength, 800, 1200,
-                value);
-            IEnumerable<string> actual = parameter.GetErrors(nameof(parameter.Value)).Cast<string>();
+            IEnumerable<string> actual = CheckForErrors(DeskParameterType.WorktopLength, 800,
+                1200, 955);
 
             // Assert
             Assert.IsEmpty(actual);
         }
 
-        [TestCase(500, TestIndexerReturnsValueMinErrorMessage, TestName =
-            TestIndexerReturnsValueTestName)]
-        [TestCase(1500, TestIndexerReturnsValueMaxErrorMessage, TestName =
-            TestIndexerReturnsValueTestName)]
+        [TestCase(500, TestGetErrors_ValueLessThanMin_ErrorMessage, TestName =
+            TestGetErrors_InvalidValue_ReturnsEnumerableWithErrorMessage_TestName)]
+        [TestCase(1500, TestGetErrors_ValueGreaterThanMax_ErrorMessage, TestName =
+            TestGetErrors_InvalidValue_ReturnsEnumerableWithErrorMessage_TestName)]
         public void TestGetErrors_InvalidValue_ReturnsEnumerableWithErrorMessage(int value,
-            string errorMessage)
+            string expected)
         {
-            // Arrange
-            string expected = errorMessage;
-
             // Act
-            var parameter = new DeskParameter(DeskParameterType.WorktopLength, 800, 1200,
-                value);
-            IEnumerable<string> actual = parameter.GetErrors(nameof(parameter.Value))
-                .Cast<string>();
+            IEnumerable<string> actual = CheckForErrors(DeskParameterType.WorktopLength, 800, 
+                1200, value);
+
+            bool isContained = actual.Contains(expected);
 
             // Assert
-            Assert.IsTrue(actual.Contains(expected));
+            Assert.IsTrue(isContained);
         }
 
         #endregion
@@ -248,41 +253,62 @@ namespace TestParameters
             Assert.IsFalse(isEqual);
         }
 
-        [TestCase(TestName = "У одинаковых объектов одинаковые хеш-коды")]
+        [TestCase(TestName = "Для одинаковых объектов возвращаются одинаковые хеш-коды")]
         public void TestGetHashCode_EqualObjects_EqualHashCodes()
         {
             // Arrange
             int expected = _testParameter.GetHashCode();
 
             // Act
-            if (!(_testParameter.Clone() is DeskParameter cloneParameter))
+            if (!(_testParameter.Clone() is DeskParameter parameter))
             {
                 return;
             }
 
-            int actual = cloneParameter.GetHashCode();
+            int actual = parameter.GetHashCode();
 
             // Assert
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(TestName = "У разных объектов разные хеш-коды")]
+        [TestCase(TestName = "Для разных объектов возвращаются разные хеш-коды")]
         public void TestGetHashCode_DifferentObjects_DifferentHashCodes()
         {
             // Arrange
             int expected = _testParameter.GetHashCode();
 
             // Act
-            if (!(_testParameter.Clone() is DeskParameter cloneParameter))
+            if (!(_testParameter.Clone() is DeskParameter parameter))
             {
                 return;
             }
 
-            cloneParameter.Value = 1077;
-            int actual = cloneParameter.GetHashCode();
+            parameter.Value = 877;
+            int actual = parameter.GetHashCode();
 
             // Assert
             Assert.AreNotEqual(expected, actual);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Метод, проверяющий параметр на ошибки валидации.
+        /// </summary>
+        /// <param name="name"> Имя параметра.</param>
+        /// <param name="min"> Минимальное значение.</param>
+        /// <param name="max"> Максимальное значение.</param>
+        /// <param name="value"> Текущее значение.</param>
+        /// <returns> Перечисление строк, содержащих сообщения об ошибках, либо пустое перечисление,
+        /// если ошибок не обнаружено.</returns>
+        private static IEnumerable<string> CheckForErrors(DeskParameterType name, int min, int max, 
+            int value)
+        {
+            var parameter = new DeskParameter(name, min, max, value);
+
+            return parameter.GetErrors(nameof(parameter.Value)).Cast<string>();
         }
 
         #endregion
