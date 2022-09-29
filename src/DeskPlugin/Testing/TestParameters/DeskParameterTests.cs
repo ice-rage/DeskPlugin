@@ -40,6 +40,9 @@ namespace TestParameters
         private const string TestGetErrors_ValueGreaterThanMax_ErrorMessage =
             "Parameter \"Length (L1)\" must be less than or equal to 1200";
 
+        private const string TestGetErrors_ValidValue_ReturnsEmptyEnumerable_TestName = "При " +
+            "вызове валидатора для свойства {0} и значения {1} возвращается пустое перечисление";
+
         /// <summary>
         /// Название модульного теста для метода <see cref="DeskParameter.GetErrors"/>
         /// с некорректным значением параметра.
@@ -170,39 +173,6 @@ namespace TestParameters
 
         #endregion
 
-        #region Test Validators
-
-        [TestCase(TestName = "При вызове валидатора для корректного значения возвращается пустое " +
-                             "перечисление")]
-        public void TestGetErrors_ValidValue_ReturnsEmptyEnumerable()
-        {
-            // Act
-            IEnumerable<string> actual = CheckForErrors(DeskParameterType.WorktopLength, 800,
-                1200, 955);
-
-            // Assert
-            Assert.IsEmpty(actual);
-        }
-
-        [TestCase(500, TestGetErrors_ValueLessThanMin_ErrorMessage, TestName =
-            TestGetErrors_InvalidValue_ReturnsEnumerableWithErrorMessage_TestName)]
-        [TestCase(1500, TestGetErrors_ValueGreaterThanMax_ErrorMessage, TestName =
-            TestGetErrors_InvalidValue_ReturnsEnumerableWithErrorMessage_TestName)]
-        public void TestGetErrors_InvalidValue_ReturnsEnumerableWithErrorMessage(int value,
-            string expected)
-        {
-            // Act
-            IEnumerable<string> actual = CheckForErrors(DeskParameterType.WorktopLength, 800, 
-                1200, value);
-
-            bool isContained = actual.Contains(expected);
-
-            // Assert
-            Assert.IsTrue(isContained);
-        }
-
-        #endregion
-
         #region Test Methods
 
         [TestCase(TestName = "При сравнении одинаковых объектов возвращается true")]
@@ -290,26 +260,37 @@ namespace TestParameters
             Assert.AreNotEqual(expected, actual);
         }
 
-        #endregion
+        #region Test Validators
 
-        #region Methods
-
-        /// <summary>
-        /// Метод, проверяющий параметр на ошибки валидации.
-        /// </summary>
-        /// <param name="name"> Имя параметра.</param>
-        /// <param name="min"> Минимальное значение.</param>
-        /// <param name="max"> Максимальное значение.</param>
-        /// <param name="value"> Текущее значение.</param>
-        /// <returns> Перечисление строк, содержащих сообщения об ошибках, либо пустое перечисление,
-        /// если ошибок не обнаружено.</returns>
-        private static IEnumerable<string> CheckForErrors(DeskParameterType name, int min, int max, 
-            int value)
+        [TestCase(null, 500, TestGetErrors_ValueLessThanMin_ErrorMessage)]
+        [TestCase(null, 1500, TestGetErrors_ValueGreaterThanMax_ErrorMessage)]
+        [TestCase(null, 1050, "")]
+        [TestCase(nameof(DeskParameter.Max), 500, "")]
+        public void TestGetErrors_ReturnsValue(string propertyName, int value, string expected)
         {
-            var parameter = new DeskParameter(name, min, max, value);
+            // Act
+            if (!(_testParameter.Clone() is DeskParameter parameters))
+            {
+                return;
+            }
 
-            return parameter.GetErrors(nameof(parameter.Value)).Cast<string>();
+            parameters.Value = value;
+            List<string> errors = parameters.GetErrors(propertyName).OfType<string>().ToList();
+
+            // Assert
+            if (errors.Any())
+            {
+                bool isContained = errors.Contains(expected);
+                Assert.IsTrue(isContained);
+            }
+            else
+            {
+                var actual = string.Empty;
+                Assert.AreEqual(expected, actual);
+            }
         }
+
+        #endregion
 
         #endregion
     }

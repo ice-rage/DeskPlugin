@@ -151,7 +151,7 @@ namespace Parameters
             unchecked
             {
                 var hash = 17;
-                
+
                 hash = hash * 23 + Name.GetHashCode();
                 hash = hash * 23 + Description.GetHashCode();
                 hash = hash * 23 + Min.GetHashCode();
