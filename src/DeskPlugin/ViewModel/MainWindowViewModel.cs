@@ -110,7 +110,7 @@ namespace ViewModel
         /// </summary>
         /// <param name="action"> Делегат, используемый для передачи соответствующего метода
         /// установки значений по умолчанию.</param>
-        public void SetDefaultParameters(Action<DeskParameter> action)
+        private void SetDefaultParameters(Action<DeskParameter> action)
         {
             foreach (ObservableCollection<DeskParameter> parameters in Parameters.ParametersByGroup
                          .Values)
