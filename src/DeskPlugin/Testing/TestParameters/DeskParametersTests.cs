@@ -3,7 +3,7 @@
 namespace TestParameters
 {
     [TestFixture]
-    internal class DeskParametersTests
+    public class DeskParametersTests
     {
 
     }

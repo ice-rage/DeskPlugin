@@ -11,7 +11,7 @@ namespace TestParameters
     /// Класс, содержащий модульные тесты для класса <see cref="DeskParameter"/>.
     /// </summary>
     [TestFixture]
-    internal class DeskParameterTests
+    public class DeskParameterTests
     {
         #region Constants
 

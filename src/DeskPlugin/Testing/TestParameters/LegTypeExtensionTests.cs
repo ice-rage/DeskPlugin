@@ -3,7 +3,7 @@
 namespace TestParameters
 {
     [TestFixture]
-    internal class LegTypeExtensionTests
+    public class LegTypeExtensionTests
     {
 
     }
