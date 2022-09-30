@@ -12,20 +12,21 @@ namespace TestParameters
     [TestFixture]
     public class DeskParametersTests
     {
-        #region Constants
+        #region Test Data Sources
 
         /// <summary>
-        /// Тестовый словарь, содержащий группы параметров и соответствующие им списки параметров.
+        /// Тестовый словарь, содержащий группы параметров и соответствующие им коллекции
+        /// параметров.
         /// </summary>
         private readonly Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>>
             _testParametersByGroup = new Dictionary<DeskParameterGroupType,
                 ObservableCollection<DeskParameter>>
             {
-                { 
+                {
                     DeskParameterGroupType.Worktop, new ObservableCollection<DeskParameter>
-                    { 
-                        new DeskParameter(DeskParameterType.WorktopLength, 800, 1200, 1000), 
-                        new DeskParameter(DeskParameterType.WorktopWidth, 500, 750, 625), 
+                    {
+                        new DeskParameter(DeskParameterType.WorktopLength, 800, 1200, 1000),
+                        new DeskParameter(DeskParameterType.WorktopWidth, 500, 750, 625),
                         new DeskParameter(DeskParameterType.WorktopHeight, 30, 40, 35)
                     }
                 },
@@ -45,24 +46,28 @@ namespace TestParameters
                 }
             };
 
-        
+        #endregion
+
+        #region Constants For Testing
+
         /// <summary>
-        /// Названия модульных тестов статических свойств класса <see cref="DeskParameters"/>.
+        /// Название модульных тестов для статических свойств класса <see cref="DeskParameters"/>.
         /// </summary>
-        private const string TestStaticProperty_GoodScenario_TestName = "Позитивный тест геттера " + 
-            "статического свойства {0}";
+        private const string TestStaticProperties_GoodScenario_TestName = "Позитивный тест " + 
+            "геттера статического свойства {0}";
 
         #endregion
 
-        #region Test Properties
+        #region Property Tests
 
-        #region Test Static Properties
+        #region Static Property Tests
 
-        [TestCaseSource(nameof(GetStaticPropertyTestCases))]
+        [TestCaseSource(nameof(StaticPropertyTestCases))]
         public void TestStaticPropertiesGet_GoodScenario(string staticPropertyName, int expected)
         {
             // Act
-            object actual = typeof(DeskParameters).GetProperty(staticPropertyName)?.GetValue(null, null);
+            object actual = typeof(DeskParameters).GetProperty(staticPropertyName)?.GetValue(null, 
+                null);
 
             // Arrange
             if (actual is int)
@@ -113,28 +118,7 @@ namespace TestParameters
 
         #endregion
 
-        #region Test Constructors
-
-        [TestCase(TestName = "Когда вызывается конструктор класса DeskParameters, словарь " + 
-            "параметров должен заполниться значениями по умолчанию")]
-        public void TestConstructor_CheckAcceptableRange_ReturnsValue()
-        {
-            // Arrange
-            var parameters = new DeskParameters();
-            Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>> expected = 
-                _testParametersByGroup;
-
-            // Act
-            Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>> actual = 
-                parameters.ParametersByGroup;
-
-            // Assert
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        #endregion
-
-        #region Test Methods
+        #region Method Tests
 
         [TestCase(TestName = "При изменении значения длины столешницы должны измениться" + 
             "максимальное значение ширины столешницы и минимальное значение длины ящиков для " + 
@@ -167,10 +151,10 @@ namespace TestParameters
             });
         }
 
-        #region Test Indexers
+        #region Indexer Tests
 
-        [TestCase(TestName = "Позитивный тест геттера и сеттера индексатора " + 
-            "this[DeskParameterGroupType index]")]
+        [TestCase(TestName = "Позитивный тест геттера индексатора this[DeskParameterGroupType " + 
+            "index]")]
         public void TestIndexerGet_ReturnsKeyValuePair()
         {
             // Arrange
@@ -219,47 +203,47 @@ namespace TestParameters
         #region Test Case Sources
 
         /// <summary>
-        /// Метод-источников тестовых случаев для тестирования статических свойств класса
+        /// Метод-источник тестовых случаев для тестирования статических свойств класса
         /// <see cref="DeskParameters"/>.
         /// </summary>
-        /// <returns>Перечисление тестовых случаев <see cref="TestCaseData"/>.</returns>
-        private static IEnumerable<TestCaseData> GetStaticPropertyTestCases()
+        /// <returns> Перечисление тестовых случаев <see cref="TestCaseData"/>.</returns>
+        private static IEnumerable<TestCaseData> StaticPropertyTestCases()
         {
             yield return new TestCaseData(nameof(DeskParameters.DistanceFromWorktopCorner), 20)
-                .SetName(TestStaticProperty_GoodScenario_TestName);
+                .SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.WorktopDrawerWidthDifference), 40)
-                .SetName(TestStaticProperty_GoodScenario_TestName);
+                .SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.OuterInnerDrawerLengthDifference), 
-                40).SetName(TestStaticProperty_GoodScenario_TestName);
+                40).SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.OuterInnerDrawerWidthDifference), 
-                40).SetName(TestStaticProperty_GoodScenario_TestName);
+                40).SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.OuterInnerDrawerHeightDifference), 
-                20).SetName(TestStaticProperty_GoodScenario_TestName);
+                20).SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.DrawerDoorLengthDifference), 40)
-                .SetName(TestStaticProperty_GoodScenario_TestName);
+                .SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.DoorWidth), 20)
-                .SetName(TestStaticProperty_GoodScenario_TestName);
+                .SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.DrawerDoorHeightDifference), 20)
-                .SetName(TestStaticProperty_GoodScenario_TestName);
+                .SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.HandleHeight), 20)
-                .SetName(TestStaticProperty_GoodScenario_TestName);
+                .SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.OuterInnerHandleLengthDifference),
-                40).SetName(TestStaticProperty_GoodScenario_TestName);
+                40).SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.OuterHandleWidth), 40)
-                .SetName(TestStaticProperty_GoodScenario_TestName);
+                .SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.InnerHandleWidth), 20)
-                .SetName(TestStaticProperty_GoodScenario_TestName);
+                .SetName(TestStaticProperties_GoodScenario_TestName);
         }
 
         #endregion

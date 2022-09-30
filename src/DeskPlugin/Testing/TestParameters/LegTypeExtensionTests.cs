@@ -10,15 +10,21 @@ namespace TestParameters
     [TestFixture]
     public class LegTypeExtensionTests
     {
+        #region Constants For Testing
+
         /// <summary>
-        /// Название модульного теста для метода <see cref="LegTypeExtensionTests"/>.
+        /// Название модульного теста для метода <see cref="LegTypeExtension.GetLegBaseType"/>.
         /// </summary>
         private const string TestGetLegBaseType_ReturnsValue_TestName = "Когда вызывается метод " + 
-            "GetLegBaseType() для параметра {1}, он должен вернуть соответствующий параметр {0}";
+            "GetLegBaseType() для типа ножек {1}, он должен вернуть соответствующий параметр {0}";
 
-        [TestCase(DeskParameterType.LegBaseDiameter, LegType.Round, TestName = 
+        #endregion
+
+        #region Method Tests
+
+        [TestCase(DeskParameterType.LegBaseDiameter, LegType.Round, TestName =
             TestGetLegBaseType_ReturnsValue_TestName)]
-        [TestCase(DeskParameterType.LegBaseLength, LegType.Square, TestName = 
+        [TestCase(DeskParameterType.LegBaseLength, LegType.Square, TestName =
             TestGetLegBaseType_ReturnsValue_TestName)]
         public void TestGetLegBaseType_ReturnsValue(DeskParameterType expected, LegType legType)
         {
@@ -28,5 +34,7 @@ namespace TestParameters
             // Assert
             Assert.AreEqual(expected, actual);
         }
+
+        #endregion
     }
 }

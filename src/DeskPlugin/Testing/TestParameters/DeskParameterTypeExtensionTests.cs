@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Parameters.Enums;
 using Parameters.Enums.Extensions;
 
@@ -10,6 +11,8 @@ namespace TestParameters
     [TestFixture]
     public class DeskParameterTypeExtensionTests
     {
+        #region Constants For Testing
+
         /// <summary>
         /// Название модульного теста для метода
         /// <see cref="DeskParameterTypeExtension.GetDescription"/>.
@@ -17,22 +20,11 @@ namespace TestParameters
         private const string TestGetDescription_ReturnsValue_TestName = "Когда вызывается метод " + 
             "GetDescription() для параметра {0}, он должен вернуть строку {1}";
 
-        [TestCase(DeskParameterType.WorktopLength, "Length (L1)",
-            TestName = TestGetDescription_ReturnsValue_TestName)]
-        [TestCase(DeskParameterType.WorktopWidth, "Width (B)",
-            TestName = TestGetDescription_ReturnsValue_TestName)]
-        [TestCase(DeskParameterType.WorktopHeight, "Height (H1)",
-            TestName = TestGetDescription_ReturnsValue_TestName)]
-        [TestCase(DeskParameterType.LegBaseDiameter, "Base Diameter (D)",
-            TestName = TestGetDescription_ReturnsValue_TestName)]
-        [TestCase(DeskParameterType.LegBaseLength, "Base Length (A)",
-            TestName = TestGetDescription_ReturnsValue_TestName)]
-        [TestCase(DeskParameterType.LegHeight, "Height (H2)",
-            TestName = TestGetDescription_ReturnsValue_TestName)]
-        [TestCase(DeskParameterType.DrawerNumber, "Number",
-            TestName = TestGetDescription_ReturnsValue_TestName)]
-        [TestCase(DeskParameterType.DrawerLength, "Length (L2)",
-            TestName = TestGetDescription_ReturnsValue_TestName)]
+        #endregion
+
+        #region Method Tests
+
+        [TestCaseSource(nameof(GetDescriptionTestCases))]
         public void TestGetDescription_ReturnsValue(DeskParameterType parameterType, 
             string expected)
         {
@@ -42,5 +34,43 @@ namespace TestParameters
             // Assert
             Assert.AreEqual(expected, actual);
         }
+
+        #endregion
+
+        #region Test Case Sources
+
+        /// <summary>
+        /// Метод-источник тестовых случаев для тестирования метода
+        /// <see cref="DeskParameterTypeExtension.GetDescription"/>.
+        /// </summary>
+        /// <returns> Перечисление тестовых случаев <see cref="TestCaseData"/>.</returns>
+        private static IEnumerable<TestCaseData> GetDescriptionTestCases()
+        {
+            yield return new TestCaseData(DeskParameterType.WorktopLength, "Length (L1)")
+                .SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.WorktopWidth, "Width (B)")
+                .SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.WorktopHeight, "Height (H1)")
+                .SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.LegBaseDiameter, "Base Diameter (D)")
+                .SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.LegBaseLength, "Base Length (A)")
+                .SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.LegHeight, "Height (H2)")
+                .SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.DrawerNumber, "Number")
+                .SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.DrawerLength, "Length (L2)")
+                .SetName(TestGetDescription_ReturnsValue_TestName);
+        }
+
+        #endregion
     }
 }

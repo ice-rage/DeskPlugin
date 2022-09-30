@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using CommunityToolkit.Mvvm.Input;
@@ -16,14 +17,17 @@ namespace TestViewModel
     [TestFixture]
     public class MainWindowViewModelTests
     {
-        #region Constants
+        #region Constants For Testing
 
-        private const string TestSetCommands_CanExecute_TestName = "ѕри получении команды {0} " + 
+        /// <summary>
+        /// Ќазвание модульных тестов дл€ команд, устанавливающих значени€ параметров по умолчанию.
+        /// </summary>
+        private const string TestSetCommands_CanExecute_TestName = "ѕри вызове команды {0} " + 
             "она должна содержать обработчик";
 
         #endregion
 
-        #region Test Properties
+        #region Property Tests
 
         [TestCase(TestName = "ѕозитивный тест геттера Parameters")]
         public void TestParametersGet_GoodScenario()
@@ -60,9 +64,9 @@ namespace TestViewModel
 
         #endregion
 
-        #region Test Commands
+        #region Command Tests
 
-        [TestCase(TestName = "ѕри получении команды BuildModelCommand она должна содержать " + 
+        [TestCase(TestName = "ѕри вызове команды BuildModelCommand она должна содержать " + 
             "обработчик")]
         public void TestBuildModelCommand_CanExecute()
         {
@@ -85,11 +89,7 @@ namespace TestViewModel
             var mainWindowViewModel = new MainWindowViewModel();
 
             PropertyInfo commandProperty = typeof(MainWindowViewModel).GetProperty(commandName);
-
-            if (commandProperty == null)
-            {
-                return;
-            }
+            Debug.Assert(commandProperty != null, nameof(commandProperty) + " != null");
 
             bool canExecute = ((RelayCommand)commandProperty.GetValue(mainWindowViewModel))
                 .CanExecute(null);
@@ -98,20 +98,16 @@ namespace TestViewModel
             Assert.IsTrue(canExecute);
         }
 
-        [TestCaseSource(nameof(GetSetCommandsTestCases))]
+        [TestCaseSource(nameof(SetCommandsTestCases))]
         public void TestSetCommands_Execute(string commandName, IList<int> expected, 
-            Func<DeskParameter, int> function)
+            Func<DeskParameter, int> getParameterAcceptableLimit)
         {
             // Arrange
             var mainWindowViewModel = new MainWindowViewModel();
 
             // Act
             PropertyInfo commandProperty = typeof(MainWindowViewModel).GetProperty(commandName);
-
-            if (commandProperty == null)
-            {
-                return;
-            }
+            Debug.Assert(commandProperty != null, nameof(commandProperty) + " != null");
 
             ((RelayCommand)commandProperty.GetValue(mainWindowViewModel))
                 .Execute(mainWindowViewModel.Parameters);
@@ -122,7 +118,7 @@ namespace TestViewModel
                 .ToList()
                 .ForEach(parameters => actual
                     .AddRange(parameters
-                        .Select(function)));
+                        .Select(getParameterAcceptableLimit)));
 
             // Assert
             CollectionAssert.AreEqual(expected, actual);
@@ -130,10 +126,10 @@ namespace TestViewModel
 
         #endregion
 
-        #region Test Methods
+        #region Method Tests
 
-        [TestCase(TestName = "≈сли все параметры содержат корректные данные, в свойство " + 
-            "IsDataValid класса MainWindowViewModel должно быть установлено значение true")]
+        [TestCase(TestName = "≈сли все параметры содержат корректные данные, свойство IsDataValid" + 
+            "должно принимать значение true")]
         public void TestOnDataValidChanged_ValidData_SetsTrue()
         {
             // Act
@@ -149,8 +145,8 @@ namespace TestViewModel
             Assert.IsTrue(isValid);
         }
 
-        [TestCase(TestName = "≈сли в один из параметров ввод€т некорректные данные, в свойство " + 
-            "IsDataValid класса MainWindowViewModel должно быть установлено значение false")]
+        [TestCase(TestName = "≈сли хот€ бы один из параметров содержит некорректные данные, " + 
+            "свойство IsDataValid должно принимать значение false")]
         public void TestOnDataValidChanged_InvalidData_SetsFalse()
         {
             // Act
@@ -169,11 +165,11 @@ namespace TestViewModel
         #region Test Case Sources
 
         /// <summary>
-        /// ћетод-источников тестовых случаев дл€ тестировани€ статических свойств класса
-        /// <see cref="DeskParameters"/>.
+        /// ћетод-источник тестовых случаев дл€ тестировани€ команд, устанавливающих значени€
+        /// параметров по умолчанию.
         /// </summary>
-        /// <returns>ѕеречисление тестовых случаев <see cref="TestCaseData"/>.</returns>
-        private static IEnumerable<TestCaseData> GetSetCommandsTestCases()
+        /// <returns> ѕеречисление тестовых случаев <see cref="TestCaseData"/>.</returns>
+        private static IEnumerable<TestCaseData> SetCommandsTestCases()
         {
             yield return new TestCaseData(nameof(MainWindowViewModel.SetMinimumParametersCommand),
                 new List<int> { 800, 400, 30, 50, 690, 3, 250 }, (Func<DeskParameter, int>)

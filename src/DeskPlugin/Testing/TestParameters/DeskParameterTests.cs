@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using Parameters;
 using Parameters.Enums;
-using Parameters.Enums.Extensions;
 
 namespace TestParameters
 {
@@ -13,13 +12,17 @@ namespace TestParameters
     [TestFixture]
     public class DeskParameterTests
     {
-        #region Constants
+        #region Test Data Source
 
         /// <summary>
         /// Тестовый параметр.
         /// </summary>
         private readonly DeskParameter _testParameter = new DeskParameter(DeskParameterType
             .WorktopLength, 800, 1200, 1000);
+
+        #endregion
+
+        #region Constants For Testing
 
         /// <summary>
         /// Название модульного теста для конструктора.
@@ -42,7 +45,7 @@ namespace TestParameters
 
         #endregion
 
-        #region Test Properties
+        #region Property Tests
 
         [TestCase(TestName = "Позитивный тест геттера Name")]
         public void TestNameGet_GoodScenario()
@@ -90,11 +93,7 @@ namespace TestParameters
         public void TestValueGetSet_GoodScenario(int expected)
         {
             // Act
-            if (!(_testParameter.Clone() is DeskParameter parameter))
-            {
-                return;
-            }
-
+            var parameter = (DeskParameter)_testParameter.Clone();
             parameter.Value = expected;
             int actual = parameter.Value;
 
@@ -106,7 +105,7 @@ namespace TestParameters
         public void TestDescriptionGet_GoodScenario()
         {
             // Arrange
-            string expected = DeskParameterType.WorktopLength.GetDescription();
+            var expected = "Length (L1)";
 
             // Act
             string actual = _testParameter.Description;
@@ -140,7 +139,7 @@ namespace TestParameters
 
         #endregion
 
-        #region Test Constructors
+        #region Constructor Tests
 
         [TestCase(DeskParameterType.WorktopLength, 1200, 800, 900, "Error",
             TestName = TestConstructor_CheckAcceptableRange_ReturnsValue_TestName)]
@@ -163,20 +162,16 @@ namespace TestParameters
 
         #endregion
 
-        #region Test Methods
+        #region Method Tests
 
         [TestCase(TestName = "При сравнении одинаковых объектов возвращается true")]
-        public void TestEqualsAndClone_EqualValues_ReturnsTrue()
+        public void TestEquals_EqualObjects_ReturnsTrue()
         {
             // Arrange
             DeskParameter expected = _testParameter;
 
             // Act
-            if (!(_testParameter.Clone() is DeskParameter actual))
-            {
-                return;
-            }
-
+            var actual = (DeskParameter)expected.Clone();
             bool isEqual = actual.Equals(expected);
 
             // Assert
@@ -190,11 +185,7 @@ namespace TestParameters
             DeskParameter expected = _testParameter;
 
             // Act
-            if (!(_testParameter.Clone() is DeskParameter actual))
-            {
-                return;
-            }
-
+            var actual = (DeskParameter)expected.Clone();
             actual.Value = 1172;
             bool isEqual = actual.Equals(expected);
 
@@ -202,8 +193,8 @@ namespace TestParameters
             Assert.IsFalse(isEqual);
         }
 
-        [TestCase(TestName = "При сравнении с null возвращается false")]
-        public void TestEquals_NullValue_ReturnsFalse()
+        [TestCase(TestName = "При сравнении объекта с null возвращается false")]
+        public void TestEquals_NullObject_ReturnsFalse()
         {
             // Act
             DeskParameter actual = _testParameter;
@@ -217,15 +208,12 @@ namespace TestParameters
         public void TestGetHashCode_EqualObjects_EqualHashCodes()
         {
             // Arrange
-            int expected = _testParameter.GetHashCode();
+            DeskParameter parameter = _testParameter;
+            int expected = parameter.GetHashCode();
 
             // Act
-            if (!(_testParameter.Clone() is DeskParameter parameter))
-            {
-                return;
-            }
-
-            int actual = parameter.GetHashCode();
+            var equalParameter = (DeskParameter)parameter.Clone();
+            int actual = equalParameter.GetHashCode();
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -235,22 +223,19 @@ namespace TestParameters
         public void TestGetHashCode_DifferentObjects_DifferentHashCodes()
         {
             // Arrange
-            int expected = _testParameter.GetHashCode();
+            DeskParameter parameter = _testParameter;
+            int expected = parameter.GetHashCode();
 
             // Act
-            if (!(_testParameter.Clone() is DeskParameter parameter))
-            {
-                return;
-            }
-
-            parameter.Value = 877;
-            int actual = parameter.GetHashCode();
+            var differentParameter = (DeskParameter)parameter.Clone();
+            differentParameter.Value = 877;
+            int actual = differentParameter.GetHashCode();
 
             // Assert
             Assert.AreNotEqual(expected, actual);
         }
 
-        #region Test Validators
+        #region Validator Tests
 
         [TestCase(null, 500, TestGetErrors_ValueLessThanMin_ErrorMessage)]
         [TestCase(null, 1500, TestGetErrors_ValueGreaterThanMax_ErrorMessage)]
@@ -259,18 +244,18 @@ namespace TestParameters
         public void TestGetErrors_ReturnsValue(string propertyName, int value, string expected)
         {
             // Act
-            if (!(_testParameter.Clone() is DeskParameter parameters))
-            {
-                return;
-            }
+            var parameter = (DeskParameter)_testParameter.Clone();
 
-            parameters.Value = value;
-            List<string> errors = parameters.GetErrors(propertyName).OfType<string>().ToList();
+            parameter.Value = value;
+            List<string> validationErrors = parameter
+                .GetErrors(propertyName)
+                .OfType<string>()
+                .ToList();
 
             // Assert
-            if (errors.Any())
+            if (validationErrors.Any())
             {
-                bool isContained = errors.Contains(expected);
+                bool isContained = validationErrors.Contains(expected);
                 Assert.IsTrue(isContained);
             }
             else
