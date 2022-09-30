@@ -255,8 +255,8 @@ namespace Builder
         /// <summary>
         /// Метод для построения ножек письменного стола.
         /// </summary>
-        /// <param name="legType"> Тип ножек, описанный в перечислении <see cref="ParameterType"/>.
-        /// </param>
+        /// <param name="legType"> Тип ножек, описанный в перечислении
+        /// <see cref="DeskParameterType"/>.</param>
         /// <param name="legBase"> Значение основания ножек.</param>
         /// <param name="legHeight"> Высота ножек.</param>
         /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета положения ножек

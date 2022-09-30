@@ -18,7 +18,7 @@ namespace Desk.Behaviors
         /// <inheritdoc/>
         protected override void OnDetaching() => AssociatedObject.MouseUp -= OnMouseUp;
 
-        #region EventArgs
+        #region Event Handlers
 
         /// <summary>
         /// Обработчик события освобождения кнопки мыши.

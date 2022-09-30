@@ -23,7 +23,7 @@ namespace Desk.Extensions
         public static DependencyObject FindRoot(this DependencyObject obj, Type helperType)
         {
             if (helperType is null || (helperType != typeof(VisualTreeHelper) && 
-                                       helperType != typeof(LogicalTreeHelper)))
+                helperType != typeof(LogicalTreeHelper)))
             {
                 throw new ArgumentException($"The \"{nameof(helperType)}\" parameter " + 
                     "must be of type VisualTreeHelper or LogicalTreeHelper");

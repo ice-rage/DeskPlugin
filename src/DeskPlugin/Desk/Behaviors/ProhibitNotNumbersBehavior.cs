@@ -41,11 +41,12 @@ namespace Desk.Behaviors
         /// <summary>
         /// Метод, применяющий специальное регулярное выражение для определения корректности ввода.
         /// </summary>
-        /// <param name="text">Текст, содержащийся в текстовом поле.</param>
-        /// <returns>true, если ввод корректен, и false в противном случае.</returns>
+        /// <param name="text"> Текст, содержащийся в текстовом поле.</param>
+        /// <returns> <see langword="true"/>, если ввод корректен, и <see langword="false"/>
+        /// в противном случае.</returns>
         private static bool IsTextAllowed(string text) => !_regex.IsMatch(text);
 
-        #region EventHandlers
+        #region Event Handlers
 
         /// <summary>
         /// Обработчик события получения элементом <see cref="TextBox"/> текстового ввода.

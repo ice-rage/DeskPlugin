@@ -125,7 +125,7 @@ namespace ViewModel
             OnDataValidChanged(this, EventArgs.Empty);
         }
 
-        #region EventHandlers
+        #region Event Handlers
 
         /// <summary>
         /// Обработчик события изменения корректности введенных данных.

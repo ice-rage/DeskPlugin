@@ -19,7 +19,7 @@ namespace Desk.Behaviors
         /// <inheritdoc/>
         protected override void OnDetaching() => AssociatedObject.Click -= OnButtonClick;
 
-        #region EventHandlers
+        #region Event Handlers
 
         /// <summary>
         /// Обработчик события нажатия на кнопку минимизации окна.

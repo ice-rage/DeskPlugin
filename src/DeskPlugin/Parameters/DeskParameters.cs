@@ -24,7 +24,7 @@ namespace Parameters
 
         #region Properties
 
-        #region Static
+        #region Static Properties
 
         /// <summary>
         /// Расстояние от края столешницы до некоторого объекта (ножек стола, углов ящиков и т.п.).
@@ -91,8 +91,9 @@ namespace Parameters
         /// <summary>
         /// Группа параметров и соответствующий ей список параметров.
         /// </summary>
-        public Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>> ParametersByGroup
-        { get; } = new Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>>();
+        public Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>> 
+            ParametersByGroup { get; } = new Dictionary<DeskParameterGroupType, 
+            ObservableCollection<DeskParameter>>();
 
         /// <summary>
         /// Тип ножек письменного стола.
@@ -135,26 +136,29 @@ namespace Parameters
             LegType = LegType.Round;
             ParametersByGroup.Clear();
 
-            ParametersByGroup.Add(DeskParameterGroupType.Worktop, new ObservableCollection<DeskParameter>
-            {
-                new DeskParameter(DeskParameterType.WorktopLength, 800, 1200, 1000),
-                new DeskParameter(DeskParameterType.WorktopWidth, 500, 750, 625),
-                new DeskParameter(DeskParameterType.WorktopHeight, 30, 40, 35)
-            });
+            ParametersByGroup.Add(DeskParameterGroupType.Worktop, 
+                new ObservableCollection<DeskParameter> 
+                { 
+                    new DeskParameter(DeskParameterType.WorktopLength, 800, 1200, 1000), 
+                    new DeskParameter(DeskParameterType.WorktopWidth, 500, 750, 625), 
+                    new DeskParameter(DeskParameterType.WorktopHeight, 30, 40, 35)
+                });
 
-            ParametersByGroup.Add(DeskParameterGroupType.Legs, new ObservableCollection<DeskParameter>
-            {
-                LegType == LegType.Round
-                    ? new DeskParameter(DeskParameterType.LegBaseDiameter, 50, 70, 60)
-                    : new DeskParameter(DeskParameterType.LegBaseLength, 50, 70, 60),
-                new DeskParameter(DeskParameterType.LegHeight, 690, 740, 715)
-            });
+            ParametersByGroup.Add(DeskParameterGroupType.Legs, 
+                new ObservableCollection<DeskParameter>
+                {
+                    LegType == LegType.Round
+                        ? new DeskParameter(DeskParameterType.LegBaseDiameter, 50, 70, 60)
+                        : new DeskParameter(DeskParameterType.LegBaseLength, 50, 70, 60),
+                    new DeskParameter(DeskParameterType.LegHeight, 690, 740, 715)
+                });
 
-            ParametersByGroup.Add(DeskParameterGroupType.Drawers, new ObservableCollection<DeskParameter>
-            {
-                new DeskParameter(DeskParameterType.DrawerNumber, 3, 5, 4),
-                new DeskParameter(DeskParameterType.DrawerLength, 250, 333, 291)
-            });
+            ParametersByGroup.Add(DeskParameterGroupType.Drawers, 
+                new ObservableCollection<DeskParameter>
+                {
+                    new DeskParameter(DeskParameterType.DrawerNumber, 3, 5, 4),
+                    new DeskParameter(DeskParameterType.DrawerLength, 250, 333, 291)
+                });
 
             // Подписываемся на событие изменения текущего значения длины столешницы, т.к. от этого
             // параметра зависит несколько других параметров письменного стола (ширина столешницы
@@ -176,8 +180,8 @@ namespace Parameters
         #region Methods
 
         /// <summary>
-        /// Обновляет параметр, хранящий размер основания ножек письменного стола, в зависимости от
-        /// их типа.
+        /// Обновляет параметр, хранящий размер основания ножек письменного стола, в зависимости
+        /// от их типа.
         /// </summary>
         /// <param name="legType"> Тип ножек письменного стола.</param>
         private void UpdateLegBaseParameter(LegType legType)
@@ -186,11 +190,14 @@ namespace Parameters
             SetProperty(ref _legType, legType);
             DeskParameterType updatedLegBaseType = LegType.GetLegBaseType();
 
-            DeskParameter previousParameter = this[DeskParameterGroupType.Legs, previousLegBaseType];
+            DeskParameter previousParameter = this[DeskParameterGroupType.Legs, 
+                previousLegBaseType];
 
-            this[DeskParameterGroupType.Legs, previousLegBaseType] = new DeskParameter(updatedLegBaseType,
-                previousParameter.Min, previousParameter.Max, previousParameter.Value);
-            this[DeskParameterGroupType.Legs, updatedLegBaseType].DataValidChanged += DataValidChanged;
+            this[DeskParameterGroupType.Legs, previousLegBaseType] = 
+                new DeskParameter(updatedLegBaseType, previousParameter.Min, previousParameter.Max, 
+                    previousParameter.Value);
+            this[DeskParameterGroupType.Legs, updatedLegBaseType].DataValidChanged += 
+                DataValidChanged;
         }
 
         /// <summary>
@@ -201,7 +208,8 @@ namespace Parameters
         /// <param name="e"> Аргументы события.</param>
         private void OnWorktopLengthChanged(object sender, EventArgs e)
         {
-            int worktopLength = this[DeskParameterGroupType.Worktop, DeskParameterType.WorktopLength].Value;
+            int worktopLength = this[DeskParameterGroupType.Worktop, 
+                DeskParameterType.WorktopLength].Value;
 
             DeskParameter worktopWidthParameter = this[DeskParameterGroupType.Worktop, 
                 DeskParameterType.WorktopWidth];
@@ -233,7 +241,7 @@ namespace Parameters
         /// списком параметров.</returns>
         public KeyValuePair<DeskParameterGroupType, ObservableCollection<DeskParameter>>
             this[DeskParameterGroupType index] => new KeyValuePair<DeskParameterGroupType,
-            ObservableCollection<DeskParameter>>(index, ParametersByGroup[index]);
+                ObservableCollection<DeskParameter>>(index, ParametersByGroup[index]);
 
         /// <summary>
         /// Индексатор, позволяющий получить группу параметров письменного стола по ее наименованию.
