@@ -84,6 +84,10 @@
       <Project>{0ec9a5ff-ae96-455b-8f02-2e629db57d48}</Project>
       <Name>Builder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{c5aceb46-8b3f-4d15-a2eb-ad9b5a4bd71d}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

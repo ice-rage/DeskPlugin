@@ -5,6 +5,7 @@ using Builder;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Parameters;
+using Services;
 
 namespace ViewModel
 {
@@ -18,7 +19,7 @@ namespace ViewModel
         /// <summary>
         /// Объект для построения 3D-модели письменного стола.
         /// </summary>
-        private readonly DeskBuilder _builder = new DeskBuilder();
+        private readonly DeskBuilder _builder = new DeskBuilder(new AutoCadWrapper("Desk"));
 
         /// <summary>
         /// Переменная для хранения значения, показывающего, корректны ли введенные данные.
