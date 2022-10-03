@@ -6,6 +6,9 @@ using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
 namespace Services
 {
+    /// <summary>
+    /// Класс-обертка для обращения к свойствам и методам AuoCAD .NET API.
+    /// </summary>
     public class AutoCadWrapper : ICadWrapper
     {
         #region Fileds
