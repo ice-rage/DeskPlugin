@@ -60,7 +60,7 @@ namespace Builder
             int legBaseValue = parameters[DeskParameterGroupType.Legs,
                 parameters.LegType.GetLegBaseType()].Value;
 
-            BuildWorktop(worktopLength, worktopWidth, worktopHeight);
+            BuildWorktop(worktopLength, worktopWidth, worktopHeight, legHeight);
 
             BuildLegs(legType, legBaseValue, legHeight, worktopWidth);
 
@@ -76,10 +76,14 @@ namespace Builder
         /// <param name="worktopLength"> Длина столешницы.</param>
         /// <param name="worktopWidth"> Ширина столешницы.</param>
         /// <param name="worktopHeight"> Высота столешницы.</param>
-        private void BuildWorktop(int worktopLength, int worktopWidth, int worktopHeight)
+        /// <param name="legHeight"> Высота ножек.</param>
+        private void BuildWorktop(int worktopLength, int worktopWidth, int worktopHeight, 
+            int legHeight)
         {
-            var displacementEndPoint = new Point3D(worktopLength, worktopWidth, worktopHeight);
-            _wrapper.BuildSimpleBox(worktopLength, worktopWidth, worktopHeight, displacementEndPoint);
+            var displacementEndPoint = new Point3D(worktopLength, worktopWidth, 
+                worktopHeight + legHeight);
+            _wrapper.BuildSimpleBox(worktopLength, worktopWidth, worktopHeight, 
+                displacementEndPoint);
         }
 
         /// <summary>
@@ -107,7 +111,7 @@ namespace Builder
             // Выполняем операцию выдавливания для основания каждой ножки.
             foreach (object leg in legBases)
             {
-                _wrapper.Extrude(leg, -legHeight);
+                _wrapper.Extrude(leg, legHeight);
             }
         }
 
@@ -131,13 +135,12 @@ namespace Builder
             // В каждый словарь оснований добавляем координату центра окружности основания
             // соответствующей ножки.
             //
-            int baseCenterCoordinate = DeskParameters.DistanceFromWorktopCorner + 
-                (baseDiameter / 2);
-            x.Add(0, baseCenterCoordinate);
-            y.Add(0, baseCenterCoordinate);
+            int baseCenter = DeskParameters.DistanceFromWorktopCorner + (baseDiameter / 2);
+            x.Add(0, baseCenter);
+            y.Add(0, baseCenter);
 
-            x.Add(1, baseCenterCoordinate);
-            y.Add(1, worktopWidth - baseCenterCoordinate);
+            x.Add(1, baseCenter);
+            y.Add(1, worktopWidth - baseCenter);
 
             // Создаем окружности основания ножек и добавляем их в массив.
             for (var i = 0; i < x.Count; i++)
@@ -202,7 +205,7 @@ namespace Builder
             int worktopLength,
             int worktopWidth)
         {
-            for (var i = 0; i < drawerNumber; i++)
+            for (var i = 1; i <= drawerNumber; i++)
             {
                 // Строим ящик для канцелярии.
                 _wrapper.BuildCompositeBox(
@@ -212,7 +215,7 @@ namespace Builder
                     new Point3D(
                         worktopLength - DeskParameters.DistanceFromWorktopCorner,
                         worktopWidth - DeskParameters.DistanceFromWorktopCorner,
-                        -drawerHeight * i),
+                        drawerHeight * i),
                     drawerLength - DeskParameters.OuterInnerDrawerLengthDifference,
                     worktopWidth - DeskParameters.WorktopDrawerWidthDifference -
                     DeskParameters.OuterInnerDrawerWidthDifference,
@@ -220,7 +223,7 @@ namespace Builder
                     new Point3D(
                         worktopLength - DeskParameters.OuterInnerDrawerLengthDifference,
                         worktopWidth - DeskParameters.OuterInnerDrawerWidthDifference,
-                        -drawerHeight * i));
+                        drawerHeight * i));
 
                 // Строим дверцу ящика.
                 _wrapper.BuildSimpleBox(
@@ -230,7 +233,7 @@ namespace Builder
                     new Point3D(
                         worktopLength - DeskParameters.DrawerDoorLengthDifference,
                         DeskParameters.DoorWidth + DeskParameters.DistanceFromWorktopCorner,
-                        -drawerHeight * i));
+                        drawerHeight * i));
 
                 // Строим ручку ящика.
                 _wrapper.BuildCompositeBox(
@@ -241,7 +244,7 @@ namespace Builder
                         worktopLength - DeskParameters.DistanceFromWorktopCorner - 
                         drawerLength / 4,
                         DeskParameters.DistanceFromWorktopCorner,
-                        -drawerHeight * i - drawerHeight / 2 + 
+                        drawerHeight * i - drawerHeight / 2 + 
                         (double)DeskParameters.HandleHeight / 2),
                     drawerLength / 2 - 
                     DeskParameters.OuterInnerHandleLengthDifference,
@@ -251,7 +254,7 @@ namespace Builder
                         worktopLength - DeskParameters.DistanceFromWorktopCorner - 
                         drawerLength / 4 - DeskParameters.OuterInnerHandleLengthDifference / 2,
                         DeskParameters.DistanceFromWorktopCorner,
-                        -drawerHeight * i - drawerHeight / 2 + 
+                        drawerHeight * i - drawerHeight / 2 + 
                         (double)DeskParameters.HandleHeight / 2));
             }
         }
