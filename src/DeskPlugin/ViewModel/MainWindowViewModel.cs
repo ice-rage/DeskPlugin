@@ -41,7 +41,6 @@ namespace ViewModel
         public bool IsDataValid
         {
             get => _isDataValid;
-
             set => SetProperty(ref _isDataValid, value);
         }
 
@@ -113,7 +112,8 @@ namespace ViewModel
         /// установки значений по умолчанию.</param>
         private void SetDefaultParameters(Action<DeskParameter> action)
         {
-            foreach (ObservableCollection<DeskParameter> parameters in Parameters.ParametersByGroup
+	        // TODO: Почему не var?
+			foreach (ObservableCollection<DeskParameter> parameters in Parameters.ParametersByGroup
                          .Values)
             {
                 for (var i = 0; i < parameters.Count; i++)

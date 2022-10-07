@@ -16,12 +16,13 @@ namespace Services
     /// </summary>
     public class AutoCadWrapper : ICadWrapper
     {
-        #region Fileds
+		#region Fileds
 
-        /// <summary>
-        /// Массив объектов базы данных документа AutoCAD, хранящий части (детали) 3D-модели.
-        /// </summary>
-        private readonly DBObjectCollection _3dModelParts = new DBObjectCollection();
+		/// <summary>
+		/// Массив объектов базы данных документа AutoCAD, хранящий части (детали) 3D-модели.
+		/// </summary>
+		// TODO: просто _modelParts или _modelParts3D
+		private readonly DBObjectCollection _3dModelParts = new DBObjectCollection();
 
         #endregion
 
@@ -109,11 +110,11 @@ namespace Services
             var curves = new DBObjectCollection();
             curves.Add((DBObject)obj);
 
-            // Для выполнения операции выдавливания 2D-объект должен представлять собой замкнутую
-            // область, поэтому предварительно получаем область (region) из кривых, образующих
-            // объект.
-            //
-            DBObjectCollection regions = Region.CreateFromCurves(curves);
+			// Для выполнения операции выдавливания 2D-объект должен представлять собой замкнутую
+			// область, поэтому предварительно получаем область (region) из кривых, образующих
+			// объект.
+			// TODO: Почему не var?
+			DBObjectCollection regions = Region.CreateFromCurves(curves);
 
             using (var region = (Region)regions[0])
             {

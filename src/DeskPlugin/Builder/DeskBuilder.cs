@@ -42,7 +42,8 @@ namespace Builder
         /// <param name="parameters"> Параметры, необходимые для построения 3D-модели.</param>
         public void BuildDesk(DeskParameters parameters)
         {
-            int worktopLength = parameters[DeskParameterGroupType.Worktop,
+	        // TODO: Почему не var? И так по всему классу.
+			int worktopLength = parameters[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopLength].Value;
             int worktopWidth = parameters[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopWidth].Value;
@@ -100,7 +101,6 @@ namespace Builder
         {
             // Создаем словари, содержащие в качестве ключа порядковый номер ножки, а в качестве
             // значения - одну из координат ее основания.
-            //
             var x = new Dictionary<int, double>();
             var y = new Dictionary<int, double>();
 
@@ -135,7 +135,6 @@ namespace Builder
 
             // В каждый словарь оснований добавляем координату центра окружности основания
             // соответствующей ножки.
-            //
             int baseCenter = DeskParameters.DistanceFromWorktopCornerToLeg + baseDiameter / 2;
             x.Add(0, baseCenter);
             y.Add(0, baseCenter);

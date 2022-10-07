@@ -92,6 +92,7 @@ namespace Parameters
         /// <summary>
         /// Группа параметров и соответствующий ей список параметров.
         /// </summary>
+        // TODO: Подумать надо, как сделать более читаемо.
         public Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>> 
             ParametersByGroup { get; } = new Dictionary<DeskParameterGroupType, 
             ObservableCollection<DeskParameter>>();
@@ -140,8 +141,11 @@ namespace Parameters
             ParametersByGroup.Add(DeskParameterGroupType.Worktop, 
                 new ObservableCollection<DeskParameter> 
                 { 
+                    // TODO: длина строк
                     new DeskParameter(DeskParameterType.WorktopLength, 800, 1200, 1000), 
+                    // TODO: длина строк
                     new DeskParameter(DeskParameterType.WorktopWidth, 500, 750, 625), 
+                    // TODO: длина строк и т.д. Должно быть примерно 80-85 длина стоки
                     new DeskParameter(DeskParameterType.WorktopHeight, 30, 40, 35)
                 });
 
@@ -187,7 +191,8 @@ namespace Parameters
         /// <param name="legType"> Тип ножек письменного стола.</param>
         private void UpdateLegBaseParameter(LegType legType)
         {
-            DeskParameterType previousLegBaseType = LegType.GetLegBaseType();
+	        // TODO: Почему не var? И так дальше по классу
+			DeskParameterType previousLegBaseType = LegType.GetLegBaseType();
             SetProperty(ref _legType, legType);
             DeskParameterType updatedLegBaseType = LegType.GetLegBaseType();
 
@@ -195,8 +200,8 @@ namespace Parameters
                 previousLegBaseType];
 
             this[DeskParameterGroupType.Legs, previousLegBaseType] = 
-                new DeskParameter(updatedLegBaseType, previousParameter.Min, previousParameter.Max, 
-                    previousParameter.Value);
+                new DeskParameter(updatedLegBaseType, previousParameter.Min, 
+	                previousParameter.Max, previousParameter.Value);
             this[DeskParameterGroupType.Legs, updatedLegBaseType].DataValidChanged += 
                 DataValidChanged;
         }

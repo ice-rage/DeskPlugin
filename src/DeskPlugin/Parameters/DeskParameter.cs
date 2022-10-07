@@ -75,7 +75,6 @@ namespace Parameters
         public string AcceptableRange
         {
             get => _acceptableRange;
-
             private set => SetProperty(ref _acceptableRange, value);
         }
 
@@ -156,6 +155,7 @@ namespace Parameters
             {
                 var hash = 17;
 
+	            // TODO: Магическое число
                 hash = hash * 23 + Name.GetHashCode();
                 hash = hash * 23 + Description.GetHashCode();
                 hash = hash * 23 + Min.GetHashCode();

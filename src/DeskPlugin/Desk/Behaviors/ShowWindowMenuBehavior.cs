@@ -37,9 +37,10 @@ namespace Desk.Behaviors
                 return;
             }
 
-            // Вычисляем координаты центра иконки окна и в зависимости от состояния окна отображаем
-            // меню либо в правом нижнем углу иконки, либо в ее центре.
-            double halfWidthIcon = element.ActualWidth / 2;
+			// Вычисляем координаты центра иконки окна и в зависимости от состояния окна отображаем
+			// меню либо в правом нижнем углу иконки, либо в ее центре.
+			// TODO: Почему не var?
+			double halfWidthIcon = element.ActualWidth / 2;
             double halfHeightIcon = element.ActualHeight / 2;
 
             Point point = window.WindowState == WindowState.Maximized

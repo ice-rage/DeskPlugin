@@ -53,6 +53,7 @@ namespace Desk.Behaviors
         /// </summary>
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
+        // TODO: Лучше сделать в теле метода
         private static void OnPreviewTextInput(object sender, TextCompositionEventArgs e) => 
             e.Handled = !IsTextAllowed(e.Text);
 

@@ -6,8 +6,9 @@ using Parameters.Enums;
 
 namespace TestParameters
 {
+    // TODO: РџРѕР»РµС‚РµР»Р° РєРѕРґРёСЂРѕРІРєР°
     /// <summary>
-    /// Класс, содержащий модульные тесты для класса <see cref="DeskParameter"/>.
+    /// пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ <see cref="DeskParameter"/>.
     /// </summary>
     [TestFixture]
     public class DeskParameterTests
@@ -15,7 +16,7 @@ namespace TestParameters
         #region Test Data Source
 
         /// <summary>
-        /// Тестовый параметр.
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
         private readonly DeskParameter _testParameter = new DeskParameter(DeskParameterType
             .WorktopLength, 800, 1200, 1000);
@@ -25,20 +26,20 @@ namespace TestParameters
         #region Constants For Testing
 
         /// <summary>
-        /// Название модульного теста для конструктора.
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
         private const string TestConstructor_CheckAcceptableRange_ReturnsValue_TestName =
-            "При вызове конструктора для параметра {0} с ограничениями от {1} до {2} строка " +
-            "с ограничениями равна {4}";
+            "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {0} пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ {1} пїЅпїЅ {2} пїЅпїЅпїЅпїЅпїЅпїЅ " +
+            "пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ {4}";
 
         /// <summary>
-        /// Ожидаемое сообщение об ошибке, когда значение параметра меньше допустимого минимума.
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
         private const string TestGetErrors_ValueLessThanMin_ErrorMessage =
             "Parameter \"Length (L1)\" must be greater than or equal to 800";
 
         /// <summary>
-        /// Ожидаемое сообщение об ошибке, когда значение параметра больше допустимого максимума.
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
         private const string TestGetErrors_ValueGreaterThanMax_ErrorMessage =
             "Parameter \"Length (L1)\" must be less than or equal to 1200";
@@ -47,7 +48,7 @@ namespace TestParameters
 
         #region Property Tests
 
-        [TestCase(TestName = "Позитивный тест геттера Name")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Name")]
         public void TestNameGet_GoodScenario()
         {
             // Arrange
@@ -60,7 +61,7 @@ namespace TestParameters
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(TestName = "Позитивный тест геттера Min")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Min")]
         public void TestMinGet_GoodScenario()
         {
             // Arrange
@@ -73,7 +74,7 @@ namespace TestParameters
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(TestName = "Позитивный тест геттера Max")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Max")]
         public void TestMaxGet_GoodScenario()
         {
             // Arrange
@@ -86,10 +87,10 @@ namespace TestParameters
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(1000, TestName = "Позитивный тест геттера и сеттера Value с тем же значением " + 
-            "параметра")]
-        [TestCase(1100, TestName = "Позитивный тест геттера и сеттера Value с новым значением " + 
-            "параметра")]
+        [TestCase(1000, TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Value пїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ " + 
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+        [TestCase(1100, TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Value пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ " + 
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public void TestValueGetSet_GoodScenario(int expected)
         {
             // Act
@@ -101,7 +102,7 @@ namespace TestParameters
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(TestName = "Позитивный тест геттера Description")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Description")]
         public void TestDescriptionGet_GoodScenario()
         {
             // Arrange
@@ -114,7 +115,7 @@ namespace TestParameters
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(TestName = "Позитивный тест геттера AcceptableRange")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ AcceptableRange")]
         public void TestAcceptableRangeGet_GoodScenario()
         {
             // Arrange
@@ -127,7 +128,7 @@ namespace TestParameters
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(TestName = "Позитивный тест геттера HasErrors")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ HasErrors")]
         public void TestHasErrorsGet_GoodScenario()
         {
             // Act
@@ -164,7 +165,7 @@ namespace TestParameters
 
         #region Method Tests
 
-        [TestCase(TestName = "При сравнении одинаковых объектов возвращается true")]
+        [TestCase(TestName = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ true")]
         public void TestEquals_EqualObjects_ReturnsTrue()
         {
             // Arrange
@@ -178,7 +179,7 @@ namespace TestParameters
             Assert.IsTrue(isEqual);
         }
 
-        [TestCase(TestName = "При сравнении различных объектов возвращается false")]
+        [TestCase(TestName = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ false")]
         public void TestEquals_DifferentObjects_ReturnsFalse()
         {
             // Arrange
@@ -193,7 +194,7 @@ namespace TestParameters
             Assert.IsFalse(isEqual);
         }
 
-        [TestCase(TestName = "При сравнении объекта с null возвращается false")]
+        [TestCase(TestName = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ null пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ false")]
         public void TestEquals_NullObject_ReturnsFalse()
         {
             // Act
@@ -204,7 +205,7 @@ namespace TestParameters
             Assert.IsFalse(isEqual);
         }
 
-        [TestCase(TestName = "Для одинаковых объектов возвращаются одинаковые хеш-коды")]
+        [TestCase(TestName = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅ")]
         public void TestGetHashCode_EqualObjects_EqualHashCodes()
         {
             // Arrange
@@ -219,7 +220,7 @@ namespace TestParameters
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(TestName = "Для разных объектов возвращаются разные хеш-коды")]
+        [TestCase(TestName = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅ")]
         public void TestGetHashCode_DifferentObjects_DifferentHashCodes()
         {
             // Arrange

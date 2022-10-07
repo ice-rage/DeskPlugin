@@ -12,17 +12,18 @@ namespace TestParameters
     [TestFixture]
     public class DeskParametersTests
     {
-        #region Test Data Sources
+		#region Test Data Sources
 
-        /// <summary>
-        /// Тестовый словарь, содержащий группы параметров и соответствующие им коллекции
-        /// параметров.
-        /// </summary>
-        private readonly Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>>
+		/// <summary>
+		/// Тестовый словарь, содержащий группы параметров и соответствующие им коллекции
+		/// параметров.
+		/// </summary>
+		private readonly Dictionary<DeskParameterGroupType, ObservableCollection<DeskParameter>>
             _testParametersByGroup = new Dictionary<DeskParameterGroupType,
                 ObservableCollection<DeskParameter>>
             {
-                {
+				{
+					// TODO: длина строк
                     DeskParameterGroupType.Worktop, new ObservableCollection<DeskParameter>
                     {
                         new DeskParameter(DeskParameterType.WorktopLength, 800, 1200, 1000),

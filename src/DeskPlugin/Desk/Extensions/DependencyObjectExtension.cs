@@ -30,8 +30,9 @@ namespace Desk.Extensions
             }
 
             do
-            {
-                DependencyObject parent = helperType == typeof(VisualTreeHelper) 
+			{
+				// TODO: Почему не var?
+				DependencyObject parent = helperType == typeof(VisualTreeHelper) 
                     ? VisualTreeHelper.GetParent(obj) 
                     : LogicalTreeHelper.GetParent(obj);
 

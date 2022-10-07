@@ -16,7 +16,8 @@ namespace Desk.ValidationRules
             var stringValue = value as string;
 
             return string.IsNullOrWhiteSpace(stringValue)
-                ? new ValidationResult(false, "Value may not be blank or white-spaces")
+                ? new ValidationResult(
+	                false, "Value may not be blank or white-spaces")
                 : ValidationResult.ValidResult;
         }
 

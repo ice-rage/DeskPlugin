@@ -25,10 +25,16 @@ namespace Desk.Converters
             {
                 case LegType.Round:
                 {
-                    return "../../Resources/DeskWithRoundLegs.png";
+						// TODO: Лучше сделать относительный путь.
+						// Копировать всегда изображения при сборке.
+						// Получиться примерно такой путь Resources/DeskWithSquareLegs.png
+						return "../../Resources/DeskWithRoundLegs.png";
                 }
                 case LegType.Square:
                 {
+	                // TODO: Лучше сделать относительный путь.
+	                // Копировать всегда изображения при сборке.
+	                // Получиться примерно такой путь Resources/DeskWithSquareLegs.png
                     return "../../Resources/DeskWithSquareLegs.png";
                 }
                 default:
