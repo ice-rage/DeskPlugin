@@ -16,13 +16,13 @@ namespace Parameters.Enums.Extensions
         /// </summary>
         /// <param name="parameter"> Параметр, описание которого необходимо получить.
         /// </param>
-        /// <returns> Строка, содержащая описание параметра.</returns>
+        /// <returns> Строковое описание параметра.</returns>
         public static string GetDescription(this DeskParameterType parameter)
         {
             var description = parameter.ToString();
-            FieldInfo fieldInfo = parameter.GetType().GetField(parameter.ToString());
+            FieldInfo field = parameter.GetType().GetField(parameter.ToString());
 
-            if (fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false) 
+            if (field.GetCustomAttributes(typeof(DescriptionAttribute), false) 
                     is DescriptionAttribute[] attributes && attributes.Any())
             {
                 description = attributes.First().Description;

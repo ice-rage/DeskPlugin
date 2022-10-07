@@ -9,7 +9,7 @@ namespace Desk.Behaviors
     /// <summary>
     /// Класс, реализующий поведение для максимизации (разворачивания на весь экран) окна.
     /// </summary>
-    public class MaximizeWindowBehavior : Behavior<Button>
+    internal class MaximizeWindowBehavior : Behavior<Button>
     {
         #region Methods
 

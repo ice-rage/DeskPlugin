@@ -27,14 +27,9 @@ namespace Parameters
         #region Static Properties
 
         /// <summary>
-        /// Расстояние от края столешницы до некоторого объекта (ножек стола, углов ящиков и т.п.).
+        /// Расстояние от края столешницы до ближайшей ножки стола.
         /// </summary>
-        public static int DistanceFromWorktopCorner => 20;
-
-        /// <summary>
-        /// Разница в ширине между столешницей и ящиком для канцелярии.
-        /// </summary>
-        public static int WorktopDrawerWidthDifference => 40;
+        public static int DistanceFromWorktopCornerToLeg => 20;
 
         /// <summary>
         /// Разница в длине между внешним и внутренним пространством ящика для канцелярии.
@@ -50,6 +45,12 @@ namespace Parameters
         /// Разница в высоте между внешним и внутренним пространством ящика для канцелярии.
         /// </summary>
         public static int OuterInnerDrawerHeightDifference => 20;
+
+        /// <summary>
+        /// Разница между длиной (высотой) внутреннего пространства ящика для канцелярии и длиной
+        /// (высотой) его дверцы.
+        /// </summary>
+        public static double InnerDrawerDoorDimensionsDifference => 0.1;
 
         /// <summary>
         /// Разница в длине между ящиком для канцелярии и его дверцей.
@@ -129,7 +130,7 @@ namespace Parameters
         #region Constructors
 
         /// <summary>
-        /// Создает экземпляр класса <see cref="DeskParameters"/>.
+        /// Создает экземпляр <see cref="DeskParameters"/>.
         /// </summary>
         public DeskParameters()
         {
@@ -202,7 +203,8 @@ namespace Parameters
 
         /// <summary>
         /// Обработчик события изменения значения длины столешницы.
-        /// <para>Для зависимых параметров устанавливаются новые ограничения.</para>
+        /// <para> Для зависимых параметров устанавливаются новые диапазоны допустимых значений.
+        /// </para>
         /// </summary>
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
@@ -237,19 +239,18 @@ namespace Parameters
         /// по указанной группе параметров./>
         /// </summary>
         /// <param name="index"> Группа параметров.</param>
-        /// <returns> Пара "ключ-значение", образованная группой параметров и соответствующим
-        /// списком параметров.</returns>
+        /// <returns> Пара "ключ-значение", которая содержит группу параметров и соответствующий
+        /// список параметров.</returns>
         public KeyValuePair<DeskParameterGroupType, ObservableCollection<DeskParameter>>
             this[DeskParameterGroupType index] => new KeyValuePair<DeskParameterGroupType,
                 ObservableCollection<DeskParameter>>(index, ParametersByGroup[index]);
 
         /// <summary>
-        /// Индексатор, позволяющий получить группу параметров письменного стола по ее наименованию.
+        /// Индексатор, позволяющий получить параметр письменного стола по его группе и типу.
         /// </summary>
         /// <param name="firstIndex"> Группа параметров.</param>
         /// <param name="secondIndex"> Тип определенного параметра.</param>
-        /// <returns> Объект <see cref="DeskParameter"/>, который представляет найденную группу
-        /// параметров.</returns>
+        /// <returns> Найденный параметр.</returns>
         public DeskParameter this[DeskParameterGroupType firstIndex, DeskParameterType secondIndex]
         {
             get => ParametersByGroup[firstIndex].First(parameter => parameter.Name == secondIndex);

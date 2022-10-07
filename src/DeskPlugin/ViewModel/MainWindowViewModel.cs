@@ -83,7 +83,7 @@ namespace ViewModel
             SetMinimumParametersCommand = new RelayCommand(() =>
                 SetDefaultParameters(parameter => parameter.Value = parameter.Min));
             SetAverageParametersCommand = new RelayCommand(() =>
-                SetDefaultParameters(parameter => parameter.Value =
+                SetDefaultParameters(parameter => parameter.Value = 
                     (parameter.Min + parameter.Max) / 2));
             SetMaximumParametersCommand = new RelayCommand(() =>
                 SetDefaultParameters(parameter => parameter.Value = parameter.Max));
@@ -116,10 +116,10 @@ namespace ViewModel
             foreach (ObservableCollection<DeskParameter> parameters in Parameters.ParametersByGroup
                          .Values)
             {
-                for (var j = 0; j < parameters.Count; j++)
+                for (var i = 0; i < parameters.Count; i++)
                 {
-                    action?.Invoke(parameters[j]);
-                    parameters[j].DataValidChanged += OnDataValidChanged;
+                    action?.Invoke(parameters[i]);
+                    parameters[i].DataValidChanged += OnDataValidChanged;
                 }
             }
 

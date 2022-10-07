@@ -15,7 +15,10 @@ namespace Desk.Views.UserControls
         {
             InitializeComponent();
 
-            //TODO: костыль?..
+            // TODO: Костыль?..
+            // Чтобы во время запуска плагина из AutoCAD не было сгенерировано исключение "Could
+            // not load file or assembly Microsoft.Xaml.Behaviors", приходится ссылаться на (любой)
+            // объект этой библиотеки из code-behind
             var _ = new DefaultTriggerAttribute(typeof(Trigger),
                 typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
         }

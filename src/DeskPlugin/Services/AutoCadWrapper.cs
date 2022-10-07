@@ -1,13 +1,18 @@
-﻿using System.Windows.Media.Media3D;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.BoundaryRepresentation;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using Services.Enums;
 using Services.Interfaces;
 using Application = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 
 namespace Services
 {
     /// <summary>
-    /// Класс-обертка для обращения к свойствам и методам AuoCAD .NET API.
+    /// Класс-обертка для обращения к свойствам и методам AutoCAD .NET API.
     /// </summary>
     public class AutoCadWrapper : ICadWrapper
     {
@@ -44,49 +49,42 @@ namespace Services
 
         #region Methods
 
-        #region Interface Implementation
+        #region ICadWrapper Implementation
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void BuildSimpleBox(double boxLength, double boxWidth, double boxHeight,
-            Point3D displacementEndPoint)
+        public object CreateRectangle(PlaneType planeType, double x, double y, double width, 
+            double height)
         {
-            Solid3d box = CreateAndDisplaceBox(boxLength, boxWidth, boxHeight, 
-                new Point3d(displacementEndPoint.X, displacementEndPoint.Y, 
-                    displacementEndPoint.Z));
-            _3dModelParts.Add(box);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void BuildCompositeBox(
-            double firstBoxLength,
-            double firstBoxWidth,
-            double firstBoxHeight,
-            Point3D firstBoxDisplacementEndpoint,
-            double secondBoxLength,
-            double secondBoxWidth,
-            double secondBoxHeight,
-            Point3D secondBoxDisplacementEndpoint)
-        {
-            // Строим внешний объект типа "ящик".
-            Solid3d objectToSubstructFrom = CreateAndDisplaceBox(firstBoxLength, firstBoxWidth,
-                firstBoxHeight, new Point3d(firstBoxDisplacementEndpoint.X,
-                    firstBoxDisplacementEndpoint.Y, firstBoxDisplacementEndpoint.Z));
-
-            // Внутри внешнего объекта строим еще один объект того же типа.
-            Solid3d substructedObject = CreateAndDisplaceBox(secondBoxLength, secondBoxWidth,
-                secondBoxHeight, new Point3d(secondBoxDisplacementEndpoint.X,
-                    secondBoxDisplacementEndpoint.Y, secondBoxDisplacementEndpoint.Z));
-
-            // Вычитаем внутренний объект из внешнего, добавляем результат в блок 3D-модели
-            // письменного стола.
+            // Т.к. в AutoCAD .NET API отсутствует сущность Rectangle, создаем прямоугольник 
+            // с помощью ломаной линии.
             //
-            objectToSubstructFrom.BooleanOperation(BooleanOperationType.BoolSubtract,
-                substructedObject);
-            _3dModelParts.Add(objectToSubstructFrom);
+            var rectangle = new Polyline();
+            rectangle.SetDatabaseDefaults();
+
+            var baseSquareVertices = new[]
+            {
+                new Point2d(x, y),
+                new Point2d(x, y + height),
+                new Point2d(x + width, y + height),
+                new Point2d(x + width, y)
+            };
+
+            for (var j = 0; j < baseSquareVertices.Length; j++)
+            {
+                rectangle.AddVertexAt(j, baseSquareVertices[j], 0, 0, 0);
+            }
+
+            // Замыкаем ломаную линию, чтобы позднее над прямоугольником можно было выполнять
+            // различные операции как над обычным 2D-объектом.
+            rectangle.Closed = true;
+
+            // Помещаем (поворачиваем) прямоугольник так, чтобы он оказался в указанной
+            // координатной плоскости.
+            Entity rotatedRectangle = PlaceInPlane(rectangle, planeType);
+
+            return rotatedRectangle;
         }
 
         /// <summary>
@@ -105,43 +103,22 @@ namespace Services
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public object CreateSquare(int sideLength, double x, double y)
-        {
-            var square = new Polyline();
-            square.SetDatabaseDefaults();
-
-            var baseSquareVertices = new[]
-            {
-                new Point2d(x, y),
-                new Point2d(x, y + sideLength),
-                new Point2d(x + sideLength, y + sideLength),
-                new Point2d(x + sideLength, y)
-            };
-
-            for (var j = 0; j < baseSquareVertices.Length; j++)
-            {
-                square.AddVertexAt(j, baseSquareVertices[j], 0, 0, 0);
-            }
-
-            square.Closed = true;
-
-            return square;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void Extrude(object obj, double height)
+        public void Extrude(object obj, double height, bool cuttingByExtrusion = false,
+            bool isPositiveDirection = true)
         {
             var curves = new DBObjectCollection();
             curves.Add((DBObject)obj);
 
+            // Для выполнения операции выдавливания 2D-объект должен представлять собой замкнутую
+            // область, поэтому предварительно получаем область (region) из кривых, образующих
+            // объект.
+            //
             DBObjectCollection regions = Region.CreateFromCurves(curves);
 
             using (var region = (Region)regions[0])
             {
                 var solid = new Solid3d();
-                solid.Extrude(region, height, 0);
+                solid.Extrude(region, isPositiveDirection ? height : -height, 0);
                 _3dModelParts.Add(solid);
             }
         }
@@ -151,6 +128,7 @@ namespace Services
         /// </summary>
         public void Build()
         {
+            // При пустом массиве деталей построение 3D-модели не выполняется.
             if (_3dModelParts.Count == 0)
             {
                 return;
@@ -166,8 +144,55 @@ namespace Services
 
                         CreateBlock(blockTableId);
 
-                        foreach (DBObject modelPart in _3dModelParts)
+                        // Перед добавлением 3D-объектов в документ AutoCAD проверяем, нужно ли
+                        // применять операцию вычитания к некоторым объектам
+                        //
+                        for (var i = 0; i < _3dModelParts.Count; i++)
                         {
+                            DBObject modelPart = _3dModelParts[i];
+
+                            Extents3d modelPartExtents = modelPart.Bounds.GetValueOrDefault();
+                            Point3d minPoint = modelPartExtents.MinPoint;
+                            Point3d maxPoint = modelPartExtents.MaxPoint;
+
+                            // Выбираем минимальные и максимальные координаты тела
+                            //
+                            var xMin = (int)minPoint.X;
+                            var xMax = (int)maxPoint.X;
+
+                            var yMin = (int)minPoint.Y;
+                            var yMax = (int)maxPoint.Y;
+
+                            var zMin = (int)minPoint.Z;
+                            var zMax = (int)maxPoint.Z;
+
+                            // Проверяем остальные тела на содержание внутри текущего тела, и 
+                            // в случае успеха применяем операцию вычитания к этим телам, при этом
+                            // удаляя тело, содержащееся в "главном", из общего массива тел,
+                            // подлежащих добавлению в документ AutoCAD
+                            // 
+                            foreach (DBObject otherPart in _3dModelParts)
+                            {
+                                var points = new List<Point3d>();
+
+                                using (var brep = new Brep((Entity)otherPart))
+                                {
+                                    points.AddRange(brep.Vertices.Select(vertex => vertex.Point));
+                                }
+
+                                if (otherPart == modelPart ||
+                                    !points.All(point => xMin <= (int)point.X && (int)point.X <= xMax) ||
+                                    !points.All(point => yMin <= (int)point.Y && (int)point.Y <= yMax) ||
+                                    !points.All(point => zMin <= (int)point.Z && (int)point.Z <= zMax))
+                                {
+                                    continue;
+                                }
+
+                                ((Solid3d)modelPart).BooleanOperation(BooleanOperationType
+                                    .BoolSubtract, (Solid3d)otherPart);
+                                _3dModelParts.Remove(otherPart);
+                            }
+
                             AddObjectInBlock(modelPart, BlockName);
                         }
 
@@ -182,6 +207,56 @@ namespace Services
         }
 
         #endregion
+
+        /// <summary>
+        /// Метод для размещения некоторой сущности в указанной координатной плоскости.
+        /// </summary>
+        /// <param name="entity"> Сущность, которую необходимо поместить в указанную плоскость.
+        /// </param>
+        /// <param name="planeType"> Координатная плоскость из перечисления <see cref="PlaneType"/>.
+        /// </param>
+        /// <returns> Сущность, помещенная в указанную плоскость.</returns>
+        private static Entity PlaceInPlane(Entity entity, PlaneType planeType)
+        {
+            // Получаем текущую систему координат активного документа AutoCAD.
+            Document activeDocument = Application.DocumentManager.MdiActiveDocument;
+            Matrix3d currentUcs = activeDocument.Editor.CurrentUserCoordinateSystem;
+            CoordinateSystem3d coordinateSystem3d = currentUcs.CoordinateSystem3d;
+
+            Vector3d axis;
+            var rotationDegree = 0.0;
+
+            // В зависимости от указанной координатной плоскости определяем, вокруг какой оси 
+            // необходимо выполнить поворот прямоугольника, чтобы поместить его в эту плоскость
+            // (по умолчанию текущей плоскостью является xOy).
+            switch (planeType)
+            {
+                case PlaneType.XoZ:
+                {
+                    axis = coordinateSystem3d.Xaxis;
+                    rotationDegree = -90;
+                    break;
+                }
+
+                case PlaneType.YoZ:
+                {
+                    axis = coordinateSystem3d.Yaxis;
+                    break;
+                }
+
+                default:
+                {
+                    axis = new Vector3d(0, 0, 0);
+                    break;
+                }
+            }
+
+            Matrix3d rotationMatrix = Matrix3d.Rotation(rotationDegree * (Math.PI / 180), axis,
+                Point3d.Origin);
+            entity.TransformBy(rotationMatrix);
+
+            return entity;
+        }
 
         /// <summary>
         /// Метод для создания блока, содержащего 3D-модель письменного стола.
@@ -219,6 +294,7 @@ namespace Services
                         //
                         var deskBlockReference = new BlockReference(Point3d.Origin,
                             deskBlockTableRecordId);
+
                         AddObjectInBlock(deskBlockReference, BlockTableRecord.ModelSpace);
 
                         transaction.Commit();
@@ -313,33 +389,6 @@ namespace Services
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Метод для создания 3D-примитива "ящик" и его перемещения в указанную точку чертежа.
-        /// </summary>
-        /// <param name="boxLength"> Длина ящика.</param>
-        /// <param name="boxWidth"> Ширина ящика.</param>
-        /// <param name="boxHeight"> Высота ящика.</param>
-        /// <param name="displacementEndPoint"> Точка чертежа, в которую необходимо переместить
-        /// ящик.</param>
-        /// <returns> Созданный ящик.</returns>
-        private static Solid3d CreateAndDisplaceBox(
-            double boxLength,
-            double boxWidth,
-            double boxHeight,
-            Point3d displacementEndPoint)
-        {
-            var box = new Solid3d();
-            box.CreateBox(boxLength, boxWidth, boxHeight);
-
-            Extents3d boxExtents = box.Bounds.GetValueOrDefault();
-            var displacementStartPoint = new Point3d(boxExtents.MaxPoint.X, boxExtents.MaxPoint.Y,
-                boxExtents.MaxPoint.Z);
-            Vector3d displacementVector = displacementStartPoint.GetVectorTo(displacementEndPoint);
-            box.TransformBy(Matrix3d.Displacement(displacementVector));
-
-            return box;
         }
 
         #endregion

@@ -9,7 +9,7 @@ namespace Desk.Behaviors
     /// <summary>
     /// Класс, реализующий поведение для закрытия окна.
     /// </summary>
-    public class CloseWindowBehavior : Behavior<Button>
+    internal class CloseWindowBehavior : Behavior<Button>
     {
         #region Methods
 

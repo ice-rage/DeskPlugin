@@ -6,7 +6,7 @@ namespace Desk.ValidationRules
     /// <summary>
     /// Правило проверки пользовательского ввода на пустоту или заполненность только пробелами.
     /// </summary>
-    public class NullOrWhiteSpaceValidationRule : ValidationRule
+    internal class NullOrWhiteSpaceValidationRule : ValidationRule
     {
         #region Methods
 

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Media.Media3D;
 using Parameters;
 using Parameters.Enums;
 using Parameters.Enums.Extensions;
+using Services.Enums;
 using Services.Interfaces;
 
 namespace Builder
@@ -60,11 +60,15 @@ namespace Builder
             int legBaseValue = parameters[DeskParameterGroupType.Legs,
                 parameters.LegType.GetLegBaseType()].Value;
 
-            BuildWorktop(worktopLength, worktopWidth, worktopHeight, legHeight);
+            BuildWorktop(worktopLength, worktopWidth, worktopHeight);
 
             BuildLegs(legType, legBaseValue, legHeight, worktopWidth);
 
-            BuildDrawers(drawerNumber, drawerLength, drawerHeight, worktopLength,
+            BuildDrawers(
+                drawerNumber, 
+                drawerLength, 
+                drawerHeight, 
+                worktopLength, 
                 worktopWidth);
 
             _wrapper.Build();
@@ -76,14 +80,11 @@ namespace Builder
         /// <param name="worktopLength"> Длина столешницы.</param>
         /// <param name="worktopWidth"> Ширина столешницы.</param>
         /// <param name="worktopHeight"> Высота столешницы.</param>
-        /// <param name="legHeight"> Высота ножек.</param>
-        private void BuildWorktop(int worktopLength, int worktopWidth, int worktopHeight, 
-            int legHeight)
+        private void BuildWorktop(int worktopLength, int worktopWidth, int worktopHeight)
         {
-            var displacementEndPoint = new Point3D(worktopLength, worktopWidth, 
-                worktopHeight + legHeight);
-            _wrapper.BuildSimpleBox(worktopLength, worktopWidth, worktopHeight, 
-                displacementEndPoint);
+            object worktop = _wrapper.CreateRectangle(PlaneType.XoY, 0, 0, worktopLength, 
+                worktopWidth);
+            _wrapper.Extrude(worktop, worktopHeight);
         }
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace Builder
             // Выполняем операцию выдавливания для основания каждой ножки.
             foreach (object leg in legBases)
             {
-                _wrapper.Extrude(leg, legHeight);
+                _wrapper.Extrude(leg, legHeight, isPositiveDirection: false);
             }
         }
 
@@ -126,7 +127,7 @@ namespace Builder
         /// в качестве значения - x-координату центра окружности основания ножки.</param>
         /// <param name="y"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
         /// в качестве значения - y-координату центра окружности основания ножки.</param>
-        /// <returns> Массив круглых оснований ножек.</returns>
+        /// <returns> Перечисление круглых оснований ножек.</returns>
         private IEnumerable<object> CreateRoundLegBases(int baseDiameter, int worktopWidth,
             IDictionary<int, double> x, IDictionary<int, double> y)
         {
@@ -135,14 +136,14 @@ namespace Builder
             // В каждый словарь оснований добавляем координату центра окружности основания
             // соответствующей ножки.
             //
-            int baseCenter = DeskParameters.DistanceFromWorktopCorner + (baseDiameter / 2);
+            int baseCenter = DeskParameters.DistanceFromWorktopCornerToLeg + baseDiameter / 2;
             x.Add(0, baseCenter);
             y.Add(0, baseCenter);
 
             x.Add(1, baseCenter);
             y.Add(1, worktopWidth - baseCenter);
 
-            // Создаем окружности основания ножек и добавляем их в массив.
+            // Создаем окружности основания ножек и добавляем их в список.
             for (var i = 0; i < x.Count; i++)
             {
                 object circle = _wrapper.CreateCircle(baseDiameter, x[i], y[i]);
@@ -163,7 +164,7 @@ namespace Builder
         /// в качестве значения - x-координату левого нижнего угла квадрата основания ножки.</param>
         /// <param name="y"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
         /// в качестве значения - y-координату левого нижнего угла квадрата основания ножки.</param>
-        /// <returns> Массив квадратных оснований ножек.</returns>
+        /// <returns> Перечисление квадратных оснований ножек.</returns>
         private IEnumerable<object> CreateSquareLegBases(int baseLength, int worktopWidth,
             IDictionary<int, double> x, IDictionary<int, double> y)
         {
@@ -172,16 +173,17 @@ namespace Builder
             // В каждый словарь оснований добавляем координату левого нижнего угла квадрата
             // основания соответствующей ножки.
             //
-            x.Add(0, DeskParameters.DistanceFromWorktopCorner);
-            y.Add(0, DeskParameters.DistanceFromWorktopCorner);
+            x.Add(0, DeskParameters.DistanceFromWorktopCornerToLeg);
+            y.Add(0, DeskParameters.DistanceFromWorktopCornerToLeg);
 
-            x.Add(1, DeskParameters.DistanceFromWorktopCorner);
-            y.Add(1, worktopWidth - DeskParameters.DistanceFromWorktopCorner - baseLength);
+            x.Add(1, DeskParameters.DistanceFromWorktopCornerToLeg);
+            y.Add(1, worktopWidth - DeskParameters.DistanceFromWorktopCornerToLeg - baseLength);
 
-            // Создаем квадраты оснований ножек и добавляем их в массив.
+            // Создаем квадраты оснований ножек и добавляем их в список.
             for (var i = 0; i < x.Count; i++)
             {
-                object square = _wrapper.CreateSquare(baseLength, x[i], y[i]);
+                object square = _wrapper.CreateRectangle(PlaneType.XoY, x[i], y[i], baseLength, 
+                    baseLength);
                 squareLegBases.Add(square);
             }
 
@@ -195,9 +197,9 @@ namespace Builder
         /// <param name="drawerLength"> Длина ящиков для канцелярии.</param>
         /// <param name="drawerHeight"> Высота ящиков для канцелярии.</param>
         /// <param name="worktopLength"> Длина столешницы, необходимая для расчета размеров
-        /// и положения ящиков для канцелярии, их дверц и ручек в пространстве чертежа.</param>
+        /// и положения ящиков для канцелярии, их дверц и ручек.</param>
         /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета размеров
-        /// и положения ящиков для канцелярии, их дверц и ручек в пространстве чертежа.</param>
+        /// и положения ящиков для канцелярии, их дверц и ручек.</param>
         private void BuildDrawers(
             int drawerNumber,
             int drawerLength,
@@ -205,57 +207,63 @@ namespace Builder
             int worktopLength,
             int worktopWidth)
         {
-            for (var i = 1; i <= drawerNumber; i++)
+            for (var i = 0; i < drawerNumber; i++)
             {
+                double y = drawerHeight * i;
+
                 // Строим ящик для канцелярии.
-                _wrapper.BuildCompositeBox(
-                    drawerLength,
-                    worktopWidth - DeskParameters.WorktopDrawerWidthDifference,
-                    drawerHeight,
-                    new Point3D(
-                        worktopLength - DeskParameters.DistanceFromWorktopCorner,
-                        worktopWidth - DeskParameters.DistanceFromWorktopCorner,
-                        drawerHeight * i),
-                    drawerLength - DeskParameters.OuterInnerDrawerLengthDifference,
-                    worktopWidth - DeskParameters.WorktopDrawerWidthDifference -
-                    DeskParameters.OuterInnerDrawerWidthDifference,
-                    drawerHeight - DeskParameters.OuterInnerDrawerHeightDifference,
-                    new Point3D(
-                        worktopLength - DeskParameters.OuterInnerDrawerLengthDifference,
-                        worktopWidth - DeskParameters.OuterInnerDrawerWidthDifference,
-                        drawerHeight * i));
+                object outerDrawer = _wrapper.CreateRectangle(
+                    PlaneType.XoZ, 
+                    worktopLength - drawerLength, 
+                    y, 
+                    drawerLength, 
+                    drawerHeight);
+                _wrapper.Extrude(outerDrawer, worktopWidth);
+
+                // Вырезаем отверстие (внутреннее пространство) в ящике.
+                object innerDrawer = _wrapper
+                    .CreateRectangle(PlaneType.XoZ, 
+                        worktopLength - drawerLength + 
+                        DeskParameters.OuterInnerDrawerLengthDifference / 2, 
+                        y, 
+                        drawerLength - DeskParameters.OuterInnerDrawerLengthDifference, 
+                        drawerHeight - DeskParameters.OuterInnerDrawerHeightDifference);
+                _wrapper.Extrude(innerDrawer, worktopWidth - 
+                    DeskParameters.OuterInnerDrawerWidthDifference, cuttingByExtrusion: true);
 
                 // Строим дверцу ящика.
-                _wrapper.BuildSimpleBox(
-                    drawerLength - DeskParameters.DrawerDoorLengthDifference,
-                    DeskParameters.DoorWidth,
-                    drawerHeight - DeskParameters.DrawerDoorHeightDifference,
-                    new Point3D(
-                        worktopLength - DeskParameters.DrawerDoorLengthDifference,
-                        DeskParameters.DoorWidth + DeskParameters.DistanceFromWorktopCorner,
-                        drawerHeight * i));
+                object drawerDoor = _wrapper
+                    .CreateRectangle(
+                        PlaneType.XoZ, worktopLength - drawerLength + 
+                            DeskParameters.DrawerDoorLengthDifference / 2 + 
+                            DeskParameters.InnerDrawerDoorDimensionsDifference, 
+                        y + DeskParameters.InnerDrawerDoorDimensionsDifference, 
+                        drawerLength - DeskParameters.DrawerDoorLengthDifference - 
+                        2 * DeskParameters.InnerDrawerDoorDimensionsDifference, 
+                        drawerHeight - DeskParameters.DrawerDoorHeightDifference - 
+                        2 * DeskParameters.InnerDrawerDoorDimensionsDifference);
+                _wrapper.Extrude(drawerDoor, DeskParameters.DoorWidth);
 
                 // Строим ручку ящика.
-                _wrapper.BuildCompositeBox(
-                    (double)drawerLength / 2,
-                    DeskParameters.OuterHandleWidth,
-                    DeskParameters.HandleHeight,
-                    new Point3D(
-                        worktopLength - DeskParameters.DistanceFromWorktopCorner - 
-                        drawerLength / 4,
-                        DeskParameters.DistanceFromWorktopCorner,
-                        drawerHeight * i - drawerHeight / 2 + 
-                        (double)DeskParameters.HandleHeight / 2),
-                    drawerLength / 2 - 
-                    DeskParameters.OuterInnerHandleLengthDifference,
-                    DeskParameters.InnerHandleWidth,
-                    DeskParameters.HandleHeight,
-                    new Point3D(
-                        worktopLength - DeskParameters.DistanceFromWorktopCorner - 
-                        drawerLength / 4 - DeskParameters.OuterInnerHandleLengthDifference / 2,
-                        DeskParameters.DistanceFromWorktopCorner,
-                        drawerHeight * i - drawerHeight / 2 + 
-                        (double)DeskParameters.HandleHeight / 2));
+                //
+                object outerBox = _wrapper
+                    .CreateRectangle(PlaneType.XoZ, 
+                        worktopLength - drawerLength + drawerLength / 4, 
+                        y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2, 
+                        (double)drawerLength / 2, 
+                        DeskParameters.HandleHeight);
+                _wrapper.Extrude(outerBox, DeskParameters.OuterHandleWidth, 
+                    isPositiveDirection: false);
+
+                object innerBox = _wrapper
+                    .CreateRectangle(PlaneType.XoZ, 
+                        worktopLength - drawerLength + drawerLength / 4 + 
+                            DeskParameters.OuterInnerHandleLengthDifference / 2, 
+                        y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2, 
+                        drawerLength / 2 - DeskParameters.OuterInnerHandleLengthDifference, 
+                        DeskParameters.HandleHeight);
+                _wrapper.Extrude(innerBox, DeskParameters.InnerHandleWidth, cuttingByExtrusion:
+                    true, isPositiveDirection: false);
             }
         }
 

@@ -10,7 +10,7 @@ using Parameters.Enums.Extensions;
 namespace Parameters
 {
     /// <summary>
-    /// Класс <see cref="DeskParameter"/> хранит информацию о параметре письменного стола.
+    /// Класс для хранения информации об отдельном параметре письменного стола.
     /// </summary>
     public class DeskParameter : ObservableObject, INotifyDataErrorInfo, ICloneable
     {
@@ -104,7 +104,7 @@ namespace Parameters
         #region Constructors
 
         /// <summary>
-        /// Создает экземпляр класса <see cref="DeskParameter"/>.
+        /// Создает экземпляр <see cref="DeskParameter"/>.
         /// </summary>
         /// <param name="name"> Имя параметра.</param>
         /// <param name="min"> Минимальное значение параметра.</param>
@@ -141,8 +141,12 @@ namespace Parameters
                 return false;
             }
 
-            return parameter.Name == Name && parameter.Min == Min && parameter.Max == Max &&
-                   parameter.Value == Value;
+            return parameter.Name == Name && 
+                   parameter.Min == Min && 
+                   parameter.Max == Max &&
+                   parameter.Value == Value && 
+                   parameter.AcceptableRange == AcceptableRange && 
+                   parameter.HasErrors == HasErrors;
         }
 
         /// <inheritdoc/>

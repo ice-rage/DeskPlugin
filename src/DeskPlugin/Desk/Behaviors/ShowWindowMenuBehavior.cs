@@ -8,7 +8,7 @@ namespace Desk.Behaviors
     /// Класс, реализующий поведение для отображения меню окна при нажатии на его иконку левой
     /// кнопкой мыши.
     /// </summary>
-    public class ShowWindowMenuBehavior : Behavior<FrameworkElement>
+    internal class ShowWindowMenuBehavior : Behavior<FrameworkElement>
     {
         #region Methods
 
@@ -25,7 +25,7 @@ namespace Desk.Behaviors
         /// </summary>
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
-        private void OnMouseUp(object sender, MouseButtonEventArgs e)
+        private static void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is FrameworkElement element))
             {

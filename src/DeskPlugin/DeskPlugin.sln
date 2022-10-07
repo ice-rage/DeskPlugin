@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 	ProjectSection(SolutionItems) = preProject
 		Libraries\AcCoreMgd.dll = Libraries\AcCoreMgd.dll
 		Libraries\AcDbMgd.dll = Libraries\AcDbMgd.dll
+		Libraries\acdbmgdbrep.dll = Libraries\acdbmgdbrep.dll
 		Libraries\AcMgd.dll = Libraries\AcMgd.dll
 	EndProjectSection
 EndProject

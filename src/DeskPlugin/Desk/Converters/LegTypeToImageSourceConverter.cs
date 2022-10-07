@@ -13,7 +13,7 @@ namespace Desk.Converters
     /// </summary>
     [ValueConversion(typeof(LegType), typeof(string))]
     [MarkupExtensionReturnType(typeof(LegTypeToImageSourceConverter))]
-    public class LegTypeToImageSourceConverter : IValueConverter
+    internal class LegTypeToImageSourceConverter : IValueConverter
     {
         #region Methods
 
@@ -39,8 +39,8 @@ namespace Desk.Converters
         }
 
         /// <inheritdoc/>
-        public object ConvertBack(object value, Type targetType,
-            object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, 
+            CultureInfo culture)
         {
             return DependencyProperty.UnsetValue;
         }

@@ -9,7 +9,7 @@ namespace Desk.Behaviors
     /// <summary>
     /// Класс, реализующий поведение для минимизации (сворачивания) окна.
     /// </summary>
-    public class MinimizeWindowBehavior : Behavior<Button>
+    internal class MinimizeWindowBehavior : Behavior<Button>
     {
         #region Methods
 

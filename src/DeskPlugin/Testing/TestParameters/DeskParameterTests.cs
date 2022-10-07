@@ -86,10 +86,10 @@ namespace TestParameters
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(1000, TestName = "Позитивный тест геттера и сеттера Value с тем же значением " +
-                                   "параметра")]
-        [TestCase(1100, TestName = "Позитивный тест геттера и сеттера Value с новым значением " +
-                                   "параметра")]
+        [TestCase(1000, TestName = "Позитивный тест геттера и сеттера Value с тем же значением " + 
+            "параметра")]
+        [TestCase(1100, TestName = "Позитивный тест геттера и сеттера Value с новым значением " + 
+            "параметра")]
         public void TestValueGetSet_GoodScenario(int expected)
         {
             // Act

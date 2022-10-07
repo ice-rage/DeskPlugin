@@ -63,14 +63,14 @@ namespace TestParameters
         #region Static Property Tests
 
         [TestCaseSource(nameof(StaticPropertyTestCases))]
-        public void TestStaticPropertiesGet_GoodScenario(string staticPropertyName, int expected)
+        public void TestStaticPropertiesGet_GoodScenario(string staticPropertyName, object expected)
         {
             // Act
             object actual = typeof(DeskParameters).GetProperty(staticPropertyName)?.GetValue(null, 
                 null);
 
             // Arrange
-            if (actual is int)
+            if (actual is int || actual is double)
             {
                 Assert.AreEqual(expected, actual);
             }
@@ -209,10 +209,7 @@ namespace TestParameters
         /// <returns> Перечисление тестовых случаев <see cref="TestCaseData"/>.</returns>
         private static IEnumerable<TestCaseData> StaticPropertyTestCases()
         {
-            yield return new TestCaseData(nameof(DeskParameters.DistanceFromWorktopCorner), 20)
-                .SetName(TestStaticProperties_GoodScenario_TestName);
-
-            yield return new TestCaseData(nameof(DeskParameters.WorktopDrawerWidthDifference), 40)
+            yield return new TestCaseData(nameof(DeskParameters.DistanceFromWorktopCornerToLeg), 20)
                 .SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.OuterInnerDrawerLengthDifference), 
@@ -221,8 +218,11 @@ namespace TestParameters
             yield return new TestCaseData(nameof(DeskParameters.OuterInnerDrawerWidthDifference), 
                 40).SetName(TestStaticProperties_GoodScenario_TestName);
 
-            yield return new TestCaseData(nameof(DeskParameters.OuterInnerDrawerHeightDifference), 
+            yield return new TestCaseData(nameof(DeskParameters.OuterInnerDrawerHeightDifference),
                 20).SetName(TestStaticProperties_GoodScenario_TestName);
+
+            yield return new TestCaseData(nameof(DeskParameters.InnerDrawerDoorDimensionsDifference),
+                0.1).SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(nameof(DeskParameters.DrawerDoorLengthDifference), 40)
                 .SetName(TestStaticProperties_GoodScenario_TestName);

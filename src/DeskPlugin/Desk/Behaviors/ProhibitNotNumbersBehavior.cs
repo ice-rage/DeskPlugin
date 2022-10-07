@@ -53,15 +53,15 @@ namespace Desk.Behaviors
         /// </summary>
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
-        private void OnPreviewTextInput(object sender, TextCompositionEventArgs e) => e.Handled =
-            !IsTextAllowed(e.Text);
+        private static void OnPreviewTextInput(object sender, TextCompositionEventArgs e) => 
+            e.Handled = !IsTextAllowed(e.Text);
 
         /// <summary>
         /// Обработчик события вставки текста в текстовое поле.
         /// </summary>
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
-        private void OnPasting(object sender, DataObjectPastingEventArgs e)
+        private static void OnPasting(object sender, DataObjectPastingEventArgs e)
         {
             if (!e.DataObject.GetDataPresent(typeof(string)))
             {

@@ -16,7 +16,8 @@
     FontSize="12"
     Icon="../../Resources/desk.ico"
     mc:Ignorable="d"
-    Background="#f0f0f0">
+    Background="#f0f0f0"
+    d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel, IsDesignTimeCreatable=True}">
 
     <Window.DataContext>
         <viewModel:MainWindowViewModel x:Name="MainWindowViewModel"/>

@@ -32,15 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AcCoreMgd">
-      <HintPath>..\Libraries\AcCoreMgd.dll</HintPath>
-    </Reference>
-    <Reference Include="AcDbMgd">
-      <HintPath>..\Libraries\AcDbMgd.dll</HintPath>
-    </Reference>
-    <Reference Include="AcMgd">
-      <HintPath>..\Libraries\AcMgd.dll</HintPath>
-    </Reference>
     <Reference Include="CommunityToolkit.Mvvm">
       <HintPath>..\packages\CommunityToolkit.Mvvm.8.0.0\lib\netstandard2.0\CommunityToolkit.Mvvm.dll</HintPath>
     </Reference>

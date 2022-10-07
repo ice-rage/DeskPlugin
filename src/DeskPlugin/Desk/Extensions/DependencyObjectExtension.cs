@@ -7,7 +7,7 @@ namespace Desk.Extensions
     /// <summary>
     /// Класс, расширяющий базовый класс <see cref="DependencyObject"/>.
     /// </summary>
-    public static class DependencyObjectExtension
+    internal static class DependencyObjectExtension
     {
         /// <summary>
         /// Метод для поиска корневого элемента объекта, являющегося наследником класса

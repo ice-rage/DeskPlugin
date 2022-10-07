@@ -37,6 +37,9 @@
     <Reference Include="AcDbMgd">
       <HintPath>..\Libraries\AcDbMgd.dll</HintPath>
     </Reference>
+    <Reference Include="acdbmgdbrep">
+      <HintPath>..\Libraries\acdbmgdbrep.dll</HintPath>
+    </Reference>
     <Reference Include="AcMgd">
       <HintPath>..\Libraries\AcMgd.dll</HintPath>
     </Reference>
@@ -52,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoCadWrapper.cs" />
+    <Compile Include="Enums\PlaneType.cs" />
     <Compile Include="Interfaces\ICadWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
