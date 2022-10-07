@@ -11,25 +11,26 @@ using ViewModel;
 
 namespace TestViewModel
 {
-    /// <summary>
-    /// Класс, содержащий модульные тесты для класса <see cref="MainWindowViewModel"/>.
-    /// </summary>
-    [TestFixture]
+	// TODO: РџРѕР»РµС‚РµР»Р° РєРѕРґРёСЂРѕРІРєР°
+	/// <summary>
+	/// пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ <see cref="MainWindowViewModel"/>.
+	/// </summary>
+	[TestFixture]
     public class MainWindowViewModelTests
     {
         #region Constants For Testing
 
         /// <summary>
-        /// Название модульных тестов для команд, устанавливающих значения параметров по умолчанию.
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
-        private const string TestSetCommands_CanExecute_TestName = "При вызове команды {0} " + 
-            "она должна содержать обработчик";
+        private const string TestSetCommands_CanExecute_TestName = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ {0} " + 
+            "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
 
         #endregion
 
         #region Property Tests
 
-        [TestCase(TestName = "Позитивный тест геттера Parameters")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Parameters")]
         public void TestParametersGet_GoodScenario()
         {
             // Arrange
@@ -47,7 +48,7 @@ namespace TestViewModel
             });
         }
 
-        [TestCase(TestName = "Позитивный тест геттера и сеттера IsDataValid")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ IsDataValid")]
         public void TestIsDataValidGetSet_GoodScenario()
         {
             // Act
@@ -66,8 +67,8 @@ namespace TestViewModel
 
         #region Command Tests
 
-        [TestCase(TestName = "При вызове команды BuildModelCommand она должна содержать " + 
-            "обработчик")]
+        [TestCase(TestName = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ BuildModelCommand пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ " + 
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
         public void TestBuildModelCommand_CanExecute()
         {
             // Act
@@ -128,8 +129,8 @@ namespace TestViewModel
 
         #region Method Tests
 
-        [TestCase(TestName = "Если все параметры содержат корректные данные, свойство IsDataValid" + 
-            "должно принимать значение true")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ IsDataValid" + 
+            "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ true")]
         public void TestOnDataValidChanged_ValidData_SetsTrue()
         {
             // Act
@@ -145,8 +146,8 @@ namespace TestViewModel
             Assert.IsTrue(isValid);
         }
 
-        [TestCase(TestName = "Если хотя бы один из параметров содержит некорректные данные, " + 
-            "свойство IsDataValid должно принимать значение false")]
+        [TestCase(TestName = "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, " + 
+            "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ IsDataValid пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ false")]
         public void TestOnDataValidChanged_InvalidData_SetsFalse()
         {
             // Act
@@ -165,29 +166,29 @@ namespace TestViewModel
         #region Test Case Sources
 
         /// <summary>
-        /// Метод-источник тестовых случаев для тестирования команд, устанавливающих значения
-        /// параметров по умолчанию.
+        /// пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
         /// </summary>
-        /// <returns> Перечисление тестовых случаев <see cref="TestCaseData"/>.</returns>
+        /// <returns> пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ <see cref="TestCaseData"/>.</returns>
         private static IEnumerable<TestCaseData> SetCommandsTestCases()
         {
             yield return new TestCaseData(nameof(MainWindowViewModel.SetMinimumParametersCommand),
                 new List<int> { 800, 400, 30, 50, 690, 3, 250 }, (Func<DeskParameter, int>)
                 (parameter => parameter.Min))
-                .SetName("При вызове команды {0} должны быть установлены минимальные значения " +
-                         "всех параметров");
+                .SetName("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ {0} пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ " +
+                         "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
             yield return new TestCaseData(nameof(MainWindowViewModel.SetAverageParametersCommand),
                 new List<int> { 1000, 625, 35, 60, 715, 4, 291 }, (Func<DeskParameter, int>)
                 (parameter => (parameter.Min + parameter.Max) / 2))
-                .SetName("При вызове команды {0} должны быть установлены средние значения " +
-                         "всех параметров");
+                .SetName("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ {0} пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ " +
+                         "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
             yield return new TestCaseData(nameof(MainWindowViewModel.SetMaximumParametersCommand),
                 new List<int> { 1200, 750, 40, 70, 740, 5, 400 }, (Func<DeskParameter, int>)
                 (parameter => parameter.Max))
-                .SetName("При вызове команды {0} должны быть установлены максимальные значения " +
-                         "всех параметров");
+                .SetName("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ {0} пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ " +
+                         "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
         }
 
         #endregion
