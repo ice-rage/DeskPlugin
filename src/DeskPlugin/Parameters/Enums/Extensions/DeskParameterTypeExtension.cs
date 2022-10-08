@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 
 namespace Parameters.Enums.Extensions
 {
     /// <summary>
-    /// Класс, расширяющий перечисление типов параметров <see cref="DeskParameterType"/>.
+    /// Класс, расширяющий перечисление типов параметров
+    /// <see cref="DeskParameterType"/>.
     /// </summary>
     public static class DeskParameterTypeExtension
     {
@@ -14,13 +14,13 @@ namespace Parameters.Enums.Extensions
         /// <summary>
         /// Метод для получения описания параметра письменного стола.
         /// </summary>
-        /// <param name="parameter"> Параметр, описание которого необходимо получить.
-        /// </param>
+        /// <param name="parameter"> Параметр, описание которого необходимо
+        /// получить.</param>
         /// <returns> Строковое описание параметра.</returns>
         public static string GetDescription(this DeskParameterType parameter)
         {
             var description = parameter.ToString();
-            FieldInfo field = parameter.GetType().GetField(parameter.ToString());
+            var field = parameter.GetType().GetField(parameter.ToString());
 
             if (field.GetCustomAttributes(typeof(DescriptionAttribute), false) 
                     is DescriptionAttribute[] attributes && attributes.Any())

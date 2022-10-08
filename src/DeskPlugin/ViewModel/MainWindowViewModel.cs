@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Builder;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -19,10 +18,12 @@ namespace ViewModel
         /// <summary>
         /// Объект для построения 3D-модели письменного стола.
         /// </summary>
-        private readonly DeskBuilder _builder = new DeskBuilder(new AutoCadWrapper("Desk"));
+        private readonly DeskBuilder _builder = new DeskBuilder(
+            new AutoCadWrapper("Desk"));
 
         /// <summary>
-        /// Переменная для хранения значения, показывающего, корректны ли введенные данные.
+        /// Переменная для хранения значения, показывающего, корректны ли введенные
+        /// данные.
         /// </summary>
         private bool _isDataValid = true;
 
@@ -41,6 +42,7 @@ namespace ViewModel
         public bool IsDataValid
         {
             get => _isDataValid;
+
             set => SetProperty(ref _isDataValid, value);
         }
 
@@ -87,9 +89,10 @@ namespace ViewModel
             SetMaximumParametersCommand = new RelayCommand(() =>
                 SetDefaultParameters(parameter => parameter.Value = parameter.Max));
 
-            // Подписываемся на событие изменения корректности данных, вводимых пользователем,
-            // чтобы иметь возможность отслеживать это событие и определять, корректен ли ввод
-            // в целом (необходимо для отключения/включения кнопки построения 3D-модели).
+            // Подписываемся на событие изменения корректности данных, вводимых
+            // пользователем, чтобы иметь возможность отслеживать это событие
+            // и определять, корректен ли ввод в целом (необходимо для отключения/
+            // включения кнопки построения 3D-модели).
             //
             Parameters.DataValidChanged += OnDataValidChanged;
 
@@ -97,7 +100,8 @@ namespace ViewModel
                 .ToList()
                 .ForEach(parameters => parameters
                     .ToList()
-                    .ForEach(parameter => parameter.DataValidChanged += OnDataValidChanged));
+                    .ForEach(parameter => parameter.DataValidChanged += 
+                        OnDataValidChanged));
         }
 
         #endregion
@@ -105,16 +109,15 @@ namespace ViewModel
         #region Methods
 
         /// <summary>
-        /// Метод, устанавливающий значения по умолчанию (минимальные, средние или максимальные)
-        /// для параметров письменного стола.
+        /// Метод, устанавливающий значения по умолчанию (минимальные, средние или
+        /// максимальные) для параметров письменного стола.
         /// </summary>
-        /// <param name="action"> Делегат, используемый для передачи соответствующего метода
-        /// установки значений по умолчанию.</param>
+        /// <param name="action"> Делегат, используемый для передачи
+        /// соответствующего метода установки значений по умолчанию.</param>
         private void SetDefaultParameters(Action<DeskParameter> action)
         {
 	        // TODO: Почему не var?
-			foreach (ObservableCollection<DeskParameter> parameters in Parameters.ParametersByGroup
-                         .Values)
+			foreach (var parameters in Parameters.ParametersByGroup.Values)
             {
                 for (var i = 0; i < parameters.Count; i++)
                 {
@@ -133,10 +136,10 @@ namespace ViewModel
         /// </summary>
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
-        private void OnDataValidChanged(object sender, EventArgs e) => IsDataValid = !Parameters
-            .ParametersByGroup.Values
-            .Any(parameters => parameters
-                .Any(parameter => parameter.HasErrors));
+        private void OnDataValidChanged(object sender, EventArgs e) => IsDataValid = 
+            !Parameters.ParametersByGroup.Values
+                .Any(parameters => parameters
+                    .Any(parameter => parameter.HasErrors));
 
         #endregion
 

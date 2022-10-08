@@ -17,6 +17,12 @@ namespace Parameters
         #region Fields
 
         /// <summary>
+        /// Простое число, используемое для вычисления хэш-кода объекта
+        /// <see cref="DeskParameter"/>.
+        /// </summary>
+        private const int PrimeNumberForHashCalculation = 23;
+
+        /// <summary>
         /// Текущее значение параметра.
         /// </summary>
         private int _value;
@@ -75,6 +81,7 @@ namespace Parameters
         public string AcceptableRange
         {
             get => _acceptableRange;
+
             private set => SetProperty(ref _acceptableRange, value);
         }
 
@@ -156,13 +163,16 @@ namespace Parameters
                 var hash = 17;
 
 	            // TODO: Магическое число
-                hash = hash * 23 + Name.GetHashCode();
-                hash = hash * 23 + Description.GetHashCode();
-                hash = hash * 23 + Min.GetHashCode();
-                hash = hash * 23 + Max.GetHashCode();
-                hash = hash * 23 + Value.GetHashCode();
-                hash = hash * 23 + AcceptableRange.GetHashCode();
-                hash = hash * 23 + HasErrors.GetHashCode();
+                hash = hash * PrimeNumberForHashCalculation + Name.GetHashCode();
+                hash = hash * PrimeNumberForHashCalculation + Description
+                    .GetHashCode();
+                hash = hash * PrimeNumberForHashCalculation + Min.GetHashCode();
+                hash = hash * PrimeNumberForHashCalculation + Max.GetHashCode();
+                hash = hash * PrimeNumberForHashCalculation + Value.GetHashCode();
+                hash = hash * PrimeNumberForHashCalculation + AcceptableRange
+                    .GetHashCode();
+                hash = hash * PrimeNumberForHashCalculation + HasErrors
+                    .GetHashCode();
 
                 return hash;
             }
@@ -176,19 +186,22 @@ namespace Parameters
         /// <inheritdoc/>
         public IEnumerable GetErrors([CallerMemberName] string propertyName = null)
         {
-            if (!string.IsNullOrEmpty(propertyName) && propertyName != nameof(Value))
+            if (!string.IsNullOrEmpty(propertyName) && propertyName != 
+                nameof(Value))
             {
                 yield break;
             }
 
             if (Value < Min)
             {
-                yield return $"Parameter \"{Description}\" must be greater than or equal to {Min}";
+                yield return $"Parameter \"{Description}\" must be greater than " +
+                             $"or equal to {Min}";
             }
 
             if (Value > Max)
             {
-                yield return $"Parameter \"{Description}\" must be less than or equal to {Max}";
+                yield return $"Parameter \"{Description}\" must be less than " +
+                             $"or equal to {Max}";
             }
         }
 

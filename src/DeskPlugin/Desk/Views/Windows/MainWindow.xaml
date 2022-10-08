@@ -14,7 +14,7 @@
     MinWidth="700" MinHeight="490"
     MaxWidth="700" MaxHeight="490"
     FontSize="12"
-    Icon="../../Resources/desk.ico"
+    Icon="/desk.ico"
     mc:Ignorable="d"
     Background="#f0f0f0"
     d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel, IsDesignTimeCreatable=True}">

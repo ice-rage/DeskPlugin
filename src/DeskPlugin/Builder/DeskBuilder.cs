@@ -15,7 +15,8 @@ namespace Builder
         #region Fields
 
         /// <summary>
-        /// Объект класса-оболочки для изолированного вызова методов API используемой САПР.
+        /// Объект класса-оболочки для изолированного вызова методов API
+        /// используемой САПР.
         /// </summary>
         private readonly ICadWrapper _wrapper;
 
@@ -39,26 +40,27 @@ namespace Builder
         /// <summary>
         /// Метод для построения 3D-модели письменного стола.
         /// </summary>
-        /// <param name="parameters"> Параметры, необходимые для построения 3D-модели.</param>
+        /// <param name="parameters"> Параметры, необходимые для построения
+        /// 3D-модели.</param>
         public void BuildDesk(DeskParameters parameters)
         {
 	        // TODO: Почему не var? И так по всему классу.
-			int worktopLength = parameters[DeskParameterGroupType.Worktop,
+			var worktopLength = parameters[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopLength].Value;
-            int worktopWidth = parameters[DeskParameterGroupType.Worktop,
+            var worktopWidth = parameters[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopWidth].Value;
-            int worktopHeight = parameters[DeskParameterGroupType.Worktop,
+            var worktopHeight = parameters[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopHeight].Value;
-            int legHeight = parameters[DeskParameterGroupType.Legs,
+            var legHeight = parameters[DeskParameterGroupType.Legs,
                 DeskParameterType.LegHeight].Value;
-            int drawerNumber = parameters[DeskParameterGroupType.Drawers,
+            var drawerNumber = parameters[DeskParameterGroupType.Drawers,
                 DeskParameterType.DrawerNumber].Value;
-            int drawerLength = parameters[DeskParameterGroupType.Drawers,
+            var drawerLength = parameters[DeskParameterGroupType.Drawers,
                 DeskParameterType.DrawerLength].Value;
-            double drawerHeight = (double)legHeight / drawerNumber;
+            var drawerHeight = (double)legHeight / drawerNumber;
 
-            LegType legType = parameters.LegType;
-            int legBaseValue = parameters[DeskParameterGroupType.Legs,
+            var legType = parameters.LegType;
+            var legBaseValue = parameters[DeskParameterGroupType.Legs,
                 parameters.LegType.GetLegBaseType()].Value;
 
             BuildWorktop(worktopLength, worktopWidth, worktopHeight);
@@ -81,10 +83,11 @@ namespace Builder
         /// <param name="worktopLength"> Длина столешницы.</param>
         /// <param name="worktopWidth"> Ширина столешницы.</param>
         /// <param name="worktopHeight"> Высота столешницы.</param>
-        private void BuildWorktop(int worktopLength, int worktopWidth, int worktopHeight)
+        private void BuildWorktop(int worktopLength, int worktopWidth, 
+            int worktopHeight)
         {
-            object worktop = _wrapper.CreateRectangle(PlaneType.XoY, 0, 0, worktopLength, 
-                worktopWidth);
+            var worktop = _wrapper.CreateRectangle(PlaneType.XoY, 0, 0, 
+                worktopLength, worktopWidth);
             _wrapper.Extrude(worktop, worktopHeight);
         }
 
@@ -95,47 +98,51 @@ namespace Builder
         /// <see cref="DeskParameterType"/>.</param>
         /// <param name="legBase"> Значение основания ножек.</param>
         /// <param name="legHeight"> Высота ножек.</param>
-        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета положения ножек
-        /// относительно краев стола.</param>
-        private void BuildLegs(LegType legType, int legBase, int legHeight, int worktopWidth)
+        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета
+        /// положения ножек относительно краев стола.</param>
+        private void BuildLegs(LegType legType, int legBase, int legHeight, 
+            int worktopWidth)
         {
-            // Создаем словари, содержащие в качестве ключа порядковый номер ножки, а в качестве
-            // значения - одну из координат ее основания.
+            // Создаем словари, содержащие в качестве ключа порядковый номер ножки,
+            // а в качестве значения - одну из координат ее основания.
             var x = new Dictionary<int, double>();
             var y = new Dictionary<int, double>();
 
             // Строим основания ножек.
-            IEnumerable<object> legBases = legType == LegType.Round
+            var legBases = legType == LegType.Round
                 ? CreateRoundLegBases(legBase, worktopWidth, x, y)
                 : CreateSquareLegBases(legBase, worktopWidth, x, y);
 
             // Выполняем операцию выдавливания для основания каждой ножки.
-            foreach (object leg in legBases)
+            foreach (var leg in legBases)
             {
                 _wrapper.Extrude(leg, legHeight, isPositiveDirection: false);
             }
         }
 
         /// <summary>
-        /// Метод для создания круглых оснований ножек письменного стола (если выбран тип ножек
-        /// <see cref="LegType.Round"/>).
+        /// Метод для создания круглых оснований ножек письменного стола (если
+        /// выбран тип ножек <see cref="LegType.Round"/>).
         /// </summary>
         /// <param name="baseDiameter"> Диаметр основания ножек.</param>
-        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета положения ножек
-        /// относительно краев стола.</param>
-        /// <param name="x"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
-        /// в качестве значения - x-координату центра окружности основания ножки.</param>
-        /// <param name="y"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
-        /// в качестве значения - y-координату центра окружности основания ножки.</param>
+        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета
+        /// положения ножек относительно краев стола.</param>
+        /// <param name="x"> Словарь, содержащий в качестве ключа порядковый номер
+        /// ножки, а в качестве значения - x-координату центра окружности основания
+        /// ножки.</param>
+        /// <param name="y"> Словарь, содержащий в качестве ключа порядковый номер
+        /// ножки, а в качестве значения - y-координату центра окружности основания
+        /// ножки.</param>
         /// <returns> Перечисление круглых оснований ножек.</returns>
-        private IEnumerable<object> CreateRoundLegBases(int baseDiameter, int worktopWidth,
-            IDictionary<int, double> x, IDictionary<int, double> y)
+        private IEnumerable<object> CreateRoundLegBases(int baseDiameter, 
+            int worktopWidth, IDictionary<int, double> x, IDictionary<int, double> y)
         {
             var roundLegBases = new List<object>();
 
-            // В каждый словарь оснований добавляем координату центра окружности основания
-            // соответствующей ножки.
-            int baseCenter = DeskParameters.DistanceFromWorktopCornerToLeg + baseDiameter / 2;
+            // В каждый словарь оснований добавляем координату центра окружности
+            // основания соответствующей ножки.
+            var baseCenter = DeskParameters.DistanceFromWorktopCornerToLeg + 
+                baseDiameter / 2;
             x.Add(0, baseCenter);
             y.Add(0, baseCenter);
 
@@ -145,7 +152,7 @@ namespace Builder
             // Создаем окружности основания ножек и добавляем их в список.
             for (var i = 0; i < x.Count; i++)
             {
-                object circle = _wrapper.CreateCircle(baseDiameter, x[i], y[i]);
+                var circle = _wrapper.CreateCircle(baseDiameter, x[i], y[i]);
                 roundLegBases.Add(circle);
             }
 
@@ -153,36 +160,41 @@ namespace Builder
         }
 
         /// <summary>
-        /// Метод для создания квадратных оснований ножек письменного стола (если выбран тип ножек
+        /// Метод для создания квадратных оснований ножек письменного стола (если
+        /// выбран тип ножек
         /// <see cref="LegType.Square"/>).
         /// </summary>
         /// <param name="baseLength"> Длина основания ножек.</param>
-        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета положения ножек
-        /// относительно краев стола.</param>
-        /// <param name="x"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
-        /// в качестве значения - x-координату левого нижнего угла квадрата основания ножки.</param>
-        /// <param name="y"> Словарь, содержащий в качестве ключа порядковый номер ножки, а
-        /// в качестве значения - y-координату левого нижнего угла квадрата основания ножки.</param>
+        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета
+        /// положения ножек относительно краев стола.</param>
+        /// <param name="x"> Словарь, содержащий в качестве ключа порядковый номер
+        /// ножки, а в качестве значения - x-координату левого нижнего угла квадрата
+        /// основания ножки.</param>
+        /// <param name="y"> Словарь, содержащий в качестве ключа порядковый номер
+        /// ножки, а
+        /// в качестве значения - y-координату левого нижнего угла квадрата
+        /// основания ножки.</param>
         /// <returns> Перечисление квадратных оснований ножек.</returns>
-        private IEnumerable<object> CreateSquareLegBases(int baseLength, int worktopWidth,
-            IDictionary<int, double> x, IDictionary<int, double> y)
+        private IEnumerable<object> CreateSquareLegBases(int baseLength, 
+            int worktopWidth, IDictionary<int, double> x, IDictionary<int, double> y)
         {
             var squareLegBases = new List<object>();
 
-            // В каждый словарь оснований добавляем координату левого нижнего угла квадрата
-            // основания соответствующей ножки.
+            // В каждый словарь оснований добавляем координату левого нижнего угла
+            // квадрата основания соответствующей ножки.
             //
             x.Add(0, DeskParameters.DistanceFromWorktopCornerToLeg);
             y.Add(0, DeskParameters.DistanceFromWorktopCornerToLeg);
 
             x.Add(1, DeskParameters.DistanceFromWorktopCornerToLeg);
-            y.Add(1, worktopWidth - DeskParameters.DistanceFromWorktopCornerToLeg - baseLength);
+            y.Add(1, worktopWidth - DeskParameters.DistanceFromWorktopCornerToLeg - 
+                     baseLength);
 
             // Создаем квадраты оснований ножек и добавляем их в список.
             for (var i = 0; i < x.Count; i++)
             {
-                object square = _wrapper.CreateRectangle(PlaneType.XoY, x[i], y[i], baseLength, 
-                    baseLength);
+                var square = _wrapper.CreateRectangle(PlaneType.XoY, x[i], 
+                    y[i], baseLength, baseLength);
                 squareLegBases.Add(square);
             }
 
@@ -195,10 +207,10 @@ namespace Builder
         /// <param name="drawerNumber"> Количество ящиков для канцелярии.</param>
         /// <param name="drawerLength"> Длина ящиков для канцелярии.</param>
         /// <param name="drawerHeight"> Высота ящиков для канцелярии.</param>
-        /// <param name="worktopLength"> Длина столешницы, необходимая для расчета размеров
-        /// и положения ящиков для канцелярии, их дверц и ручек.</param>
-        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета размеров
-        /// и положения ящиков для канцелярии, их дверц и ручек.</param>
+        /// <param name="worktopLength"> Длина столешницы, необходимая для расчета
+        /// размеров и положения ящиков для канцелярии, их дверц и ручек.</param>
+        /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета
+        /// размеров и положения ящиков для канцелярии, их дверц и ручек.</param>
         private void BuildDrawers(
             int drawerNumber,
             int drawerLength,
@@ -208,10 +220,10 @@ namespace Builder
         {
             for (var i = 0; i < drawerNumber; i++)
             {
-                double y = drawerHeight * i;
+                var y = drawerHeight * i;
 
                 // Строим ящик для канцелярии.
-                object outerDrawer = _wrapper.CreateRectangle(
+                var outerDrawer = _wrapper.CreateRectangle(
                     PlaneType.XoZ, 
                     worktopLength - drawerLength, 
                     y, 
@@ -220,49 +232,57 @@ namespace Builder
                 _wrapper.Extrude(outerDrawer, worktopWidth);
 
                 // Вырезаем отверстие (внутреннее пространство) в ящике.
-                object innerDrawer = _wrapper
+                var innerDrawer = _wrapper
                     .CreateRectangle(PlaneType.XoZ, 
                         worktopLength - drawerLength + 
                         DeskParameters.OuterInnerDrawerLengthDifference / 2, 
                         y, 
-                        drawerLength - DeskParameters.OuterInnerDrawerLengthDifference, 
-                        drawerHeight - DeskParameters.OuterInnerDrawerHeightDifference);
+                        drawerLength - 
+                            DeskParameters.OuterInnerDrawerLengthDifference, 
+                        drawerHeight - 
+                            DeskParameters.OuterInnerDrawerHeightDifference);
                 _wrapper.Extrude(innerDrawer, worktopWidth - 
-                    DeskParameters.OuterInnerDrawerWidthDifference, cuttingByExtrusion: true);
+                    DeskParameters.OuterInnerDrawerWidthDifference, 
+                    cuttingByExtrusion: true);
 
                 // Строим дверцу ящика.
-                object drawerDoor = _wrapper
+                var drawerDoor = _wrapper
                     .CreateRectangle(
                         PlaneType.XoZ, worktopLength - drawerLength + 
                             DeskParameters.DrawerDoorLengthDifference / 2 + 
                             DeskParameters.InnerDrawerDoorDimensionsDifference, 
                         y + DeskParameters.InnerDrawerDoorDimensionsDifference, 
-                        drawerLength - DeskParameters.DrawerDoorLengthDifference - 
-                        2 * DeskParameters.InnerDrawerDoorDimensionsDifference, 
-                        drawerHeight - DeskParameters.DrawerDoorHeightDifference - 
-                        2 * DeskParameters.InnerDrawerDoorDimensionsDifference);
+                        drawerLength - 
+                            DeskParameters.DrawerDoorLengthDifference - 
+                            2 * DeskParameters.InnerDrawerDoorDimensionsDifference, 
+                        drawerHeight - 
+                            DeskParameters.DrawerDoorHeightDifference - 
+                            2 * DeskParameters.InnerDrawerDoorDimensionsDifference);
                 _wrapper.Extrude(drawerDoor, DeskParameters.DoorWidth);
 
                 // Строим ручку ящика.
                 //
-                object outerBox = _wrapper
+                var outerBox = _wrapper
                     .CreateRectangle(PlaneType.XoZ, 
                         worktopLength - drawerLength + drawerLength / 4, 
-                        y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2, 
+                        y + drawerHeight / 2 - 
+                            (double)DeskParameters.HandleHeight / 2, 
                         (double)drawerLength / 2, 
                         DeskParameters.HandleHeight);
                 _wrapper.Extrude(outerBox, DeskParameters.OuterHandleWidth, 
                     isPositiveDirection: false);
 
-                object innerBox = _wrapper
+                var innerBox = _wrapper
                     .CreateRectangle(PlaneType.XoZ, 
                         worktopLength - drawerLength + drawerLength / 4 + 
                             DeskParameters.OuterInnerHandleLengthDifference / 2, 
-                        y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2, 
-                        drawerLength / 2 - DeskParameters.OuterInnerHandleLengthDifference, 
+                        y + drawerHeight / 2 - 
+                            (double)DeskParameters.HandleHeight / 2, 
+                        drawerLength / 2 - 
+                            DeskParameters.OuterInnerHandleLengthDifference, 
                         DeskParameters.HandleHeight);
-                _wrapper.Extrude(innerBox, DeskParameters.InnerHandleWidth, cuttingByExtrusion:
-                    true, isPositiveDirection: false);
+                _wrapper.Extrude(innerBox, DeskParameters.InnerHandleWidth, 
+                    cuttingByExtrusion: true, isPositiveDirection: false);
             }
         }
 

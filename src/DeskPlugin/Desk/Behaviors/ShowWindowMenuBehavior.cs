@@ -5,18 +5,20 @@ using Microsoft.Xaml.Behaviors;
 namespace Desk.Behaviors
 {
     /// <summary>
-    /// Класс, реализующий поведение для отображения меню окна при нажатии на его иконку левой
-    /// кнопкой мыши.
+    /// Класс, реализующий поведение для отображения меню окна при нажатии на его
+    /// иконку левой кнопкой мыши.
     /// </summary>
     internal class ShowWindowMenuBehavior : Behavior<FrameworkElement>
     {
         #region Methods
 
         /// <inheritdoc/>
-        protected override void OnAttached() => AssociatedObject.MouseUp += OnMouseUp;
+        protected override void OnAttached() => AssociatedObject.MouseUp +=
+            OnMouseUp;
 
         /// <inheritdoc/>
-        protected override void OnDetaching() => AssociatedObject.MouseUp -= OnMouseUp;
+        protected override void OnDetaching() => AssociatedObject.MouseUp -= 
+            OnMouseUp;
 
         #region Event Handlers
 
@@ -37,15 +39,17 @@ namespace Desk.Behaviors
                 return;
             }
 
-			// Вычисляем координаты центра иконки окна и в зависимости от состояния окна отображаем
-			// меню либо в правом нижнем углу иконки, либо в ее центре.
+			// Вычисляем координаты центра иконки окна и в зависимости от состояния
+			// окна отображаем меню либо в правом нижнем углу иконки, либо в ее
+			// центре.
 			// TODO: Почему не var?
-			double halfWidthIcon = element.ActualWidth / 2;
-            double halfHeightIcon = element.ActualHeight / 2;
+			var halfWidthIcon = element.ActualWidth / 2;
+            var halfHeightIcon = element.ActualHeight / 2;
 
-            Point point = window.WindowState == WindowState.Maximized
+            var point = window.WindowState == WindowState.Maximized
                 ? new Point(halfWidthIcon, halfHeightIcon)
-                : new Point(window.Left + halfWidthIcon, window.Top + halfHeightIcon);
+                : new Point(window.Left + halfWidthIcon, window.Top + 
+                    halfHeightIcon);
 
             SystemCommands.ShowSystemMenu(window, point);
         }

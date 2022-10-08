@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.BoundaryRepresentation;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
@@ -19,10 +18,11 @@ namespace Services
 		#region Fileds
 
 		/// <summary>
-		/// Массив объектов базы данных документа AutoCAD, хранящий части (детали) 3D-модели.
+		/// Массив объектов базы данных документа AutoCAD, хранящий части (детали)
+		/// 3D-модели.
 		/// </summary>
 		// TODO: просто _modelParts или _modelParts3D
-		private readonly DBObjectCollection _3dModelParts = new DBObjectCollection();
+		private readonly DBObjectCollection _modelParts = new DBObjectCollection();
 
         #endregion
 
@@ -40,7 +40,8 @@ namespace Services
         /// <summary>
         /// Создает экземпляр <see cref="AutoCadWrapper"/>.
         /// </summary>
-        /// <param name="blockName"> Название блока 3D-модели, которую необходимо построить.</param>
+        /// <param name="blockName"> Название блока 3D-модели, которую необходимо
+        /// построить.</param>
         public AutoCadWrapper(string blockName)
         {
             BlockName = blockName;
@@ -55,11 +56,15 @@ namespace Services
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public object CreateRectangle(PlaneType planeType, double x, double y, double width, 
+        public object CreateRectangle(
+            PlaneType planeType, 
+            double x, 
+            double y, 
+            double width, 
             double height)
         {
-            // Т.к. в AutoCAD .NET API отсутствует сущность Rectangle, создаем прямоугольник 
-            // с помощью ломаной линии.
+            // Т.к. в AutoCAD .NET API отсутствует сущность Rectangle, создаем
+            // прямоугольник с помощью ломаной линии.
             //
             var rectangle = new Polyline();
             rectangle.SetDatabaseDefaults();
@@ -77,13 +82,13 @@ namespace Services
                 rectangle.AddVertexAt(j, baseSquareVertices[j], 0, 0, 0);
             }
 
-            // Замыкаем ломаную линию, чтобы позднее над прямоугольником можно было выполнять
-            // различные операции как над обычным 2D-объектом.
+            // Замыкаем ломаную линию, чтобы позднее над прямоугольником можно было
+            // выполнять различные операции как над обычным 2D-объектом.
             rectangle.Closed = true;
 
-            // Помещаем (поворачиваем) прямоугольник так, чтобы он оказался в указанной
-            // координатной плоскости.
-            Entity rotatedRectangle = PlaceInPlane(rectangle, planeType);
+            // Помещаем (поворачиваем) прямоугольник так, чтобы он оказался
+            // в указанной координатной плоскости.
+            var rotatedRectangle = PlaceInPlane(rectangle, planeType);
 
             return rotatedRectangle;
         }
@@ -104,23 +109,23 @@ namespace Services
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Extrude(object obj, double height, bool cuttingByExtrusion = false,
-            bool isPositiveDirection = true)
+        public void Extrude(object obj, double height, bool cuttingByExtrusion = 
+                false, bool isPositiveDirection = true)
         {
             var curves = new DBObjectCollection();
             curves.Add((DBObject)obj);
 
-			// Для выполнения операции выдавливания 2D-объект должен представлять собой замкнутую
-			// область, поэтому предварительно получаем область (region) из кривых, образующих
-			// объект.
+			// Для выполнения операции выдавливания 2D-объект должен представлять
+			// собой замкнутую область, поэтому предварительно получаем область
+			// (region) из кривых, образующих объект.
 			// TODO: Почему не var?
-			DBObjectCollection regions = Region.CreateFromCurves(curves);
+			var regions = Region.CreateFromCurves(curves);
 
             using (var region = (Region)regions[0])
             {
                 var solid = new Solid3d();
                 solid.Extrude(region, isPositiveDirection ? height : -height, 0);
-                _3dModelParts.Add(solid);
+                _modelParts.Add(solid);
             }
         }
 
@@ -130,33 +135,37 @@ namespace Services
         public void Build()
         {
             // При пустом массиве деталей построение 3D-модели не выполняется.
-            if (_3dModelParts.Count == 0)
+            if (_modelParts.Count == 0)
             {
                 return;
             }
 
             using (Application.DocumentManager.MdiActiveDocument.LockDocument())
             {
-                using (Database database = Application.DocumentManager.MdiActiveDocument.Database)
+                using (var database = Application.DocumentManager.MdiActiveDocument
+                           .Database)
                 {
-                    using (Transaction transaction = database.TransactionManager.StartTransaction())
+                    using (var transaction = database.TransactionManager
+                               .StartTransaction())
                     {
-                        ObjectId blockTableId = database.BlockTableId;
+                        var blockTableId = database.BlockTableId;
 
                         CreateBlock(blockTableId);
 
-                        // Перед добавлением 3D-объектов в документ AutoCAD проверяем, нужно ли
-                        // применять операцию вычитания к некоторым объектам
+                        // Перед добавлением 3D-объектов в документ AutoCAD
+                        // проверяем, нужно ли применять операцию вычитания
+                        // к некоторым объектам.
                         //
-                        for (var i = 0; i < _3dModelParts.Count; i++)
+                        for (var i = 0; i < _modelParts.Count; i++)
                         {
-                            DBObject modelPart = _3dModelParts[i];
+                            var modelPart = _modelParts[i];
 
-                            Extents3d modelPartExtents = modelPart.Bounds.GetValueOrDefault();
-                            Point3d minPoint = modelPartExtents.MinPoint;
-                            Point3d maxPoint = modelPartExtents.MaxPoint;
+                            var modelPartExtents = modelPart.Bounds
+                                .GetValueOrDefault();
+                            var minPoint = modelPartExtents.MinPoint;
+                            var maxPoint = modelPartExtents.MaxPoint;
 
-                            // Выбираем минимальные и максимальные координаты тела
+                            // Выбираем минимальные и максимальные координаты тела.
                             //
                             var xMin = (int)minPoint.X;
                             var xMax = (int)maxPoint.X;
@@ -167,39 +176,45 @@ namespace Services
                             var zMin = (int)minPoint.Z;
                             var zMax = (int)maxPoint.Z;
 
-                            // Проверяем остальные тела на содержание внутри текущего тела, и 
-                            // в случае успеха применяем операцию вычитания к этим телам, при этом
-                            // удаляя тело, содержащееся в "главном", из общего массива тел,
-                            // подлежащих добавлению в документ AutoCAD
+                            // Проверяем остальные тела на содержание внутри
+                            // текущего тела и в случае успеха применяем операцию
+                            // вычитания к этим телам, при этом удаляя тело,
+                            // содержащееся в "главном", из общего массива тел,
+                            // подлежащих добавлению в документ AutoCAD.
                             // 
-                            foreach (DBObject otherPart in _3dModelParts)
+                            foreach (DBObject otherPart in _modelParts)
                             {
                                 var points = new List<Point3d>();
 
                                 using (var brep = new Brep((Entity)otherPart))
                                 {
-                                    points.AddRange(brep.Vertices.Select(vertex => vertex.Point));
+                                    points.AddRange(brep.Vertices
+                                        .Select(vertex => vertex.Point));
                                 }
 
                                 if (otherPart == modelPart ||
-                                    !points.All(point => xMin <= (int)point.X && (int)point.X <= xMax) ||
-                                    !points.All(point => yMin <= (int)point.Y && (int)point.Y <= yMax) ||
-                                    !points.All(point => zMin <= (int)point.Z && (int)point.Z <= zMax))
+                                    !points.All(point => xMin <= (int)point.X 
+                                        && (int)point.X <= xMax) ||
+                                    !points.All(point => yMin <= (int)point.Y 
+                                        && (int)point.Y <= yMax) ||
+                                    !points.All(point => zMin <= (int)point.Z 
+                                        && (int)point.Z <= zMax))
                                 {
                                     continue;
                                 }
 
-                                ((Solid3d)modelPart).BooleanOperation(BooleanOperationType
-                                    .BoolSubtract, (Solid3d)otherPart);
-                                _3dModelParts.Remove(otherPart);
+                                ((Solid3d)modelPart).BooleanOperation(
+                                    BooleanOperationType.BoolSubtract, 
+                                    (Solid3d)otherPart);
+                                _modelParts.Remove(otherPart);
                             }
 
                             AddObjectInBlock(modelPart, BlockName);
                         }
 
-                        // Очищаем массив частей (деталей) 3D-модели перед последующим возможным
-                        // построением.
-                        _3dModelParts.Clear();
+                        // Очищаем массив частей (деталей) 3D-модели перед
+                        // последующим возможным построением.
+                        _modelParts.Clear();
 
                         transaction.Commit();
                     }
@@ -210,26 +225,29 @@ namespace Services
         #endregion
 
         /// <summary>
-        /// Метод для размещения некоторой сущности в указанной координатной плоскости.
+        /// Метод для размещения некоторой сущности в указанной координатной
+        /// плоскости.
         /// </summary>
-        /// <param name="entity"> Сущность, которую необходимо поместить в указанную плоскость.
-        /// </param>
-        /// <param name="planeType"> Координатная плоскость из перечисления <see cref="PlaneType"/>.
-        /// </param>
+        /// <param name="entity"> Сущность, которую необходимо поместить в указанную
+        /// плоскость.</param>
+        /// <param name="planeType"> Координатная плоскость из перечисления
+        /// <see cref="PlaneType"/>.</param>
         /// <returns> Сущность, помещенная в указанную плоскость.</returns>
         private static Entity PlaceInPlane(Entity entity, PlaneType planeType)
         {
             // Получаем текущую систему координат активного документа AutoCAD.
-            Document activeDocument = Application.DocumentManager.MdiActiveDocument;
-            Matrix3d currentUcs = activeDocument.Editor.CurrentUserCoordinateSystem;
-            CoordinateSystem3d coordinateSystem3d = currentUcs.CoordinateSystem3d;
+            var activeDocument = Application.DocumentManager.MdiActiveDocument;
+            var currentUcs = activeDocument.Editor
+                .CurrentUserCoordinateSystem;
+            var coordinateSystem3d = currentUcs.CoordinateSystem3d;
 
             Vector3d axis;
             var rotationDegree = 0.0;
 
-            // В зависимости от указанной координатной плоскости определяем, вокруг какой оси 
-            // необходимо выполнить поворот прямоугольника, чтобы поместить его в эту плоскость
-            // (по умолчанию текущей плоскостью является xOy).
+            // В зависимости от указанной координатной плоскости определяем, вокруг
+            // какой оси необходимо выполнить поворот прямоугольника, чтобы
+            // поместить его в эту плоскость (по умолчанию текущей плоскостью
+            // является xOy).
             switch (planeType)
             {
                 case PlaneType.XoZ:
@@ -252,8 +270,8 @@ namespace Services
                 }
             }
 
-            Matrix3d rotationMatrix = Matrix3d.Rotation(rotationDegree * (Math.PI / 180), axis,
-                Point3d.Origin);
+            var rotationMatrix = Matrix3d.Rotation(rotationDegree * 
+                (Math.PI / 180), axis, Point3d.Origin);
             entity.TransformBy(rotationMatrix);
 
             return entity;
@@ -262,41 +280,50 @@ namespace Services
         /// <summary>
         /// Метод для создания блока, содержащего 3D-модель письменного стола.
         /// </summary>
-        /// <param name="blockTableId"> Идентификатор таблицы блоков из базы данных активного
-        /// документа AutoCAD.</param>
+        /// <param name="blockTableId"> Идентификатор таблицы блоков из базы данных
+        /// активного документа AutoCAD.</param>
         private void CreateBlock(ObjectId blockTableId)
         {
             using (Application.DocumentManager.MdiActiveDocument.LockDocument())
             {
-                using (Database database = Application.DocumentManager.MdiActiveDocument.Database)
+                using (var database = Application.DocumentManager.MdiActiveDocument
+                           .Database)
                 {
-                    using (Transaction transaction = database.TransactionManager.StartTransaction())
+                    using (var transaction = database.TransactionManager
+                               .StartTransaction())
                     {
-                        // Если 3D-модель письменного стола уже была создана, удаляем ее.
+                        // Если 3D-модель письменного стола уже была создана,
+                        // удаляем ее.
                         EraseExisting3dModel(transaction, blockTableId);
 
-                        var blockTable = (BlockTable)transaction.GetObject(blockTableId,
-                            OpenMode.ForWrite);
+                        var blockTable = (BlockTable)transaction
+                            .GetObject(blockTableId, OpenMode.ForWrite);
 
-                        // Создаем в таблице блоков определение нового блока, присваиваем ему имя.
+                        // Создаем в таблице блоков определение нового блока,
+                        // присваиваем ему имя.
                         var blockTableRecord = new BlockTableRecord
                         {
                             Name = BlockName
                         };
 
-                        // Добавляем созданное определение блока в таблицу блоков и в транзакцию,
-                        // запоминаем идентификатор этого определения.
+                        // Добавляем созданное определение блока в таблицу блоков
+                        // и в транзакцию, запоминаем идентификатор этого
+                        // определения.
                         //
-                        ObjectId deskBlockTableRecordId = blockTable.Add(blockTableRecord);
-                        transaction.AddNewlyCreatedDBObject(blockTableRecord, true);
+                        var deskBlockTableRecordId = blockTable
+                            .Add(blockTableRecord);
+                        transaction.AddNewlyCreatedDBObject(blockTableRecord, 
+                            true);
 
-                        // Открываем пространство моделей для записи и создаем в нем новое вхождение
-                        // блока, используя сохраненный идентификатор определения этого блока.
+                        // Открываем пространство моделей для записи и создаем в нем
+                        // новое вхождение блока, используя идентификатор
+                        // определения этого блока.
                         //
                         var deskBlockReference = new BlockReference(Point3d.Origin,
                             deskBlockTableRecordId);
 
-                        AddObjectInBlock(deskBlockReference, BlockTableRecord.ModelSpace);
+                        AddObjectInBlock(deskBlockReference, 
+                            BlockTableRecord.ModelSpace);
 
                         transaction.Commit();
                     }
@@ -308,16 +335,18 @@ namespace Services
         /// Метод для удаления существующей 3D-модели.
         /// </summary>
         /// <param name="transaction"> Текущая транзакция.</param>
-        /// <param name="blockTableId"> Идентификатор таблицы блоков из базы данных активного
-        /// документа AutoCAD.</param>
-        private void EraseExisting3dModel(Transaction transaction, ObjectId blockTableId)
+        /// <param name="blockTableId"> Идентификатор таблицы блоков из базы данных
+        /// активного документа AutoCAD.</param>
+        private void EraseExisting3dModel(Transaction transaction, 
+            ObjectId blockTableId)
         {
-            ObjectId deskBlockId = ObjectId.Null;
+            var deskBlockId = ObjectId.Null;
 
-            // Если ранее уже был создан блок, содержащий 3D-модель, получаем идентификатор этого
-            // блока.
+            // Если ранее уже был создан блок, содержащий 3D-модель, получаем
+            // идентификатор этого блока.
             //
-            var blockTable = transaction.GetObject(blockTableId, OpenMode.ForRead) as BlockTable;
+            var blockTable = transaction.GetObject(blockTableId, OpenMode.ForRead) 
+                as BlockTable;
 
             if (blockTable != null && blockTable.Has(BlockName))
             {
@@ -329,13 +358,13 @@ namespace Services
                 return;
             }
 
-            // Прежде чем удалять определение блока из таблицы блоков, удаляем все его вхождения,
-            // чтобы предотвратить повреждение чертежа.
+            // Прежде чем удалять определение блока из таблицы блоков, удаляем все
+            // его вхождения, чтобы предотвратить повреждение чертежа.
             //
-            var deskBlockTableRecord = (BlockTableRecord)transaction.GetObject(deskBlockId,
-                OpenMode.ForRead);
+            var deskBlockTableRecord = (BlockTableRecord)transaction
+                .GetObject(deskBlockId, OpenMode.ForRead);
 
-            ObjectIdCollection deskBlockReferenceIds = deskBlockTableRecord
+            var deskBlockReferenceIds = deskBlockTableRecord
                 .GetBlockReferenceIds(true, false);
 
             if (deskBlockReferenceIds != null && deskBlockReferenceIds.Count > 0)
@@ -348,9 +377,11 @@ namespace Services
                 }
             }
 
-            // После удаления всех вхождений блока из поля чертежа удаляем его определение.
+            // После удаления всех вхождений блока из поля чертежа удаляем его
+            // определение.
             //
-            deskBlockReferenceIds = deskBlockTableRecord.GetBlockReferenceIds(true, false);
+            deskBlockReferenceIds = deskBlockTableRecord
+                .GetBlockReferenceIds(true, false);
 
             if (deskBlockReferenceIds != null && deskBlockReferenceIds.Count != 0)
             {
@@ -365,19 +396,23 @@ namespace Services
         /// Метод для добавления нового объекта в определенный блок.
         /// </summary>
         /// <param name="databaseObject"> Объект для добавления в блок.</param>
-        /// <param name="blockName"> Имя блока, в который нужно добавить объект.</param>
-        private static void AddObjectInBlock(DBObject databaseObject, string blockName)
+        /// <param name="blockName"> Имя блока, в который нужно добавить объект.
+        /// </param>
+        private static void AddObjectInBlock(DBObject databaseObject, 
+            string blockName)
         {
             using (Application.DocumentManager.MdiActiveDocument.LockDocument())
             {
-                using (Database database = Application.DocumentManager.MdiActiveDocument.Database)
+                using (var database = Application.DocumentManager.MdiActiveDocument
+                           .Database)
                 {
-                    using (Transaction transaction = database.TransactionManager.StartTransaction())
+                    using (var transaction = database.TransactionManager
+                               .StartTransaction())
                     {
                         // Открываем для записи определенный блок из таблицы блоков.
                         //
-                        var blockTable = (BlockTable)transaction.GetObject(database.BlockTableId,
-                            OpenMode.ForRead);
+                        var blockTable = (BlockTable)transaction.GetObject(database
+                                .BlockTableId, OpenMode.ForRead);
                         var blockTableRecord = (BlockTableRecord)transaction
                             .GetObject(blockTable[blockName], OpenMode.ForWrite);
 

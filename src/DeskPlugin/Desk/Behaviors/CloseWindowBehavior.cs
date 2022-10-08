@@ -14,10 +14,12 @@ namespace Desk.Behaviors
         #region Methods
 
         /// <inheritdoc/>
-        protected override void OnAttached() => AssociatedObject.Click += OnButtonClick;
+        protected override void OnAttached() => AssociatedObject.Click += 
+            OnButtonClick;
 
         /// <inheritdoc/>
-        protected override void OnDetaching() => AssociatedObject.Click -= OnButtonClick;
+        protected override void OnDetaching() => AssociatedObject.Click -= 
+            OnButtonClick;
 
         #region Event Handlers
 
@@ -26,8 +28,8 @@ namespace Desk.Behaviors
         /// </summary>
         /// <param name="sender"> Отправитель события.</param>
         /// <param name="e"> Аргументы события.</param>
-        private void OnButtonClick(object sender, RoutedEventArgs e) => (AssociatedObject
-            .FindRoot(typeof(VisualTreeHelper)) as Window)?.Close();
+        private void OnButtonClick(object sender, RoutedEventArgs e) => 
+            (AssociatedObject.FindRoot(typeof(VisualTreeHelper)) as Window)?.Close();
 
         #endregion
 

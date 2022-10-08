@@ -7,17 +7,20 @@ using Microsoft.Xaml.Behaviors;
 namespace Desk.Behaviors
 {
     /// <summary>
-    /// Класс, реализующий поведение для максимизации (разворачивания на весь экран) окна.
+    /// Класс, реализующий поведение для максимизации (разворачивания на весь экран)
+    /// окна.
     /// </summary>
     internal class MaximizeWindowBehavior : Behavior<Button>
     {
         #region Methods
 
         /// <inheritdoc/>
-        protected override void OnAttached() => AssociatedObject.Click += OnButtonClick;
+        protected override void OnAttached() => AssociatedObject.Click += 
+            OnButtonClick;
 
         /// <inheritdoc/>
-        protected override void OnDetaching() => AssociatedObject.Click -= OnButtonClick;
+        protected override void OnDetaching() => AssociatedObject.Click -= 
+            OnButtonClick;
 
         #region Event Handlers
 
@@ -28,13 +31,14 @@ namespace Desk.Behaviors
         /// <param name="e"> Аргументы события.</param>
         private void OnButtonClick(object sender, RoutedEventArgs e)
         {
-            if (!(AssociatedObject.FindRoot(typeof(VisualTreeHelper)) is Window window))
+            if (!(AssociatedObject.FindRoot(typeof(VisualTreeHelper)) is 
+                    Window window))
             {
                 return;
             }
 
-            // В зависимости от текущего состояния окна разворачиваем его либо сворачиваем до 
-            // обычного размера.
+            // В зависимости от текущего состояния окна разворачиваем его либо
+            // сворачиваем до обычного размера.
             switch (window.WindowState)
             {
                 case WindowState.Normal:

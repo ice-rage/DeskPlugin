@@ -6,7 +6,8 @@ using Parameters.Enums.Extensions;
 namespace TestParameters
 {
     /// <summary>
-    /// Класс, содержащий модульные тесты для класса <see cref="DeskParameterTypeExtension"/>.
+    /// Класс, содержащий модульные тесты для класса
+    /// <see cref="DeskParameterTypeExtension"/>.
     /// </summary>
     [TestFixture]
     public class DeskParameterTypeExtensionTests
@@ -17,8 +18,9 @@ namespace TestParameters
         /// Название модульного теста для метода
         /// <see cref="DeskParameterTypeExtension.GetDescription"/>.
         /// </summary>
-        private const string TestGetDescription_ReturnsValue_TestName = "Когда вызывается метод " + 
-            "GetDescription() для параметра {0}, он должен вернуть строку {1}";
+        private const string TestGetDescription_ReturnsValue_TestName = 
+            "При вызове метода GetDescription() для параметра {0} должна " +
+            "возвращаться строка {1}";
 
         #endregion
 
@@ -29,7 +31,7 @@ namespace TestParameters
             string expected)
         {
             // Act
-            string actual = parameterType.GetDescription();
+            var actual = parameterType.GetDescription();
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -43,32 +45,35 @@ namespace TestParameters
         /// Метод-источник тестовых случаев для тестирования метода
         /// <see cref="DeskParameterTypeExtension.GetDescription"/>.
         /// </summary>
-        /// <returns> Перечисление тестовых случаев <see cref="TestCaseData"/>.</returns>
+        /// <returns> Перечисление тестовых случаев <see cref="TestCaseData"/>.
+        /// </returns>
         private static IEnumerable<TestCaseData> GetDescriptionTestCases()
         {
-            yield return new TestCaseData(DeskParameterType.WorktopLength, "Length (L1)")
+            yield return new TestCaseData(DeskParameterType.WorktopLength, 
+                "Length (L1)").SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.WorktopWidth, 
+                "Width (B)").SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.WorktopHeight, 
+                "Height (H1)").SetName(TestGetDescription_ReturnsValue_TestName);
+
+            yield return new TestCaseData(DeskParameterType.LegBaseDiameter, 
+                "Base Diameter (D)")
                 .SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.WorktopWidth, "Width (B)")
+            yield return new TestCaseData(DeskParameterType.LegBaseLength, 
+                "Base Length (A)")
                 .SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.WorktopHeight, "Height (H1)")
-                .SetName(TestGetDescription_ReturnsValue_TestName);
-
-            yield return new TestCaseData(DeskParameterType.LegBaseDiameter, "Base Diameter (D)")
-                .SetName(TestGetDescription_ReturnsValue_TestName);
-
-            yield return new TestCaseData(DeskParameterType.LegBaseLength, "Base Length (A)")
-                .SetName(TestGetDescription_ReturnsValue_TestName);
-
-            yield return new TestCaseData(DeskParameterType.LegHeight, "Height (H2)")
-                .SetName(TestGetDescription_ReturnsValue_TestName);
+            yield return new TestCaseData(DeskParameterType.LegHeight, 
+                "Height (H2)").SetName(TestGetDescription_ReturnsValue_TestName);
 
             yield return new TestCaseData(DeskParameterType.DrawerNumber, "Number")
                 .SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.DrawerLength, "Length (L2)")
-                .SetName(TestGetDescription_ReturnsValue_TestName);
+            yield return new TestCaseData(DeskParameterType.DrawerLength, 
+                "Length (L2)").SetName(TestGetDescription_ReturnsValue_TestName);
         }
 
         #endregion

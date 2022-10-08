@@ -15,7 +15,8 @@ namespace Connector
         /// Метод для запуска плагина из среды AutoCAD.
         /// </summary>
         [CommandMethod("StartDeskPlugin")]
-        public void StartDeskPlugin() => Application.ShowModelessWindow(new MainWindow());
+        public static void StartDeskPlugin() => Application
+            .ShowModelessWindow(new MainWindow());
 
         /// <inheritdoc/>
         public void Initialize()
