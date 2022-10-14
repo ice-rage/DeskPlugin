@@ -4,7 +4,7 @@ using Builder;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Parameters;
-using Services;
+using Services.Interfaces;
 
 namespace ViewModel
 {
@@ -14,12 +14,6 @@ namespace ViewModel
     public class MainWindowViewModel : ObservableObject
     {
         #region Fields
-
-        /// <summary>
-        /// Объект для построения 3D-модели письменного стола.
-        /// </summary>
-        private readonly DeskBuilder _builder = new DeskBuilder(
-            new AutoCadWrapper("Desk"));
 
         /// <summary>
         /// Переменная для хранения значения, показывающего, корректны ли введенные
@@ -77,9 +71,10 @@ namespace ViewModel
         /// <summary>
         /// Создает экземпляр класса <see cref="MainWindowViewModel"/>.
         /// </summary>
-        public MainWindowViewModel()
+        public MainWindowViewModel(ICadWrapper wrapper)
         {
-            BuildModelCommand = new RelayCommand<DeskParameters>(_builder.BuildDesk);
+            var builder = new DeskBuilder(wrapper);
+            BuildModelCommand = new RelayCommand<DeskParameters>(builder.BuildDesk);
 
             SetMinimumParametersCommand = new RelayCommand(() =>
                 SetDefaultParameters(parameter => parameter.Value = parameter.Min));
@@ -100,7 +95,7 @@ namespace ViewModel
                 .ToList()
                 .ForEach(parameters => parameters
                     .ToList()
-                    .ForEach(parameter => parameter.DataValidChanged += 
+                    .ForEach(parameter => parameter.DataValidChanged +=
                         OnDataValidChanged));
         }
 
