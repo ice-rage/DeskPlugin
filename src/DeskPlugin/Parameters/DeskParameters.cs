@@ -50,12 +50,6 @@ namespace Parameters
         public static int OuterInnerDrawerHeightDifference => 20;
 
         /// <summary>
-        /// Разница между длиной (высотой) внутреннего пространства ящика для
-        /// канцелярии и длиной (высотой) его дверцы.
-        /// </summary>
-        public static double InnerDrawerDoorDimensionsDifference => 0.1;
-
-        /// <summary>
         /// Разница в длине между ящиком для канцелярии и его дверцей.
         /// </summary>
         public static int DrawerDoorLengthDifference => 40;
@@ -97,9 +91,10 @@ namespace Parameters
         /// Группа параметров и соответствующий ей список параметров.
         /// </summary>
         // TODO: Подумать надо, как сделать более читаемо.
-        public Dictionary<DeskParameterGroupType, 
-            ObservableCollection<DeskParameter>> 
-            ParametersByGroup { get; } = new Dictionary<DeskParameterGroupType, 
+        public Dictionary<DeskParameterGroupType,
+            ObservableCollection<DeskParameter>>
+            ParametersByGroup
+        { get; } = new Dictionary<DeskParameterGroupType,
                 ObservableCollection<DeskParameter>>();
 
         /// <summary>
@@ -144,38 +139,38 @@ namespace Parameters
             LegType = LegType.Round;
             ParametersByGroup.Clear();
 
-            ParametersByGroup.Add(DeskParameterGroupType.Worktop, 
-                new ObservableCollection<DeskParameter> 
+            ParametersByGroup.Add(DeskParameterGroupType.Worktop,
+                new ObservableCollection<DeskParameter>
                 { 
                     // TODO: длина строк
-                    new DeskParameter(DeskParameterType.WorktopLength, 800, 
+                    new DeskParameter(DeskParameterType.WorktopLength, 800,
                         1200, 1000), 
                     // TODO: длина строк
-                    new DeskParameter(DeskParameterType.WorktopWidth, 500, 
+                    new DeskParameter(DeskParameterType.WorktopWidth, 500,
                         750, 625), 
                     // TODO: длина строк и т.д. Должно быть примерно 80-85 длина стоки
-                    new DeskParameter(DeskParameterType.WorktopHeight, 30, 
+                    new DeskParameter(DeskParameterType.WorktopHeight, 30,
                         40, 35)
                 });
 
-            ParametersByGroup.Add(DeskParameterGroupType.Legs, 
+            ParametersByGroup.Add(DeskParameterGroupType.Legs,
                 new ObservableCollection<DeskParameter>
                 {
                     LegType == LegType.Round
-                        ? new DeskParameter(DeskParameterType.LegBaseDiameter, 
+                        ? new DeskParameter(DeskParameterType.LegBaseDiameter,
                             50, 70, 60)
-                        : new DeskParameter(DeskParameterType.LegBaseLength, 
+                        : new DeskParameter(DeskParameterType.LegBaseLength,
                             50, 70, 60),
-                    new DeskParameter(DeskParameterType.LegHeight, 690, 
+                    new DeskParameter(DeskParameterType.LegHeight, 690,
                         740, 715)
                 });
 
-            ParametersByGroup.Add(DeskParameterGroupType.Drawers, 
+            ParametersByGroup.Add(DeskParameterGroupType.Drawers,
                 new ObservableCollection<DeskParameter>
                 {
-                    new DeskParameter(DeskParameterType.DrawerNumber, 3, 
+                    new DeskParameter(DeskParameterType.DrawerNumber, 3,
                         5, 4),
-                    new DeskParameter(DeskParameterType.DrawerLength, 250, 
+                    new DeskParameter(DeskParameterType.DrawerLength, 250,
                         333, 291)
                 });
 
@@ -192,7 +187,7 @@ namespace Parameters
                 .ToList()
                 .ForEach(parameters => parameters
                     .ToList()
-                    .ForEach(parameter => parameter.DataValidChanged += 
+                    .ForEach(parameter => parameter.DataValidChanged +=
                         DataValidChanged));
         }
 
@@ -207,18 +202,18 @@ namespace Parameters
         /// <param name="legType"> Тип ножек письменного стола.</param>
         private void UpdateLegBaseParameter(LegType legType)
         {
-	        // TODO: Почему не var? И так дальше по классу
-			var previousLegBaseType = LegType.GetLegBaseType();
+            // TODO: Почему не var? И так дальше по классу
+            var previousLegBaseType = LegType.GetLegBaseType();
             SetProperty(ref _legType, legType);
             var updatedLegBaseType = LegType.GetLegBaseType();
 
-            var previousDeskParameter = this[DeskParameterGroupType.Legs, 
+            var previousDeskParameter = this[DeskParameterGroupType.Legs,
                 previousLegBaseType];
 
-            this[DeskParameterGroupType.Legs, previousLegBaseType] = 
-                new DeskParameter(updatedLegBaseType, previousDeskParameter.Min, 
-	                previousDeskParameter.Max, previousDeskParameter.Value);
-            this[DeskParameterGroupType.Legs, updatedLegBaseType].DataValidChanged += 
+            this[DeskParameterGroupType.Legs, previousLegBaseType] =
+                new DeskParameter(updatedLegBaseType, previousDeskParameter.Min,
+                    previousDeskParameter.Max, previousDeskParameter.Value);
+            this[DeskParameterGroupType.Legs, updatedLegBaseType].DataValidChanged +=
                 DataValidChanged;
         }
 
@@ -231,23 +226,23 @@ namespace Parameters
         /// <param name="e"> Аргументы события.</param>
         private void OnWorktopLengthChanged(object sender, EventArgs e)
         {
-            var worktopLength = this[DeskParameterGroupType.Worktop, 
+            var worktopLength = this[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopLength].Value;
 
-            var worktopWidthDeskParameter = this[DeskParameterGroupType.Worktop, 
+            var worktopWidthDeskParameter = this[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopWidth];
             this[DeskParameterGroupType.Worktop, DeskParameterType.WorktopWidth] =
-                new DeskParameter(worktopWidthDeskParameter.Name, 
-                    worktopLength / 2, worktopWidthDeskParameter.Max, 
+                new DeskParameter(worktopWidthDeskParameter.Name,
+                    worktopLength / 2, worktopWidthDeskParameter.Max,
                     worktopWidthDeskParameter.Value);
             this[DeskParameterGroupType.Worktop, DeskParameterType.WorktopWidth]
                     .DataValidChanged += DataValidChanged;
 
-            var drawerLengthDeskParameter = this[DeskParameterGroupType.Drawers, 
+            var drawerLengthDeskParameter = this[DeskParameterGroupType.Drawers,
                 DeskParameterType.DrawerLength];
             this[DeskParameterGroupType.Drawers, DeskParameterType.DrawerLength] =
-                new DeskParameter(drawerLengthDeskParameter.Name, 
-                    drawerLengthDeskParameter.Min, worktopLength / 3, 
+                new DeskParameter(drawerLengthDeskParameter.Name,
+                    drawerLengthDeskParameter.Min, worktopLength / 3,
                     drawerLengthDeskParameter.Value);
             this[DeskParameterGroupType.Drawers, DeskParameterType.DrawerLength]
                     .DataValidChanged += DataValidChanged;
@@ -264,11 +259,11 @@ namespace Parameters
         /// <param name="index"> Группа параметров.</param>
         /// <returns> Пара "ключ-значение", которая содержит группу параметров
         /// и соответствующий список параметров.</returns>
-        public KeyValuePair<DeskParameterGroupType, 
-                ObservableCollection<DeskParameter>> 
-            this[DeskParameterGroupType index] => 
-                new KeyValuePair<DeskParameterGroupType, 
-                    ObservableCollection<DeskParameter>>(index, 
+        public KeyValuePair<DeskParameterGroupType,
+                ObservableCollection<DeskParameter>>
+            this[DeskParameterGroupType index] =>
+                new KeyValuePair<DeskParameterGroupType,
+                    ObservableCollection<DeskParameter>>(index,
                         ParametersByGroup[index]);
 
         /// <summary>
@@ -281,7 +276,7 @@ namespace Parameters
         public DeskParameter this[DeskParameterGroupType firstIndex, 
             DeskParameterType secondIndex]
         {
-            get => ParametersByGroup[firstIndex].First(parameter => 
+            get => ParametersByGroup[firstIndex].First(parameter =>
                 parameter.Name == secondIndex);
 
             set => ParametersByGroup[firstIndex][ParametersByGroup[firstIndex]

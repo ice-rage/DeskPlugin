@@ -249,15 +249,12 @@ namespace Builder
                 var drawerDoor = _wrapper
                     .CreateRectangle(
                         PlaneType.XoZ, worktopLength - drawerLength + 
-                            DeskParameters.DrawerDoorLengthDifference / 2 + 
-                            DeskParameters.InnerDrawerDoorDimensionsDifference, 
-                        y + DeskParameters.InnerDrawerDoorDimensionsDifference, 
+                            DeskParameters.DrawerDoorLengthDifference / 2, 
+                        y, 
                         drawerLength - 
-                            DeskParameters.DrawerDoorLengthDifference - 
-                            2 * DeskParameters.InnerDrawerDoorDimensionsDifference, 
+                            DeskParameters.DrawerDoorLengthDifference, 
                         drawerHeight - 
-                            DeskParameters.DrawerDoorHeightDifference - 
-                            2 * DeskParameters.InnerDrawerDoorDimensionsDifference);
+                            DeskParameters.DrawerDoorHeightDifference);
                 _wrapper.Extrude(drawerDoor, DeskParameters.DoorWidth);
 
                 // Строим ручку ящика.
