@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using ViewModel.Registration;
+using ViewModels.Registration;
 
 namespace TestViewModel
 {

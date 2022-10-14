@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using Parameters;
 using Services.Interfaces;
 
-namespace ViewModel
+namespace ViewModels
 {
     /// <summary>
     /// Модель представления главного окна плагина.

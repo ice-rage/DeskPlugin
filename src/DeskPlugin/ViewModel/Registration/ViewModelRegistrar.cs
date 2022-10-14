@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace ViewModel.Registration
+namespace ViewModels.Registration
 {
     /// <summary>
     /// Статический класс для регистрации моделей представления плагина в контейнере

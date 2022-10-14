@@ -3,7 +3,7 @@ using System.Windows;
 using Desk.Views.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Registration;
-using ViewModel.Registration;
+using ViewModels.Registration;
 
 namespace Desk
 {

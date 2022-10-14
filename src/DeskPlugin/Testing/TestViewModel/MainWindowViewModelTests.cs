@@ -7,7 +7,7 @@ using Parameters;
 using Parameters.Enums;
 using Rhino.Mocks;
 using Services.Interfaces;
-using ViewModel;
+using ViewModels;
 
 namespace TestViewModel
 {
