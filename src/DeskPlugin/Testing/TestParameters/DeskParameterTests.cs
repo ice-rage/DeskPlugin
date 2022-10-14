@@ -12,7 +12,7 @@ namespace TestParameters
     [TestFixture]
     public class DeskParameterTests
     {
-        #region Test Data Source
+        #region Test Data Sources
 
         /// <summary>
         /// Тестовый параметр.

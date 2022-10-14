@@ -77,18 +77,15 @@ namespace TestParameters
 
         [TestCaseSource(nameof(StaticPropertyTestCases))]
         public void TestStaticPropertiesGet_GoodScenario(string staticPropertyName, 
-            object expected)
+            int expected)
         {
             // Act
             var actual = typeof(DeskParameters)
-                .GetProperty(staticPropertyName)?
-                .GetValue(null, null);
+                .GetProperty(staticPropertyName)
+                ?.GetValue(null, null);
 
             // Arrange
-            if (actual is int || actual is double)
-            {
-                Assert.AreEqual(expected, actual);
-            }
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion
@@ -245,10 +242,6 @@ namespace TestParameters
 
             yield return new TestCaseData(
                 nameof(DeskParameters.OuterInnerDrawerHeightDifference), 20)
-                .SetName(TestStaticProperties_GoodScenario_TestName);
-
-            yield return new TestCaseData(
-                nameof(DeskParameters.InnerDrawerDoorDimensionsDifference), 0.1)
                 .SetName(TestStaticProperties_GoodScenario_TestName);
 
             yield return new TestCaseData(
