@@ -160,9 +160,8 @@ namespace Parameters
         {
             unchecked
             {
-                var hash = 17;
-
-	            // TODO: Магическое число
+                const int hash = 17;
+                
                 hash = hash * PrimeNumberForHashCalculation + Name.GetHashCode();
                 hash = hash * PrimeNumberForHashCalculation + Description
                     .GetHashCode();

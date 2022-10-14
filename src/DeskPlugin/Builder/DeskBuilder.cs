@@ -44,7 +44,6 @@ namespace Builder
         /// 3D-модели.</param>
         public void BuildDesk(DeskParameters parameters)
         {
-	        // TODO: Почему не var? И так по всему классу.
 			var worktopLength = parameters[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopLength].Value;
             var worktopWidth = parameters[DeskParameterGroupType.Worktop,

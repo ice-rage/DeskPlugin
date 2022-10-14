@@ -5,7 +5,6 @@ using Parameters.Enums;
 
 namespace TestParameters
 {
-    // TODO: Полетела кодировка
     /// <summary>
     /// Класс, содержащий модульные тесты для класса <see cref="DeskParameter"/>.
     /// </summary>

@@ -11,7 +11,6 @@ using ViewModels;
 
 namespace TestViewModels
 {
-    // TODO: Полетела кодировка
     ///<summary>
     /// Класс, содержащий модульные тесты для класса
     /// <see cref="MainWindowViewModel"/>.

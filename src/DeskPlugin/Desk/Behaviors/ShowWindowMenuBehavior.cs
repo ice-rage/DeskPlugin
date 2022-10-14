@@ -42,7 +42,6 @@ namespace Desk.Behaviors
 			// Вычисляем координаты центра иконки окна и в зависимости от состояния
 			// окна отображаем меню либо в правом нижнем углу иконки, либо в ее
 			// центре.
-			// TODO: Почему не var?
 			var halfWidthIcon = element.ActualWidth / 2;
             var halfHeightIcon = element.ActualHeight / 2;
 

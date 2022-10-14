@@ -35,7 +35,6 @@ namespace Desk.Converters
             {
                 case LegType.Round:
                 {
-                    // TODO: Лучше сделать относительный путь.
                     // Копировать всегда изображения при сборке.
                     // Получиться примерно такой путь Resources/DeskWithSquareLegs.png
                     return Path.Combine(_outputDirectory, 
@@ -43,7 +42,6 @@ namespace Desk.Converters
                 }
                 case LegType.Square:
                 {
-                    // TODO: Лучше сделать относительный путь.
                     // Копировать всегда изображения при сборке.
                     // Получиться примерно такой путь Resources/DeskWithSquareLegs.png
                     return Path.Combine(_outputDirectory, 

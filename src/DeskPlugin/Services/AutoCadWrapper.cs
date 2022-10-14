@@ -21,7 +21,6 @@ namespace Services
 		/// Массив объектов базы данных документа AutoCAD, хранящий части (детали)
 		/// 3D-модели.
 		/// </summary>
-		// TODO: просто _modelParts или _modelParts3D
 		private readonly DBObjectCollection _modelParts = new DBObjectCollection();
 
         #endregion
@@ -118,7 +117,6 @@ namespace Services
 			// Для выполнения операции выдавливания 2D-объект должен представлять
 			// собой замкнутую область, поэтому предварительно получаем область
 			// (region) из кривых, образующих объект.
-			// TODO: Почему не var?
 			var regions = Region.CreateFromCurves(curves);
 
             using (var region = (Region)regions[0])

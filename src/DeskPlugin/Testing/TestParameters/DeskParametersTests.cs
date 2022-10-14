@@ -37,7 +37,6 @@ namespace TestParameters
                 ObservableCollection<DeskParameter>>
             {
                 {
-                    // TODO: длина строк
                     DeskParameterGroupType.Worktop,
                     new ObservableCollection<DeskParameter>
                     {
