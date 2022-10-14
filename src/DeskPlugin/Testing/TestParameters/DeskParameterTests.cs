@@ -14,16 +14,7 @@ namespace TestParameters
     {
         #region Test Data Sources
 
-        /// <summary>
-        /// Тестовый параметр.
-        /// </summary>
-        private readonly DeskParameter _testParameter = 
-            new DeskParameter(DeskParameterType.WorktopLength, 800, 1200, 
-                1000);
-
-        #endregion
-
-        #region Constants For Testing
+        #region Constants
 
         /// <summary>
         /// Название модульного теста для конструктора.
@@ -45,6 +36,19 @@ namespace TestParameters
         /// </summary>
         private const string TestGetErrors_ValueGreaterThanMax_ErrorMessage =
             "Parameter \"Length (L1)\" must be less than or equal to 1200";
+
+        #endregion
+
+        #region Fields
+
+        /// <summary>
+        /// Тестовый параметр.
+        /// </summary>
+        private readonly DeskParameter _testParameter =
+            new DeskParameter(DeskParameterType.WorktopLength, 800, 1200,
+                1000);
+
+        #endregion
 
         #endregion
 

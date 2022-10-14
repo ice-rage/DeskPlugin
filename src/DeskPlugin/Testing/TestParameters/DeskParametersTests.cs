@@ -12,62 +12,66 @@ namespace TestParameters
     [TestFixture]
     public class DeskParametersTests
     {
-		#region Test Data Sources
+        #region Test Data Sources
 
-		/// <summary>
-		/// Тестовый словарь, содержащий группы параметров и соответствующие им
-		/// коллекции параметров.
-		/// </summary>
-		private readonly Dictionary<DeskParameterGroupType, 
-            ObservableCollection<DeskParameter>>
+        #region Constants
+
+        /// <summary>
+        /// Название модульных тестов для статических свойств класса
+        /// <see cref="DeskParameters"/>.
+        /// </summary>
+        private const string TestStaticProperties_GoodScenario_TestName =
+            "Позитивный тест геттера статического свойства {0}";
+
+        #endregion
+
+        #region Fields
+
+        /// <summary>
+        /// Тестовый словарь, содержащий группы параметров и соответствующие им
+        /// коллекции параметров.
+        /// </summary>
+        private readonly Dictionary<DeskParameterGroupType,
+                ObservableCollection<DeskParameter>>
             _testParametersByGroup = new Dictionary<DeskParameterGroupType,
                 ObservableCollection<DeskParameter>>
             {
-				{
-					// TODO: длина строк
-                    DeskParameterGroupType.Worktop, 
+                {
+                    // TODO: длина строк
+                    DeskParameterGroupType.Worktop,
                     new ObservableCollection<DeskParameter>
                     {
-                        new DeskParameter(DeskParameterType.WorktopLength, 
+                        new DeskParameter(DeskParameterType.WorktopLength,
                             800, 1200, 1000),
-                        new DeskParameter(DeskParameterType.WorktopWidth, 
+                        new DeskParameter(DeskParameterType.WorktopWidth,
                             500, 750, 625),
-                        new DeskParameter(DeskParameterType.WorktopHeight, 
+                        new DeskParameter(DeskParameterType.WorktopHeight,
                             30, 40, 35)
                     }
                 },
                 {
-                    DeskParameterGroupType.Legs, 
+                    DeskParameterGroupType.Legs,
                     new ObservableCollection<DeskParameter>
                     {
-                        new DeskParameter(DeskParameterType.LegBaseDiameter, 
+                        new DeskParameter(DeskParameterType.LegBaseDiameter,
                             50, 70, 60),
-                        new DeskParameter(DeskParameterType.LegHeight, 
+                        new DeskParameter(DeskParameterType.LegHeight,
                             690, 740, 715)
                     }
                 },
                 {
-                    DeskParameterGroupType.Drawers, 
+                    DeskParameterGroupType.Drawers,
                     new ObservableCollection<DeskParameter>
                     {
-                        new DeskParameter(DeskParameterType.DrawerNumber, 3, 
+                        new DeskParameter(DeskParameterType.DrawerNumber, 3,
                             5, 4),
-                        new DeskParameter(DeskParameterType.DrawerLength, 
+                        new DeskParameter(DeskParameterType.DrawerLength,
                             250, 333, 291)
                     }
                 }
             };
 
         #endregion
-
-        #region Constants For Testing
-
-        /// <summary>
-        /// Название модульных тестов для статических свойств класса
-        /// <see cref="DeskParameters"/>.
-        /// </summary>
-        private const string TestStaticProperties_GoodScenario_TestName = 
-            "Позитивный тест геттера статического свойства {0}";
 
         #endregion
 

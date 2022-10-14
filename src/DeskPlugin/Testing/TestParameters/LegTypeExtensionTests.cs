@@ -11,15 +11,19 @@ namespace TestParameters
     [TestFixture]
     public class LegTypeExtensionTests
     {
-        #region Constants For Testing
+        #region Test Data Sources
+
+        #region Constants
 
         /// <summary>
         /// Название модульного теста для метода
         /// <see cref="LegTypeExtension.GetLegBaseType"/>.
         /// </summary>
-        private const string TestGetLegBaseType_ReturnsValue_TestName = 
+        private const string TestGetLegBaseType_ReturnsValue_TestName =
             "При вызове метода GetLegBaseType() для типа ножек {0} должна " +
             "возвращаться строка {1}";
+
+        #endregion
 
         #endregion
 

@@ -9,7 +9,7 @@ using Rhino.Mocks;
 using Services.Interfaces;
 using ViewModels;
 
-namespace TestViewModel
+namespace TestViewModels
 {
     // TODO: Полетела кодировка
     ///<summary>
@@ -21,9 +21,27 @@ namespace TestViewModel
     {
         #region Test Data Sources
 
+        #region Fields
+
+        /// <summary>
+        /// Репозиторий для создания mock-объекта (упрощенной реализации интерфейса
+        /// <see cref="ICadWrapper"/>, необходимой для тестирования модели
+        /// представления).
+        /// </summary>
         private readonly MockRepository _repository = new MockRepository();
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Метод, создающий mock-объект, реализующий интерфейс
+        /// <see cref="ICadWrapper"/>.
+        /// </summary>
+        /// <returns> Созданный mock-объект.</returns>
         private ICadWrapper CreateMock() => _repository.StrictMock<ICadWrapper>();
+
+        #endregion
 
         #endregion
 

@@ -194,7 +194,7 @@
       <Project>{c5aceb46-8b3f-4d15-a2eb-ad9b5a4bd71d}</Project>
       <Name>Services</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ViewModel\ViewModels.csproj">
+    <ProjectReference Include="..\ViewModels\ViewModels.csproj">
       <Project>{246e1ec6-1ed9-47d1-9a5e-c45d4295f6da}</Project>
       <Name>ViewModels</Name>
     </ProjectReference>

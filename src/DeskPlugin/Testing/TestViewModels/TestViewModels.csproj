@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Parameters\Parameters.csproj" />
-    <ProjectReference Include="..\..\ViewModel\ViewModels.csproj" />
+    <ProjectReference Include="..\..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

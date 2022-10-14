@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using ViewModels.Registration;
 
-namespace TestViewModel
+namespace TestViewModels
 {
     /// <summary>
     /// Класс, содержащий модульные тесты для класса <see cref="ViewModelRegistrar"/>.
@@ -12,9 +12,11 @@ namespace TestViewModel
     [TestFixture]
     public class ViewModelRegistrarTests
     {
-        [TestCase(TestName = "Метод расширения RegisterViewModels() должен " + 
-            "возвращать коллекцию зарегистрированных моделей представления " +
-            "с указанным временем жизни")]
+        #region Method Tests
+
+        [TestCase(TestName = "Метод расширения RegisterViewModels() должен " +
+                             "возвращать коллекцию зарегистрированных моделей представления " +
+                             "с указанным временем жизни")]
         public void TestRegisterViewModel_ReturnsViewModelCollection()
         {
             // Arrange
@@ -41,5 +43,7 @@ namespace TestViewModel
                 CollectionAssert.AreEqual(expectedLifeTimes, actualLifeTimes);
             });
         }
+
+        #endregion
     }
 }

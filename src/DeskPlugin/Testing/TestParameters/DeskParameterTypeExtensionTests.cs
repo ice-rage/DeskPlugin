@@ -12,15 +12,19 @@ namespace TestParameters
     [TestFixture]
     public class DeskParameterTypeExtensionTests
     {
-        #region Constants For Testing
+        #region Test Data Sources
+
+        #region Constants
 
         /// <summary>
         /// Название модульного теста для метода
         /// <see cref="DeskParameterTypeExtension.GetDescription"/>.
         /// </summary>
-        private const string TestGetDescription_ReturnsValue_TestName = 
+        private const string TestGetDescription_ReturnsValue_TestName =
             "При вызове метода GetDescription() для параметра {0} должна " +
             "возвращаться строка {1}";
+
+        #endregion
 
         #endregion
 
