@@ -3,7 +3,8 @@
 
     <SolidColorBrush x:Key="GraySolidColorBrush" Color="#737373"/>
 
-    <LinearGradientBrush x:Key="GrayLinearGradientBrush" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="GrayLinearGradientBrush" StartPoint="0,0" 
+                         EndPoint="0,1">
         <GradientStop Color="#CFCFCF" Offset="0"/>
         <GradientStop Color="#808080" Offset="0.5"/>
         <GradientStop Color="#4D4D4D" Offset="1"/>

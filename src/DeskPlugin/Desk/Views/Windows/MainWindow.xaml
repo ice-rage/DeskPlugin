@@ -5,70 +5,57 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="clr-namespace:Desk.Converters"
+    xmlns:markupExtensions="clr-namespace:Desk.Extensions.MarkupExtensions"
     xmlns:userControls="clr-namespace:Desk.Views.UserControls"
     xmlns:enums="clr-namespace:Parameters.Enums;assembly=Parameters"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
-    xmlns:services="clr-namespace:Desk.Services"
     xmlns:viewModels="clr-namespace:ViewModels;assembly=ViewModels"
     Title="Desk Plugin"
-    DataContext="{services:ViewModelProvider viewModels:MainWindowViewModel}"
-    Width="700" Height="490"
-    MinWidth="700" MinHeight="490"
-    MaxWidth="700" MaxHeight="490"
+    DataContext="{markupExtensions:ViewModels viewModels:MainWindowViewModel}"
+    Width="700" Height="435"
+    MinWidth="700" MinHeight="435"
+    MaxWidth="700" MaxHeight="435"
     FontSize="12"
     Icon="pack://application:,,,/Desk;component/desk.ico"
     mc:Ignorable="d"
     Background="#f0f0f0">
-
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Dictionaries/BrushesDictionary.xaml"/>
-                <ResourceDictionary Source="../../Dictionaries/MainWindowStyleDictionary.xaml"/>
-                <ResourceDictionary Source="../../Dictionaries/ComboBoxStylesDictionary.xaml"/>
-                <ResourceDictionary Source="../../Dictionaries/GroupBoxStylesDictionary.xaml"/>
-                <ResourceDictionary Source="../../Dictionaries/ButtonStylesDictionary.xaml"/>
+                <ResourceDictionary 
+                    Source="../../Dictionaries/BrushesDictionary.xaml"/>
+                <ResourceDictionary 
+                    Source="../../Dictionaries/MainWindowStyleDictionary.xaml"/>
+                <ResourceDictionary 
+                    Source="../../Dictionaries/ComboBoxStyleDictionary.xaml"/>
+                <ResourceDictionary 
+                    Source="../../Dictionaries/GroupBoxStyleDictionary.xaml"/>
+                <ResourceDictionary 
+                    Source="../../Dictionaries/ButtonStylesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <converters:LegTypeToImageSourceConverter x:Key="LegTypeToImageSourceConverter"/>
-
-            <ObjectDataProvider x:Key="LegTypeEnumData" MethodName="GetValues" ObjectType="{x:Type 
-                system:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="enums:LegType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
         </ResourceDictionary>
     </Window.Resources>
-
     <Window.Style>
-        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource MainWindowStyle}"/>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource 
+            MainWindowStyle}"/>
     </Window.Style>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-
             <userControls:ParameterGroupControl 
                 Grid.Row="0"
                 Grid.Column="0"
                 DataContext="{Binding Parameters[Worktop]}"/>
-
             <GroupBox 
                 Grid.Row="0" 
                 Grid.Column="1"
@@ -78,7 +65,7 @@
                     <ComboBox 
                         x:Name="LegTypeComboBox" 
                         Margin="5,0,5,5"
-                        ItemsSource="{Binding Source={StaticResource LegTypeEnumData}}"
+                        ItemsSource="{markupExtensions:EnumValues enums:LegType}"
                         SelectedItem="{Binding Parameters.LegType, Mode=TwoWay}"
                         IsEditable="False"/>
                     <ItemsControl ItemsSource="{Binding Parameters[Legs].Value}">
@@ -90,45 +77,80 @@
                     </ItemsControl>
                 </StackPanel>
             </GroupBox>
-
-            <userControls:ParameterGroupControl 
+            <GroupBox 
                 Grid.Row="1"
                 Grid.Column="0"
-                DataContext="{Binding Parameters[Drawers]}"/>
-
-            <GroupBox 
-                Grid.Row="1" 
-                Grid.Column="1" 
-                Header="Default Parameters">
-                <StackPanel>
-                    <Button Content="Minimum" Command="{Binding SetMinimumParametersCommand}"/>
-                    <Button Content="Average" Command="{Binding SetAverageParametersCommand}"/>
-                    <Button Content="Maximum" Command="{Binding SetMaximumParametersCommand}"/>
-                </StackPanel>
+                Grid.ColumnSpan="2"
+                Header="{Binding Parameters[Drawers].Key}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Margin="5,10,0,7" Text="Type"/>
+                        <ComboBox 
+                            x:Name="HandleTypeCombobox" 
+                            Margin="5,0,5,5"
+                            ItemsSource="{markupExtensions:EnumValues 
+                                enums:DrawerHandleType}"
+                            SelectedItem="{Binding Parameters.HandleType, 
+                                Mode=TwoWay}"/>
+                        <userControls:ParameterControl DataContext="{Binding 
+                            Parameters[Drawers].Value[0]}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <userControls:ParameterControl DataContext="{Binding 
+                            Parameters[Drawers].Value[1]}"/>
+                        <userControls:ParameterControl DataContext="{Binding 
+                            Parameters[Drawers].Value[2]}"/>
+                    </StackPanel>
+                </Grid>
             </GroupBox>
-
-            <Button 
-                Grid.Row="2" 
-                Grid.Column="0" 
-                Grid.ColumnSpan="2" 
-                Style="{StaticResource BuildModelButtonStyle}"
-                Content="Build 3D-model" 
-                Command="{Binding BuildModelCommand}" CommandParameter="{Binding Parameters}" 
-                IsEnabled="{Binding IsDataValid, UpdateSourceTrigger=PropertyChanged}"/>
-
         </Grid>
-
-        <Border 
-            Grid.Column="1" 
-            Margin="10,14" 
-            BorderThickness="1" 
-            BorderBrush="{StaticResource GraySolidColorBrush}"
-            CornerRadius="5"
-            Background="White">
-
-            <Image Stretch="Uniform" Source="{Binding ElementName=LegTypeComboBox, 
-                Path=SelectedItem, Converter={StaticResource LegTypeToImageSourceConverter}}"/>
-        </Border>
-
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border 
+                Grid.Row="0" 
+                Margin="7,14,10,5"
+                BorderThickness="1" 
+                BorderBrush="{StaticResource GraySolidColorBrush}"
+                CornerRadius="5"
+                Background="White">
+                <Image Stretch="Uniform">
+                    <Image.Source>
+                        <MultiBinding 
+                            Converter="{converters:LegTypeAndHandleTypeToImageConverter}">
+                            <Binding ElementName="LegTypeComboBox" 
+                                     Path="SelectedItem"/>
+                            <Binding ElementName="HandleTypeCombobox" 
+                                     Path="SelectedItem"/>
+                        </MultiBinding>
+                    </Image.Source>
+                </Image>
+            </Border>
+            <StackPanel Grid.Row="1" Margin="0,0,5,10">
+                <GroupBox Header="Default Parameters">
+                    <UniformGrid Rows="1" Columns="3">
+                        <Button Content="Minimum" Command="{Binding 
+                            SetMinimumParametersCommand}"/>
+                        <Button Content="Average" Command="{Binding 
+                            SetAverageParametersCommand}"/>
+                        <Button Content="Maximum" Command="{Binding 
+                            SetMaximumParametersCommand}"/>
+                    </UniformGrid>
+                </GroupBox>
+                <Button 
+                    Style="{StaticResource BuildModelButtonStyle}"
+                    Content="Build 3D-model" 
+                    Command="{Binding BuildModelCommand}" CommandParameter="{Binding 
+                        Parameters}" 
+                    IsEnabled="{Binding IsDataValid, 
+                        UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

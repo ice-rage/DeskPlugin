@@ -8,7 +8,8 @@
     </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="InactiveWindowBorderBrush" Color="LightGray"/>
-    <SolidColorBrush x:Key="InactiveWindowTitleBarBackgroundBrush" Color="#808080"/>
+    <SolidColorBrush x:Key="InactiveWindowTitleBarBackgroundBrush" 
+                     Color="#808080"/>
     <SolidColorBrush x:Key="WindowStatusBarForeground" Color="WhiteSmoke"/>
 
     <Style x:Key="MainWindowTitleBarButton" TargetType="{x:Type Button}">
@@ -28,12 +29,14 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="PART_border" Property="Background" 
                                     Value="LightSkyBlue"/>
-                            <Setter TargetName="PART_border" Property="Opacity" Value="0.7"/>
+                            <Setter TargetName="PART_border" Property="Opacity" 
+                                    Value="0.7"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="PART_border" Property="Background" 
                                     Value="Crimson"/>
-                            <Setter TargetName="PART_border" Property="Opacity" Value="1"/>
+                            <Setter TargetName="PART_border" Property="Opacity" 
+                                    Value="1"/>
                             <Setter Property="Foreground" Value="LightGray"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -42,8 +45,8 @@
         </Setter>
         <Style.Resources>
             <Style TargetType="{x:Type Path}">
-                <Setter Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource 
-                    AncestorType=Button}}"/>
+                <Setter Property="Stroke" Value="{Binding Foreground, 
+                    RelativeSource={RelativeSource AncestorType=Button}}"/>
                 <Setter Property="StrokeThickness" Value="1"/>
                 <Setter Property="Stretch" Value="None"/>
                 <Setter Property="RenderOptions.EdgeMode" Value="Aliased"/>
@@ -56,8 +59,8 @@
         <Setter Property="Foreground" Value="Red"/>
         <Style.Resources>
             <Style TargetType="{x:Type Path}">
-                <Setter Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource 
-                    AncestorType=Button}}"/>
+                <Setter Property="Stroke" Value="{Binding Foreground, 
+                    RelativeSource={RelativeSource AncestorType=Button}}"/>
                 <Setter Property="StrokeThickness" Value="2"/>
                 <Setter Property="Stretch" Value="None"/>
                 <Setter Property="RenderOptions.EdgeMode" Value="Aliased"/>
@@ -77,7 +80,8 @@
                     BorderBrush="{StaticResource GrayLinearGradientBrush}"
                     BorderThickness="1"
                     Padding="0">
-                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    <DockPanel HorizontalAlignment="Stretch" 
+                               VerticalAlignment="Stretch" 
                                Background="Transparent">
                         <Border
                             x:Name="PART_TitleBar"
@@ -112,23 +116,27 @@
                                     Foreground="Snow"
                                     Text="{TemplateBinding Title}"/>
                                 <UniformGrid Grid.Column="2" Columns="3">
-                                    <Button x:Name="MinButton" Style="{StaticResource 
-                                        MainWindowTitleBarButton}">
+                                    <Button x:Name="MinButton" 
+                                            Style="{StaticResource 
+                                                MainWindowTitleBarButton}">
                                         <Path Data="M0,8 H8 M0,7 H8 M0,6 H8"/>
                                         <i:Interaction.Behaviors>
                                             <behaviors:MinimizeWindowBehavior/>
                                         </i:Interaction.Behaviors>
                                     </Button>
-                                    <Button x:Name="MaxButton" Style="{StaticResource 
-                                        MainWindowTitleBarButton}">
+                                    <Button x:Name="MaxButton" 
+                                            Style="{StaticResource 
+                                                MainWindowTitleBarButton}">
                                         <Path x:Name="PART_MaxButton_Path" 
-                                              Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"/>
+                                              Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,
+                                                2 H8"/>
                                         <i:Interaction.Behaviors>
                                             <behaviors:MaximizeWindowBehavior/>
                                         </i:Interaction.Behaviors>
                                     </Button>
-                                    <Button x:Name="CloseButton" Style="{StaticResource 
-                                        MainWindowTitleBarCloseButton}">
+                                    <Button x:Name="CloseButton" 
+                                            Style="{StaticResource
+                                                MainWindowTitleBarCloseButton}">
                                         <Path Data="M0,0 L8,8 M0,8 L8,0"/>
                                         <i:Interaction.Behaviors>
                                             <behaviors:CloseWindowBehavior/>
@@ -149,12 +157,15 @@
                 <Setter TargetName="PART_MaxButton_Path" Property="Data" 
                         Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8"/>
                 <Setter TargetName="PART_Container" Property="BorderThickness" 
-                        Value="{x:Static SystemParameters.WindowResizeBorderThickness}"/>
+                        Value="{x:Static 
+                            SystemParameters.WindowResizeBorderThickness}"/>
             </Trigger>
             <Trigger Property="IsActive" Value="False">
                 <Setter TargetName="PART_TitleBar" Property="Background" 
-                        Value="{StaticResource InactiveWindowTitleBarBackgroundBrush}"/>
-                <Setter TargetName="PART_Border" Property="Effect" Value="{x:Null}"/>
+                        Value="{StaticResource 
+                            InactiveWindowTitleBarBackgroundBrush}"/>
+                <Setter TargetName="PART_Border" Property="Effect" 
+                        Value="{x:Null}"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -182,18 +193,21 @@
         </Setter>
         <Style.Resources>
             <Style TargetType="{x:Type StatusBar}">
-                <Setter Property="Foreground" Value="{StaticResource WindowStatusBarForeground}"/>
+                <Setter Property="Foreground" Value="{StaticResource 
+                    WindowStatusBarForeground}"/>
                 <Setter Property="Background" Value="MediumBlue"/>
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource 
-                        AncestorType=Window}}" Value="False">
+                    <DataTrigger Binding="{Binding IsActive, 
+                        RelativeSource={RelativeSource AncestorType=Window}}" 
+                        Value="False">
                         <Setter Property="Background" Value="{StaticResource 
                             InactiveWindowBorderBrush}"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
             <Style TargetType="{x:Type ResizeGrip}">
-                <Setter Property="WindowChrome.ResizeGripDirection" Value="BottomRight"/>
+                <Setter Property="WindowChrome.ResizeGripDirection" 
+                        Value="BottomRight"/>
             </Style>
         </Style.Resources>
     </Style>

@@ -39,8 +39,9 @@
                 <Setter Property="FontWeight" Value="DemiBold"/>
                 <Setter Property="Foreground" Value="Red"/>
                 <Setter Property="Background" Value="Pink"/>
-                <Setter Property="TextBox.ToolTip" Value="{Binding RelativeSource={RelativeSource 
-                    Self}, Path=(Validation.Errors)/ErrorContent}"/>
+                <Setter Property="TextBox.ToolTip" Value="{Binding 
+                    RelativeSource={RelativeSource Self}, 
+                    Path=(Validation.Errors)/ErrorContent}"/>
             </Trigger>
         </Style.Triggers>
 
