@@ -70,6 +70,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -79,6 +80,8 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\DrawerHandleType.cs" />
+    <Compile Include="Enums\Extensions\DrawerHandleTypeExtensions.cs" />
     <Compile Include="Enums\Extensions\LegTypeExtension.cs" />
     <Compile Include="Enums\Extensions\DeskParameterTypeExtension.cs" />
     <Compile Include="Enums\LegType.cs" />
@@ -88,9 +91,9 @@
     <Compile Include="DeskParameters.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Services\Services.csproj">
+    <ProjectReference Include="..\Wrappers\Wrappers.csproj">
       <Project>{C5ACEB46-8B3F-4D15-A2EB-AD9B5A4BD71D}</Project>
-      <Name>Services</Name>
+      <Name>Wrappers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media.Media3D;
 using Parameters;
 using Parameters.Enums;
 using Parameters.Enums.Extensions;
-using Services.Enums;
-using Services.Interfaces;
+using Wrappers.Enums;
+using Wrappers.Interfaces;
 
 namespace Builder
 {
@@ -62,6 +64,11 @@ namespace Builder
             var legBaseValue = parameters[DeskParameterGroupType.Legs,
                 parameters.LegType.GetLegBaseType()].Value;
 
+            var drawerHandleType = parameters.HandleType;
+            var drawerHandleDimension =
+                parameters[DeskParameterGroupType.Drawers, parameters.HandleType
+                    .GetHandleDimensionType()].Value;
+
             BuildWorktop(worktopLength, worktopWidth, worktopHeight);
 
             BuildLegs(legType, legBaseValue, legHeight, worktopWidth);
@@ -70,6 +77,8 @@ namespace Builder
                 drawerNumber, 
                 drawerLength, 
                 drawerHeight, 
+                drawerHandleType,
+                drawerHandleDimension,
                 worktopLength, 
                 worktopWidth);
 
@@ -115,7 +124,7 @@ namespace Builder
             // Выполняем операцию выдавливания для основания каждой ножки.
             foreach (var leg in legBases)
             {
-                _wrapper.Extrude(leg, legHeight, isPositiveDirection: false);
+                _wrapper.Extrude(leg, legHeight, isDirectionPositive: false);
             }
         }
 
@@ -151,7 +160,8 @@ namespace Builder
             // Создаем окружности основания ножек и добавляем их в список.
             for (var i = 0; i < x.Count; i++)
             {
-                var circle = _wrapper.CreateCircle(baseDiameter, x[i], y[i]);
+                var circle = _wrapper.CreateCircle(PlaneType.XoY, baseDiameter, 
+                    x[i], y[i]);
                 roundLegBases.Add(circle);
             }
 
@@ -192,8 +202,8 @@ namespace Builder
             // Создаем квадраты оснований ножек и добавляем их в список.
             for (var i = 0; i < x.Count; i++)
             {
-                var square = _wrapper.CreateRectangle(PlaneType.XoY, x[i], 
-                    y[i], baseLength, baseLength);
+                var square = _wrapper.CreateRectangle(PlaneType.XoY, x[i], y[i], 
+                    baseLength, baseLength);
                 squareLegBases.Add(square);
             }
 
@@ -214,6 +224,8 @@ namespace Builder
             int drawerNumber,
             int drawerLength,
             double drawerHeight,
+            DrawerHandleType handleType,
+            int handleDimension,
             int worktopLength,
             int worktopWidth)
         {
@@ -232,7 +244,8 @@ namespace Builder
 
                 // Вырезаем отверстие (внутреннее пространство) в ящике.
                 var innerDrawer = _wrapper
-                    .CreateRectangle(PlaneType.XoZ, 
+                    .CreateRectangle(
+                        PlaneType.XoZ, 
                         worktopLength - drawerLength + 
                         DeskParameters.OuterInnerDrawerLengthDifference / 2, 
                         y, 
@@ -242,44 +255,219 @@ namespace Builder
                             DeskParameters.OuterInnerDrawerHeightDifference);
                 _wrapper.Extrude(innerDrawer, worktopWidth - 
                     DeskParameters.OuterInnerDrawerWidthDifference, 
-                    cuttingByExtrusion: true);
+                    isExtrusionCuttingOut: true);
 
                 // Строим дверцу ящика.
                 var drawerDoor = _wrapper
                     .CreateRectangle(
-                        PlaneType.XoZ, worktopLength - drawerLength + 
+                        PlaneType.XoZ, 
+                        worktopLength - drawerLength + 
                             DeskParameters.DrawerDoorLengthDifference / 2, 
                         y, 
-                        drawerLength - 
-                            DeskParameters.DrawerDoorLengthDifference, 
+                        drawerLength - DeskParameters.DrawerDoorLengthDifference, 
                         drawerHeight - 
                             DeskParameters.DrawerDoorHeightDifference);
                 _wrapper.Extrude(drawerDoor, DeskParameters.DoorWidth);
 
                 // Строим ручку ящика.
                 //
-                var outerBox = _wrapper
-                    .CreateRectangle(PlaneType.XoZ, 
-                        worktopLength - drawerLength + drawerLength / 4, 
-                        y + drawerHeight / 2 - 
-                            (double)DeskParameters.HandleHeight / 2, 
-                        (double)drawerLength / 2, 
-                        DeskParameters.HandleHeight);
-                _wrapper.Extrude(outerBox, DeskParameters.OuterHandleWidth, 
-                    isPositiveDirection: false);
-
-                var innerBox = _wrapper
-                    .CreateRectangle(PlaneType.XoZ, 
-                        worktopLength - drawerLength + drawerLength / 4 + 
-                            DeskParameters.OuterInnerHandleLengthDifference / 2, 
-                        y + drawerHeight / 2 - 
-                            (double)DeskParameters.HandleHeight / 2, 
-                        drawerLength / 2 - 
-                            DeskParameters.OuterInnerHandleLengthDifference, 
-                        DeskParameters.HandleHeight);
-                _wrapper.Extrude(innerBox, DeskParameters.InnerHandleWidth, 
-                    cuttingByExtrusion: true, isPositiveDirection: false);
+                switch (handleType)
+                {
+                    case DrawerHandleType.Railing:
+                    {
+                        BuildRailingDrawerHandle(
+                            worktopLength,
+                            drawerLength,
+                            drawerHeight,
+                            y, 
+                            handleDimension);
+                        break;
+                    }
+                    case DrawerHandleType.Grip:
+                    {
+                        BuildGripDrawerHandle(
+                            worktopLength,
+                            drawerLength,
+                            drawerHeight,
+                            y, 
+                            handleDimension);
+                        break;
+                    }
+                    case DrawerHandleType.Knob:
+                    {
+                        BuildKnobDrawerHandle(
+                            worktopLength,
+                            drawerLength,
+                            drawerHeight,
+                            y,
+                            handleDimension);
+                        break;
+                    }
+                }
             }
+        }
+
+        private void BuildGripDrawerHandle(
+            int worktopLength, 
+            int drawerLength, 
+            double drawerHeight, 
+            double y, 
+            int distanceBetweenFasteners)
+        {
+            var outerBox = _wrapper
+                .CreateRectangle(PlaneType.XoZ,
+                    worktopLength - drawerLength / 2 - 
+                        distanceBetweenFasteners / 2  - 
+                        DeskParameters.OuterInnerHandleLengthDifference / 2,
+                    y + drawerHeight / 2 -
+                    (double)DeskParameters.HandleHeight / 2,
+                    distanceBetweenFasteners + 
+                        DeskParameters.OuterInnerHandleLengthDifference,
+                    DeskParameters.HandleHeight);
+            _wrapper.Extrude(outerBox, (double)distanceBetweenFasteners / 2,
+                isDirectionPositive: false);
+
+            var innerBox = _wrapper
+                .CreateRectangle(PlaneType.XoZ,
+                    worktopLength - drawerLength / 2 - 
+                        distanceBetweenFasteners / 2,
+                    y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2,
+                    distanceBetweenFasteners,
+                    DeskParameters.HandleHeight);
+            _wrapper.Extrude(innerBox, (double)distanceBetweenFasteners / 2 - 20,
+                isExtrusionCuttingOut: true, isDirectionPositive: false);
+        }
+
+        private void BuildRailingDrawerHandle(
+            int worktopLength,
+            int drawerLength,
+            double drawerHeight,
+            double y,
+            int distanceBetweenFasteners)
+        {
+            var crossbeamLength = distanceBetweenFasteners + 60;
+            var crossbeamBase = _wrapper.CreateCircle(
+                PlaneType.XoZ,
+                25,
+                worktopLength - drawerLength / 2,
+                y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2);
+            var rotatedCrossbeamBase = _wrapper.Rotate(crossbeamBase,
+                new Vector3D(0, 0, 1), 90,
+                new Point3D(worktopLength - drawerLength / 2, 
+                    (double)-crossbeamLength / 2, y + drawerHeight / 2 - 
+                    (double)DeskParameters.HandleHeight / 2));
+            _wrapper.Extrude(rotatedCrossbeamBase, crossbeamLength, 
+                isDirectionPositive: false);
+
+            var leftFasteningLeg = _wrapper.CreateCircle(
+                PlaneType.XoZ,
+                20,
+                worktopLength - drawerLength / 2 - distanceBetweenFasteners / 2,
+                y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2);
+            _wrapper.Extrude(leftFasteningLeg, (double)crossbeamLength / 2, 
+                isDirectionPositive: false);
+
+            var rightFasteningLeg = _wrapper.CreateCircle(
+                PlaneType.XoZ,
+                20,
+                worktopLength - drawerLength / 2 + distanceBetweenFasteners / 2,
+                y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2);
+            _wrapper.Extrude(rightFasteningLeg, (double)crossbeamLength / 2, 
+                isDirectionPositive: false);
+        }
+
+        private void BuildKnobDrawerHandle(
+            int worktopLength,
+            int drawerLength,
+            double drawerHeight,
+            double y,
+            int baseDiameter)
+        {
+            var handleBase = _wrapper.CreateCircle(
+                PlaneType.XoZ,
+                baseDiameter,
+                worktopLength - drawerLength / 2,
+                y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2);
+            _wrapper.Extrude(handleBase, 10, isDirectionPositive: false);
+            _wrapper.FilletEdges(handleBase, 10, 1, 5);
+
+            var handleLeg = _wrapper.CreatePolylineWithArcSegments(
+                PlaneType.XoY, 
+                new Dictionary<Point, double>
+                {
+                    {
+                        new Point(worktopLength - drawerLength / 2 - 
+                            baseDiameter / 2.5, -40), 15.0
+                    },
+                    {
+                        new Point(worktopLength - drawerLength / 2 - 
+                            baseDiameter / 2.5, -10), 0.0
+                    },
+                    {
+                        new Point(worktopLength - drawerLength / 2, -10), 0.0
+                    },
+                    {
+                        new Point(worktopLength - drawerLength / 2, -40), 0.0
+                    }
+                });
+            var movedHandleLeg = _wrapper.Move(handleLeg, 
+                new Point3D(
+                    worktopLength - drawerLength / 2, 
+                    -10, 
+                    0), 
+                new Point3D(
+                    worktopLength - drawerLength / 2, 
+                    -10, 
+                    -(y + drawerHeight / 2 - 
+                        (double)DeskParameters.HandleHeight / 2)));
+            _wrapper.Revolve(
+                movedHandleLeg,
+                new Point3D(
+                    worktopLength - drawerLength / 2,
+                    -10,
+                    -(y + drawerHeight / 2 -
+                        (double)DeskParameters.HandleHeight / 2)),
+                new Point3D(
+                    worktopLength - drawerLength / 2,
+                    -40,
+                    -(y + drawerHeight / 2 -
+                        (double)DeskParameters.HandleHeight / 2)));
+
+            var handleCapBase = _wrapper.CreateCircle(
+                PlaneType.XoZ,
+                baseDiameter + 20,
+                worktopLength - drawerLength / 2,
+                y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2);
+            var movedHandleCapBase = _wrapper.Move(
+                handleCapBase, 
+                new Point3D(
+                    worktopLength - drawerLength / 2,
+                    0,
+                    y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2),
+                new Point3D(
+                    worktopLength - drawerLength / 2,
+                    -40,
+                    y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2));
+            _wrapper.Extrude(movedHandleCapBase, 5, isDirectionPositive: false);
+            _wrapper.FilletEdges(movedHandleCapBase, 10, 1, 5);
+
+            var handleCap = _wrapper.CreateCircle(
+                PlaneType.XoZ,
+                baseDiameter + 10,
+                worktopLength - drawerLength / 2,
+                y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2);
+            var movedHandleCap = _wrapper.Move(
+                handleCap,
+                new Point3D(
+                    worktopLength - drawerLength / 2,
+                    0,
+                    y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2),
+                new Point3D(
+                    worktopLength - drawerLength / 2,
+                    -45,
+                    y + drawerHeight / 2 - (double)DeskParameters.HandleHeight / 2));
+            _wrapper.Extrude(movedHandleCap, 20, isDirectionPositive: false);
+            _wrapper.FilletEdges(movedHandleCap, 20, 1, 10);
         }
 
         #endregion

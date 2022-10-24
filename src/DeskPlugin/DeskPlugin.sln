@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestParameters", "Testing\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestViewModels", "Testing\TestViewModels\TestViewModels.csproj", "{0C1E5551-C487-4B3E-8602-B46E3C23A8D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{C5ACEB46-8B3F-4D15-A2EB-AD9B5A4BD71D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrappers", "Wrappers\Wrappers.csproj", "{C5ACEB46-8B3F-4D15-A2EB-AD9B5A4BD71D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

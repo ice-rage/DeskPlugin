@@ -20,6 +20,11 @@ namespace Parameters
         /// </summary>
         private LegType _legType;
 
+        /// <summary>
+        /// Тип ручек ящиков для канцелярии.
+        /// </summary>
+        private DrawerHandleType _handleType;
+
         #endregion
 
         #region Properties
@@ -90,11 +95,12 @@ namespace Parameters
         /// <summary>
         /// Группа параметров и соответствующий ей список параметров.
         /// </summary>
-        public Dictionary<DeskParameterGroupType,
-            ObservableCollection<DeskParameter>>
-            ParametersByGroup
-        { get; } = new Dictionary<DeskParameterGroupType,
-                ObservableCollection<DeskParameter>>();
+        public Dictionary<DeskParameterGroupType, 
+                ObservableCollection<DeskParameter>>
+            ParametersByGroup { get; private set; }
+
+        private ReadOnlyDictionary<DeskParameterGroupType,
+            ObservableCollection<DeskParameter>> _parametersByGroupReadOnly;
 
         /// <summary>
         /// Тип ножек письменного стола.
@@ -105,14 +111,30 @@ namespace Parameters
 
             set
             {
-                if (!ParametersByGroup.Any())
-                {
-                    SetProperty(ref _legType, value);
+                var previousLegBaseType = _legType.GetLegBaseType();
+                SetProperty(ref _legType, value);
+                var updatedLegBaseType = _legType.GetLegBaseType();
 
-                    return;
-                }
+                UpdateGeneralParameter(DeskParameterGroupType.Legs, 
+                    previousLegBaseType, updatedLegBaseType);
+            }
+        }
 
-                UpdateLegBaseParameter(value);
+        /// <summary>
+        /// Тип ручек ящиков для канцелярии.
+        /// </summary>
+        public DrawerHandleType HandleType
+        {
+            get => _handleType;
+
+            set
+            {
+                var previousHandleDimensionType = HandleType.GetHandleDimensionType();
+                SetProperty(ref _handleType, value);
+                var updatedHandleDimensionType = HandleType.GetHandleDimensionType();
+
+                UpdateGeneralParameter(DeskParameterGroupType.Drawers,
+                    previousHandleDimensionType, updatedHandleDimensionType);
             }
         }
 
@@ -136,80 +158,144 @@ namespace Parameters
         public DeskParameters()
         {
             LegType = LegType.Round;
-            ParametersByGroup.Clear();
+            HandleType = DrawerHandleType.Grip;
 
-            ParametersByGroup.Add(DeskParameterGroupType.Worktop,
-                new ObservableCollection<DeskParameter>
-                { 
-                    new DeskParameter(DeskParameterType.WorktopLength, 800,
-                        1200, 1000), 
-                    new DeskParameter(DeskParameterType.WorktopWidth, 500,
-                        750, 625),
-                    new DeskParameter(DeskParameterType.WorktopHeight, 30,
-                        40, 35)
-                });
-
-            ParametersByGroup.Add(DeskParameterGroupType.Legs,
-                new ObservableCollection<DeskParameter>
-                {
-                    LegType == LegType.Round
-                        ? new DeskParameter(DeskParameterType.LegBaseDiameter,
-                            50, 70, 60)
-                        : new DeskParameter(DeskParameterType.LegBaseLength,
-                            50, 70, 60),
-                    new DeskParameter(DeskParameterType.LegHeight, 690,
-                        740, 715)
-                });
-
-            ParametersByGroup.Add(DeskParameterGroupType.Drawers,
-                new ObservableCollection<DeskParameter>
-                {
-                    new DeskParameter(DeskParameterType.DrawerNumber, 3,
-                        5, 4),
-                    new DeskParameter(DeskParameterType.DrawerLength, 250,
-                        333, 291)
-                });
+            SetDefaultParameters();
+            CreateParametersByGroupDictionary();
 
             // Подписываемся на событие изменения текущего значения длины
             // столешницы, т.к. от этого параметра зависит несколько других
             // параметров письменного стола (ширина столешницы и длина ящиков для
             // канцелярии).
             this[DeskParameterGroupType.Worktop, DeskParameterType.WorktopLength]
-                    .ValueChanged += OnWorktopLengthChanged;
-
-            // Для уведомления модели представления главного окна об изменении
-            // корректности каждого параметра используем делегат-"посредник".
-            ParametersByGroup.Values
-                .ToList()
-                .ForEach(parameters => parameters
-                    .ToList()
-                    .ForEach(parameter => parameter.DataValidChanged +=
-                        DataValidChanged));
+                .ValueChanged += OnWorktopLengthChanged;
         }
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        /// Обновляет параметр, хранящий размер основания ножек письменного стола,
-        /// в зависимости от их типа.
-        /// </summary>
-        /// <param name="legType"> Тип ножек письменного стола.</param>
-        private void UpdateLegBaseParameter(LegType legType)
+        private void SetDefaultParameters()
         {
-            var previousLegBaseType = LegType.GetLegBaseType();
-            SetProperty(ref _legType, legType);
-            var updatedLegBaseType = LegType.GetLegBaseType();
+            _parametersByGroupReadOnly = 
+                new ReadOnlyDictionary<DeskParameterGroupType, 
+                    ObservableCollection<DeskParameter>>(
+                    new Dictionary<DeskParameterGroupType, 
+                        ObservableCollection<DeskParameter>>
+            {
+                {
+                    DeskParameterGroupType.Worktop,
+                    new ObservableCollection<DeskParameter>
+                    {
+                        new DeskParameter(DeskParameterType.WorktopLength,
+                            800, 1200, 1000),
+                        new DeskParameter(DeskParameterType.WorktopWidth,
+                            500, 750, 625),
+                        new DeskParameter(DeskParameterType.WorktopHeight,
+                            30, 40, 35)
+                    }
+                },
+                {
+                    DeskParameterGroupType.Legs,
+                    new ObservableCollection<DeskParameter>
+                    {
+                        new DeskParameter(DeskParameterType.LegBaseDiameter,
+                            50, 70, 60),
+                        new DeskParameter(DeskParameterType.LegBaseLength,
+                            50, 70, 60),
+                        new DeskParameter(DeskParameterType.LegHeight, 690,
+                            740, 715)
+                    }
+                },
+                {
+                    DeskParameterGroupType.Drawers,
+                    new ObservableCollection<DeskParameter>
+                    {
+                        new DeskParameter(
+                            DeskParameterType.DrawerRailingHandleFastenerDistance,
+                        70, 90, 80),
+                        new DeskParameter(
+                            DeskParameterType.DrawerGripHandleFastenerDistance,
+                        80, 100, 90),
+                        new DeskParameter(
+                            DeskParameterType.DrawerKnobHandleBaseDiameter,
+                        50, 70, 60),
+                        new DeskParameter(DeskParameterType.DrawerNumber, 3,
+                        5, 4),
+                        new DeskParameter(DeskParameterType.DrawerLength, 250,
+                        333, 291)
+                    }
+                }
+            });
+        }
 
-            var previousDeskParameter = this[DeskParameterGroupType.Legs,
-                previousLegBaseType];
+        private void CreateParametersByGroupDictionary()
+        {
+            var legBaseDiameter = DeskParameterType.LegBaseDiameter;
+            var legBaseLength = DeskParameterType.LegBaseLength;
+            var railingHandleFastenerDistance =
+                DeskParameterType.DrawerRailingHandleFastenerDistance;
+            var gripHandleFastenerDistance =
+                DeskParameterType.DrawerGripHandleFastenerDistance;
+            var knobHandleBaseDiameter =
+                DeskParameterType.DrawerKnobHandleBaseDiameter;
 
-            this[DeskParameterGroupType.Legs, previousLegBaseType] =
-                new DeskParameter(updatedLegBaseType, previousDeskParameter.Min,
-                    previousDeskParameter.Max, previousDeskParameter.Value);
-            this[DeskParameterGroupType.Legs, updatedLegBaseType].DataValidChanged +=
+            var parametersByGroupDeepCopy = new Dictionary<DeskParameterGroupType,
+                ObservableCollection<DeskParameter>>();
+
+            foreach (var parametersByGroup 
+                in _parametersByGroupReadOnly)
+            {
+                parametersByGroupDeepCopy.Add(parametersByGroup.Key, 
+                    new ObservableCollection<DeskParameter>());
+
+                foreach (var parameter in parametersByGroup.Value)
+                {
+                    var parameterType = parameter.Name;
+
+                    if (parameterType != legBaseDiameter && 
+                        parameterType != legBaseLength &&
+                        parameterType != railingHandleFastenerDistance &&
+                        parameterType != gripHandleFastenerDistance &&
+                        parameterType != knobHandleBaseDiameter ||
+                        parameterType == legBaseDiameter && LegType == LegType.Round ||
+                        parameterType == legBaseLength && LegType == LegType.Square ||
+                        parameterType == railingHandleFastenerDistance && 
+                            HandleType == DrawerHandleType.Railing ||
+                        parameterType == gripHandleFastenerDistance && 
+                            HandleType == DrawerHandleType.Grip ||
+                        parameterType == knobHandleBaseDiameter && 
+                            HandleType == DrawerHandleType.Knob)
+                    {
+                        parametersByGroupDeepCopy[parametersByGroup.Key]
+                            .Add((DeskParameter)parameter.Clone());
+                    }
+                }
+            }
+
+            ParametersByGroup = new Dictionary<DeskParameterGroupType, 
+                ObservableCollection<DeskParameter>>(parametersByGroupDeepCopy);
+        }
+
+        private void UpdateGeneralParameter(
+            DeskParameterGroupType parameterGroup, 
+            DeskParameterType previousParameterType, 
+            DeskParameterType updatedParameterType)
+        {
+            if (_parametersByGroupReadOnly == null)
+            {
+                return;
+            }
+
+            var previousParameter = this[parameterGroup, previousParameterType];
+            var updatedParam = _parametersByGroupReadOnly[parameterGroup]
+                .First(x => x.Name == updatedParameterType);
+
+            this[parameterGroup, previousParameterType] = updatedParam;
+            this[parameterGroup, updatedParameterType].DataValidChanged += 
                 DataValidChanged;
+            this[parameterGroup, updatedParameterType].Value = 
+                previousParameter.Value;
         }
 
         /// <summary>
@@ -274,8 +360,9 @@ namespace Parameters
             get => ParametersByGroup[firstIndex].First(parameter =>
                 parameter.Name == secondIndex);
 
-            set => ParametersByGroup[firstIndex][ParametersByGroup[firstIndex]
-                .IndexOf(ParametersByGroup[firstIndex]
+            set => ParametersByGroup[firstIndex]
+                [ParametersByGroup[firstIndex]
+                    .IndexOf(ParametersByGroup[firstIndex]
                     .First(parameter => parameter.Name == secondIndex))] = value;
         }
 

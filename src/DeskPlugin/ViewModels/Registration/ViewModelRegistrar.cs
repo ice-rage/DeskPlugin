@@ -10,10 +10,10 @@ namespace ViewModels.Registration
     {
         /// <summary>
         /// Метод, регистрирующий модели представления и определяющий их жизненный
-        /// цикл в рамках выполнения плагина.
+        /// цикл в рамках работы плагина.
         /// </summary>
         /// <param name="services"> Указанный контейнер сервисов.</param>
-        /// <returns> Коллекция сервисов плагина с добавленными моделями
+        /// <returns> Контейнер сервисов плагина с добавленными моделями
         /// представления.</returns>
         public static IServiceCollection RegisterViewModels(
             this IServiceCollection services) => services

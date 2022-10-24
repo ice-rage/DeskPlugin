@@ -65,10 +65,8 @@ namespace Parameters
 
             set
             {
-                if (!SetProperty(ref _value, value))
-                {
-                    return;
-                }
+                _value = value;
+                OnPropertyChanged();
 
                 ValueChanged?.Invoke(this, EventArgs.Empty);
                 DataValidChanged?.Invoke(this, EventArgs.Empty);
@@ -160,7 +158,7 @@ namespace Parameters
         {
             unchecked
             {
-                const int hash = 17;
+                var hash = 17;
                 
                 hash = hash * PrimeNumberForHashCalculation + Name.GetHashCode();
                 hash = hash * PrimeNumberForHashCalculation + Description

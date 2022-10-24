@@ -44,6 +44,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -59,9 +60,9 @@
       <Project>{237249ef-409d-4697-ba53-46c6ed457d09}</Project>
       <Name>Parameters</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Services\Services.csproj">
+    <ProjectReference Include="..\Wrappers\Wrappers.csproj">
       <Project>{c5aceb46-8b3f-4d15-a2eb-ad9b5a4bd71d}</Project>
-      <Name>Services</Name>
+      <Name>Wrappers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

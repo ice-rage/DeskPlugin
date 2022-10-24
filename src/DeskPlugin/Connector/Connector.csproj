@@ -87,7 +87,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(ProjectDir)$(OutDir)*.dll" "C:\Autodesk"
-xcopy /y "$(ProjectDir)$(OutDir)*.exe" "C:\Autodesk"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(ProjectDir)$(OutDir)*.dll" "D:\Darya\source\repos\AutoCAD"
+xcopy /y "$(ProjectDir)$(OutDir)*.exe" "D:\Darya\source\repos\AutoCAD"</PostBuildEvent>
   </PropertyGroup>
 </Project>

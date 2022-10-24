@@ -84,11 +84,14 @@ namespace TestParameters
         {
             // Act
             var actual = typeof(DeskParameters)
-                .GetProperty(staticPropertyName)
-                ?.GetValue(null, null);
+                .GetProperty(staticPropertyName)?
+                .GetValue(null, null);
 
             // Arrange
-            Assert.AreEqual(expected, actual);
+            if (actual is int)
+            {
+                Assert.AreEqual(expected, actual);
+            }
         }
 
         #endregion

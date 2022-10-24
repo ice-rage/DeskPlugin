@@ -114,11 +114,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dictionaries\ComboBoxStylesDictionary.xaml">
+    <Page Include="Dictionaries\ComboBoxStyleDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dictionaries\GroupBoxStylesDictionary.xaml">
+    <Page Include="Dictionaries\GroupBoxStyleDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -151,9 +151,10 @@
     <Compile Include="Behaviors\MinimizeWindowBehavior.cs" />
     <Compile Include="Behaviors\ProhibitNotNumbersBehavior.cs" />
     <Compile Include="Behaviors\ShowWindowMenuBehavior.cs" />
-    <Compile Include="Converters\LegTypeToImageSourceConverter.cs" />
+    <Compile Include="Converters\LegTypeAndHandleTypeToImageConverter.cs" />
     <Compile Include="Extensions\DependencyObjectExtension.cs" />
-    <Compile Include="Services\ViewModelProvider.cs" />
+    <Compile Include="Extensions\MarkupExtensions\EnumValuesExtension.cs" />
+    <Compile Include="Extensions\MarkupExtensions\ViewModelsExtension.cs" />
     <Compile Include="ValidationRules\NullOrWhiteSpaceValidationRule.cs" />
     <Compile Include="Views\UserControls\ParameterControl.xaml.cs">
       <DependentUpon>ParameterControl.xaml</DependentUpon>
@@ -178,26 +179,40 @@
   <ItemGroup>
     <Resource Include="desk.ico" />
     <Resource Include="Resources\desk.ico" />
-    <Content Include="Resources\DeskWithRoundLegs.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\DeskWithSquareLegs.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Parameters\Parameters.csproj">
       <Project>{237249ef-409d-4697-ba53-46c6ed457d09}</Project>
       <Name>Parameters</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Services\Services.csproj">
+    <ProjectReference Include="..\Wrappers\Wrappers.csproj">
       <Project>{c5aceb46-8b3f-4d15-a2eb-ad9b5a4bd71d}</Project>
-      <Name>Services</Name>
+      <Name>Wrappers</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewModels\ViewModels.csproj">
       <Project>{246e1ec6-1ed9-47d1-9a5e-c45d4295f6da}</Project>
       <Name>ViewModels</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\RoundLegsGripHandles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\RoundLegsKnobHandles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\RoundLegsRailingHandles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SquareLegsGripHandles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SquareLegsKnobHandles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SquareLegsRailingHandles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets" Condition="Exists('..\packages\CommunityToolkit.Mvvm.8.0.0\build\netstandard2.0\CommunityToolkit.Mvvm.targets')" />

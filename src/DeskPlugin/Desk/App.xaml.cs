@@ -2,8 +2,8 @@
 using System.Windows;
 using Desk.Views.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using Services.Registration;
 using ViewModels.Registration;
+using Wrappers.Registration;
 
 namespace Desk
 {
@@ -62,7 +62,7 @@ namespace Desk
             services
                 .AddSingleton<MainWindow>()
                 .RegisterViewModels()
-                .RegisterServices();
+                .RegisterWrappers();
         }
 
         #region Event Handlers

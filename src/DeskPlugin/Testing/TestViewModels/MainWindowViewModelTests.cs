@@ -6,8 +6,8 @@ using NUnit.Framework;
 using Parameters;
 using Parameters.Enums;
 using Rhino.Mocks;
-using Services.Interfaces;
 using ViewModels;
+using Wrappers.Interfaces;
 
 namespace TestViewModels
 {

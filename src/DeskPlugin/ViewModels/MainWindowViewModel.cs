@@ -4,7 +4,7 @@ using Builder;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Parameters;
-using Services.Interfaces;
+using Wrappers.Interfaces;
 
 namespace ViewModels
 {
@@ -111,14 +111,11 @@ namespace ViewModels
         /// соответствующего метода установки значений по умолчанию.</param>
         private void SetDefaultParameters(Action<DeskParameter> action)
         {
-	        // TODO: Почему не var?
-			foreach (var parameters in Parameters.ParametersByGroup.Values)
+            foreach (var parameter in Parameters.ParametersByGroup.Values
+                .SelectMany(parameters => parameters.ToList()))
             {
-                for (var i = 0; i < parameters.Count; i++)
-                {
-                    action?.Invoke(parameters[i]);
-                    parameters[i].DataValidChanged += OnDataValidChanged;
-                }
+                action?.Invoke(parameter);
+                parameter.DataValidChanged += OnDataValidChanged;
             }
 
             OnDataValidChanged(this, EventArgs.Empty);
