@@ -44,9 +44,29 @@ namespace Parameters.Enums
         LegHeight,
 
         /// <summary>
+        /// Расстояние между крепежными отверстиями ручки-рейлинг ящика
+        /// для канцелярии.
+        /// </summary>
+        [Description("Distance between fasteners")]
+        DrawerRailingHandleFastenerDistance,
+
+        /// <summary>
+        /// Расстояние между крепежными отверстиями ручки-скобы ящика
+        /// для канцелярии.
+        /// </summary>
+        [Description("Distance between fasteners")]
+        DrawerGripHandleFastenerDistance,
+
+        /// <summary>
+        /// Диаметр основания ручки ящика для канцелярии.
+        /// </summary>
+        [Description("Base Diameter")]
+        DrawerKnobHandleBaseDiameter,
+
+        /// <summary>
         /// Количество ящиков для канцелярии.
         /// </summary>
-        [Description("Number")]
+        [Description("Drawer Number")]
         DrawerNumber,
 
         /// <summary>
