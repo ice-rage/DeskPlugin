@@ -16,6 +16,14 @@ namespace Parameters
         #region Fields
 
         /// <summary>
+        /// Закрытый словарь только для чтения, в котором ключом является группа
+        /// параметров письменного стола, а значением - соответствующая коллекция
+        /// параметров, входящих в данную группу. 
+        /// </summary>
+        private ReadOnlyDictionary<DeskParameterGroupType,
+            ObservableCollection<DeskParameter>> _parametersByGroupReadOnly;
+
+        /// <summary>
         /// Тип ножек письменного стола.
         /// </summary>
         private LegType _legType;
@@ -69,27 +77,6 @@ namespace Parameters
         /// </summary>
         public static int DrawerDoorHeightDifference => 20;
 
-        /// <summary>
-        /// Высота ручки ящика для канцелярии.
-        /// </summary>
-        public static int HandleHeight => 20;
-
-        /// <summary>
-        /// Разница в длине между внешним и внутренним пространством ручки ящика
-        /// для канцелярии.
-        /// </summary>
-        public static int OuterInnerHandleLengthDifference => 40;
-
-        /// <summary>
-        /// Ширина внешнего пространства ручки ящика для канцелярии.
-        /// </summary>
-        public static int OuterHandleWidth => 40;
-
-        /// <summary>
-        /// Ширина внутреннего пространства ручки ящика для канцелярии.
-        /// </summary>
-        public static int InnerHandleWidth => 20;
-
         #endregion
 
         /// <summary>
@@ -98,9 +85,6 @@ namespace Parameters
         public Dictionary<DeskParameterGroupType, 
                 ObservableCollection<DeskParameter>>
             ParametersByGroup { get; private set; }
-
-        private ReadOnlyDictionary<DeskParameterGroupType,
-            ObservableCollection<DeskParameter>> _parametersByGroupReadOnly;
 
         /// <summary>
         /// Тип ножек письменного стола.
@@ -175,6 +159,9 @@ namespace Parameters
 
         #region Methods
 
+        /// <summary>
+        /// Метод, устанавливающий параметры письменного стола по умолчанию.
+        /// </summary>
         private void SetDefaultParameters()
         {
             _parametersByGroupReadOnly = 
@@ -229,6 +216,11 @@ namespace Parameters
             });
         }
 
+        /// <summary>
+        /// Метод для создания открытого словаря параметров письменного стола
+        /// <see cref="ParametersByGroup"/> на основе закрытого словаря
+        /// <see cref="_parametersByGroupReadOnly"/>.
+        /// </summary>
         private void CreateParametersByGroupDictionary()
         {
             var legBaseDiameter = DeskParameterType.LegBaseDiameter;
@@ -253,6 +245,8 @@ namespace Parameters
                 {
                     var parameterType = parameter.Name;
 
+                    // Определяем, для какого типа ручек ящиков необходимо добавить
+                    // параметр.
                     if (parameterType != legBaseDiameter && 
                         parameterType != legBaseLength &&
                         parameterType != railingHandleFastenerDistance &&
@@ -261,11 +255,11 @@ namespace Parameters
                         parameterType == legBaseDiameter && LegType == LegType.Round ||
                         parameterType == legBaseLength && LegType == LegType.Square ||
                         parameterType == railingHandleFastenerDistance && 
-                            HandleType == DrawerHandleType.Railing ||
+                        HandleType == DrawerHandleType.Railing ||
                         parameterType == gripHandleFastenerDistance && 
-                            HandleType == DrawerHandleType.Grip ||
+                        HandleType == DrawerHandleType.Grip ||
                         parameterType == knobHandleBaseDiameter && 
-                            HandleType == DrawerHandleType.Knob)
+                        HandleType == DrawerHandleType.Knob)
                     {
                         parametersByGroupDeepCopy[parametersByGroup.Key]
                             .Add((DeskParameter)parameter.Clone());
@@ -277,12 +271,20 @@ namespace Parameters
                 ObservableCollection<DeskParameter>>(parametersByGroupDeepCopy);
         }
 
+        /// <summary>
+        /// Метод, обновляющий "общие" (связанные с одним и тем же элементом ввода
+        /// данных) параметры письменного стола.
+        /// </summary>
+        /// <param name="parameterGroup"> Группа, к которой относится обновляемый
+        /// параметр.</param>
+        /// <param name="previousParameterType"> Тип предыдущего параметра.</param>
+        /// <param name="updatedParameterType"> Тип обновленного параметра.</param>
         private void UpdateGeneralParameter(
             DeskParameterGroupType parameterGroup, 
             DeskParameterType previousParameterType, 
             DeskParameterType updatedParameterType)
         {
-            if (_parametersByGroupReadOnly == null)
+            if (_parametersByGroupReadOnly == null || ParametersByGroup == null)
             {
                 return;
             }

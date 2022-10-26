@@ -4,7 +4,7 @@ using System.Linq;
 namespace Parameters.Enums.Extensions
 {
     /// <summary>
-    /// Класс, расширяющий перечисление типов параметров
+    /// Статический класс, расширяющий перечисление типов параметров
     /// <see cref="DeskParameterType"/>.
     /// </summary>
     public static class DeskParameterTypeExtension
@@ -12,7 +12,7 @@ namespace Parameters.Enums.Extensions
         #region Methods
 
         /// <summary>
-        /// Метод для получения описания параметра письменного стола.
+        /// Статический метод для получения описания параметра письменного стола.
         /// </summary>
         /// <param name="parameter"> Параметр, описание которого необходимо
         /// получить.</param>

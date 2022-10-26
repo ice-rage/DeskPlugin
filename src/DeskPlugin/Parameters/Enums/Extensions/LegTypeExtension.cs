@@ -1,15 +1,14 @@
 ﻿namespace Parameters.Enums.Extensions
 {
     /// <summary>
-    /// Класс, расширяющий перечисление типов ножек письменного стола
-    /// <see cref="LegType"/>.
+    /// Статический класс, расширяющий перечисление типов ножек <see cref="LegType"/>.
     /// </summary>
     public static class LegTypeExtension
     {
         #region Methods
 
         /// <summary>
-        /// Метод для получения типа основания ножек, хранящегося в перечислении
+        /// Статический метод для получения типа основания ножек из перечисления
         /// <see cref="DeskParameterType"/>.
         /// </summary>
         /// <param name="legType"> Тип ножек, выраженный значением перечисления

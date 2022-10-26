@@ -89,6 +89,7 @@
     <Compile Include="Enums\DeskParameterType.cs" />
     <Compile Include="DeskParameter.cs" />
     <Compile Include="DeskParameters.cs" />
+    <Compile Include="Static\DrawerHandleDimensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Wrappers\Wrappers.csproj">

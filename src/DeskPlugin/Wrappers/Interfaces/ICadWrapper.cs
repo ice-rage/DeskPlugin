@@ -39,47 +39,11 @@ namespace Wrappers.Interfaces
         object CreateCircle(PlaneType planeType, int diameter, double x, double y);
 
         /// <summary>
-        /// Создает замкнутую ломаную линию, содержащую эллиптические дуги.
+        /// Создает твердое тело посредством операции выдавливания области, полученной
+        /// из 2D-объекта, на заданную высоту.
         /// </summary>
-        /// <param name="planeType"> Плоскость, в которой необходимо построить
-        /// ломаную линию.</param>
-        /// <param name="bulgesByVertex"> Словарь для сопоставления определенного
-        /// угла выпуклости (в градусах) каждой вершине ломаной линии.</param>
-        /// <returns> Полученная ломаная линия.</returns>
-        object CreatePolylineWithArcSegments(PlaneType planeType, Dictionary<Point, 
-            double> bulgesByVertex);
-
-        /// <summary>
-        /// Перемещает объект в другую точку пространства относительно указанной
-        /// базовой точки.
-        /// </summary>
-        /// <param name="obj"> Объект, который необходимо переместить.</param>
-        /// <param name="basePoint"> Базовая точка перемещения.</param>
-        /// <param name="displacementPoint"> Конечная точка перемещения.</param>
-        /// <returns> Объект с измененными координатами расположения в трехмерном
-        /// пространстве.
-        /// </returns>
-        object Move(object obj, Point3D basePoint, Point3D displacementPoint);
-
-        /// <summary>
-        /// Совершает поворот объекта вдоль указанной оси, проходящей через некоторую
-        /// точку, на определенный угол вращения.
-        /// </summary>
-        /// <param name="obj"> Вращаемый объект.</param>
-        /// <param name="rotationAxis"> Вектор оси вращения объекта.</param>
-        /// <param name="rotationAngle"> Угол вращения (в градусах).</param>
-        /// <param name="rotationPoint"> Исходная точка вращения.</param>
-        /// <returns> Объект, изменивший угол расположения относительно указанной оси
-        /// и точки вращения.</returns>
-        object Rotate(object obj, Vector3D rotationAxis, double rotationAngle,
-            Point3D rotationPoint);
-
-        /// <summary>
-        /// Создает твердое тело посредством операции выдавливания 2D-объекта
-        /// на заданную высоту.
-        /// </summary>
-        /// <param name="obj"> 2D-объект, на основе которого необходимо выполнить
-        /// выдавливание.</param>
+        /// <param name="obj"> Область, для которой необходимо выполнить выдавливание.
+        /// </param>
         /// <param name="height"> Высота выдавливания.</param>
         /// <param name="taperAngle"> Угол образования конуса (в градусах).
         /// Используется для создания усеченной фигуры при выдавливании.</param>
@@ -97,35 +61,164 @@ namespace Wrappers.Interfaces
             bool isDirectionPositive = true);
 
         /// <summary>
-        /// Создает твердое тело путем вращения 2D-объекта вокруг оси, которая
-        /// определяется заданной начальной и конечной точкой.
+        /// Строит параллелепипед.
         /// </summary>
-        /// <param name="obj"> Двумерный объект, из которого необходимо получить
-        /// твердотельный объект.</param>
-        /// <param name="startAxisPoint"> Начальная точка оси вращения.</param>
-        /// <param name="endAxisPoint"> Конечная точка оси вращения.</param>
-        /// <param name="angle"> Угол вращения объекта (в градусах). По умолчанию
-        /// составляет 360 градусов (для получения замкнутого твердого тела).</param>
-        void Revolve(
-            object obj, 
-            Point3D startAxisPoint, 
-            Point3D endAxisPoint, 
-            double angle = 360);
+        /// <param name="planeType"> Плоскость, в которой необходимо построить
+        /// параллелепипед.</param>
+        /// <param name="x"> Х-координата базовой точки параллелепипеда.</param>
+        /// <param name="y"> Y-координата базовой точки параллелепипеда.</param>
+        /// <param name="baseWidth"> Ширина основания параллелепипеда (длина стороны).
+        /// </param>
+        /// <param name="baseHeight"> Высота выдавливания основания параллелепипеда.
+        /// </param>
+        /// <param name="extrusionHeight"> Высота выдавливания основания
+        /// для образования параллелепипеда.</param>
+        /// <param name="isExtrusionCuttingOut"> Показывает, выполнять ли вырезание
+        /// выдавливанием. Данная операция применяется в некоторых САПР для удаления
+        /// объема внутри другого 3D-тела.</param>
+        /// <param name="isDirectionPositive"> Показывает, в каком направлении
+        /// выполнять операцию выдавливания. По умолчанию выдавливание выполняется
+        /// в положительном направлении.</param>
+        void BuildCuboid(
+            PlaneType planeType,
+            double x,
+            double y,
+            double baseWidth,
+            double baseHeight,
+            double extrusionHeight,
+            bool isExtrusionCuttingOut,
+            bool isDirectionPositive);
 
         /// <summary>
-        /// Закругляет ребра 3D-объекта.
+        /// Строит цилиндр.
         /// </summary>
-        /// <param name="obj"> Объект, для которого применяется скругление.</param>
-        /// <param name="radius"> Радиус скругления.</param>
-        /// <param name="startSetback"> Начало отступа ("задержки") скругления
-        /// относительно ребра объекта.</param>
-        /// <param name="endSetback"> Конец отступа ("задержки") скругления
-        /// относительно ребра объекта.</param>
-        void FilletEdges(
-            object obj,
-            double radius,
-            double startSetback,
-            double endSetback);
+        /// <param name="planeType"> Плоскость, в которой необходимо построить
+        /// цилиндр.</param>
+        /// <param name="baseDiameter"> Диаметр основания цилиндра.</param>
+        /// <param name="x"> Координата центра основания цилиндра по оси X.</param>
+        /// <param name="y"> Координата центра основания цилиндра по оси Y.</param>
+        /// <param name="extrusionHeight"> Высота выдавливания основания цилиндра.
+        /// </param>
+        /// <param name="isDirectionPositive"> Показывает, в каком направлении
+        /// выполнять операцию выдавливания. По умолчанию выдавливание выполняется
+        /// в положительном направлении.</param>
+        void BuildCylinder(
+            PlaneType planeType,
+            int baseDiameter,
+            double x,
+            double y,
+            double extrusionHeight,
+            bool isDirectionPositive);
+
+        /// <summary>
+        /// Строит цилиндр, поворачивая его в пространстве на указанный угол.
+        /// </summary>
+        /// <param name="planeType"> Плоскость, в которой необходимо построить
+        /// цилиндр.</param>
+        /// <param name="baseDiameter"> Диаметр основания цилиндра.</param>
+        /// <param name="x"> Координата центра основания цилиндра по оси X.</param>
+        /// <param name="y"> Координата центра основания цилиндра по оси Y.</param>
+        /// <param name="rotationAxis"> Вектор оси вращения цилиндра.</param>
+        /// <param name="rotationAngle"> Угол вращения цилиндра (в градусах).</param>
+        /// <param name="rotationPoint"> Исходная точка вращения цилиндра.</param>
+        /// <param name="extrusionHeight"> Высота выдавливания основания цилиндра.
+        /// </param>
+        void BuildCylinder(
+            PlaneType planeType,
+            int baseDiameter,
+            double x,
+            double y,
+            Vector3D rotationAxis, 
+            double rotationAngle,
+            Point3D rotationPoint,
+            double extrusionHeight);
+
+        /// <summary>
+        /// Строит цилиндр с закругленными ребрами.
+        /// </summary>
+        /// <param name="planeType"> Плоскость, в которой необходимо построить
+        /// цилиндр.</param>
+        /// <param name="baseDiameter"> Диаметр основания цилиндра.</param>
+        /// <param name="x"> Координата центра основания цилиндра по оси X.</param>
+        /// <param name="y"> Координата центра основания цилиндра по оси Y.</param>
+        /// <param name="extrusionHeight"> Высота выдавливания цилиндра.</param>
+        /// <param name="isDirectionPositive"> Показывает, в каком направлении
+        /// выполнять операцию выдавливания. По умолчанию выдавливание выполняется
+        /// в положительном направлении.</param>
+        /// <param name="filletRadius"> Радиус скругления ребер цилиндра.</param>
+        /// <param name="filletStartSetback"> Начало отступа ("задержки") скругления
+        /// относительно ребра цилиндра.</param>
+        /// <param name="filletEndSetback"> Конец отступа ("задержки") скругления
+        /// относительно ребра цилиндра.</param>
+        void BuildCylinder(
+            PlaneType planeType,
+            int baseDiameter,
+            double x,
+            double y,
+            double extrusionHeight,
+            bool isDirectionPositive,
+            double filletRadius,
+            double filletStartSetback,
+            double filletEndSetback);
+
+        /// <summary>
+        /// Строит цилиндр с закругленными ребрами, перемещая его в указанную точку
+        /// пространства.
+        /// </summary>
+        /// <param name="planeType"> Плоскость, в которой необходимо построить
+        /// цилиндр.</param>
+        /// <param name="baseDiameter"> Диаметр основания цилиндра.</param>
+        /// <param name="x"> Координата центра основания цилиндра по оси X.</param>
+        /// <param name="y"> Координата центра основания цилиндра по оси Y.</param>
+        /// <param name="basePoint"> Базовая точка, относительно которой производится
+        /// перемещение цилиндра в пространстве.</param>
+        /// <param name="displacementPoint"> Конечная точка, в которую необходимо
+        /// переместить цилиндр.</param>
+        /// <param name="extrusionHeight"> Высота выдавливания цилиндра.</param>
+        /// <param name="filletRadius"> Радиус скругления ребер цилиндра.</param>
+        /// <param name="filletStartSetback"> Начало отступа ("задержки") скругления
+        /// относительно ребра цилиндра.</param>
+        /// <param name="filletEndSetback"> Конец отступа ("задержки") скругления
+        /// относительно ребра цилиндра.</param>
+        void BuildCylinder(
+            PlaneType planeType,
+            int baseDiameter,
+            double x,
+            double y,
+            Point3D basePoint,
+            Point3D displacementPoint,
+            double extrusionHeight,
+            double filletRadius,
+            double filletStartSetback,
+            double filletEndSetback);
+
+        /// <summary>
+        /// Строит сложный 3D-объект путем вращения 2D-объекта, образованного ломаной
+        /// линией, по оси, которая проходит через данный 2D-объект.
+        /// </summary>
+        /// <param name="planeType"> Плоскость, в которой необходимо построить
+        /// объект.</param>
+        /// <param name="bulgeByVertex"> Словарь для сопоставления определенного
+        /// угла выпуклости (в градусах) каждой вершине ломаной линии (используется
+        /// для создания 3D-объекта сложной формы).</param>
+        /// <param name="basePoint"> Базовая точка, относительно которой производится
+        /// перемещение объекта в пространстве.</param>
+        /// <param name="displacementPoint"> Конечная точка, в которую необходимо
+        /// переместить объект.</param>
+        /// <param name="revolutionAxisStartPoint"> Начальная точка оси вращения.
+        /// </param>
+        /// <param name="revolutionAxisEndPoint"> Конечная точка оси вращения.</param>
+        /// <param name="revolutionAngle"> Угол вращения объекта (в градусах).
+        /// По умолчанию составляет 360 градусов (для получения замкнутого
+        /// 3D-объекта).</param>
+        void BuildComplexObjectByRevolution(
+            PlaneType planeType,
+            Dictionary<Point, double> bulgeByVertex,
+            Point3D basePoint,
+            Point3D displacementPoint,
+            Point3D revolutionAxisStartPoint,
+            Point3D revolutionAxisEndPoint,
+            double revolutionAngle = 360);
 
         /// <summary>
         /// Вызывается непосредственно для построения 3D-модели в используемой САПР.

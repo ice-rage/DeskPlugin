@@ -228,14 +228,14 @@ namespace TestViewModels
         {
             yield return new TestCaseData(
                 nameof(MainWindowViewModel.SetMinimumParametersCommand),
-                new List<int> { 800, 400, 30, 50, 690, 3, 250 },
+                new List<int> { 800, 400, 30, 50, 690, 80, 3, 250 },
                 (Func<DeskParameter, int>)(parameter => parameter.Min))
                 .SetName("При вызове команды {0} должны быть установлены " +
                     "минимальные значения всех параметров");
 
             yield return new TestCaseData(
                 nameof(MainWindowViewModel.SetAverageParametersCommand),
-                new List<int> { 1000, 625, 35, 60, 715, 4, 291 },
+                new List<int> { 1000, 625, 35, 60, 715, 90, 4, 291 },
                 (Func<DeskParameter, int>)(parameter => (parameter.Min +
                     parameter.Max) / 2))
                 .SetName("При вызове команды {0} должны быть установлены " +
@@ -243,7 +243,7 @@ namespace TestViewModels
 
             yield return new TestCaseData(
                 nameof(MainWindowViewModel.SetMaximumParametersCommand),
-                new List<int> { 1200, 750, 40, 70, 740, 5, 400 },
+                new List<int> { 1200, 750, 40, 70, 740, 100, 5, 400 },
                 (Func<DeskParameter, int>)(parameter => parameter.Max))
                 .SetName("При вызове команды {0} должны быть установлены " +
                     "максимальные значения всех параметров");

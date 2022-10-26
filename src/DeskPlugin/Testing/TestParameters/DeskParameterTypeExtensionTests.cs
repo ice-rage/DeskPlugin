@@ -73,8 +73,8 @@ namespace TestParameters
             yield return new TestCaseData(DeskParameterType.LegHeight, 
                 "Height (H2)").SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.DrawerNumber, "Number")
-                .SetName(TestGetDescription_ReturnsValue_TestName);
+            yield return new TestCaseData(DeskParameterType.DrawerNumber, 
+                "Drawer Number").SetName(TestGetDescription_ReturnsValue_TestName);
 
             yield return new TestCaseData(DeskParameterType.DrawerLength, 
                 "Length (L2)").SetName(TestGetDescription_ReturnsValue_TestName);

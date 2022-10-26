@@ -5,6 +5,8 @@
     /// </summary>
     internal class FilletEdgesInfo
     {
+        #region Properties
+
         /// <summary>
         /// Радиус скругления.
         /// </summary>
@@ -20,6 +22,10 @@
         /// </summary>
         public double EndSetback { get; }
 
+        #endregion
+
+        #region Constructors
+
         /// <summary>
         /// Создает экземпляр <see cref="FilletEdgesInfo"/>.
         /// </summary>
@@ -32,5 +38,7 @@
             StartSetback = startSetback;
             EndSetback = endSetback;
         }
+
+        #endregion
     }
 }
