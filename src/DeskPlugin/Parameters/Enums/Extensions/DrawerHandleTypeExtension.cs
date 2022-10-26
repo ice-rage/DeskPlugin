@@ -4,17 +4,17 @@
     /// Статический класс, расширяющий перечисление типов ручек ящиков для канцелярии
     /// <see cref="DrawerHandleType"/>.
     /// </summary>
-    public static class DrawerHandleTypeExtensions
+    public static class DrawerHandleTypeExtension
     {
         /// <summary>
-        /// Статический метод, возвращающий тип ручек ящиков для канцелярии
-        /// из перечисления <see cref="DeskParameterType"/>.
+        /// Статический метод, возвращающий тип изменяемого параметра ручки ящика
+        /// для канцелярии из перечисления <see cref="DeskParameterType"/>.
         /// </summary>
-        /// <param name="handleType"> Тип ручек ящиков для канцелярии, выраженный
+        /// <param name="handleType"> Тип ручки ящика для канцелярии, выраженный
         /// значением перечисления <see cref="DrawerHandleType"/>.</param>
-        /// <returns> Тип ручек ящиков для канцелярии (значение перечисления
-        /// <see cref="DeskParameterType"/>).</returns>
-        public static DeskParameterType GetHandleDimensionType(
+        /// <returns> Тип изменяемого параметра ручки ящика для канцелярии (значение
+        /// перечисления <see cref="DeskParameterType"/>).</returns>
+        public static DeskParameterType GetHandleMutableParameterType(
             this DrawerHandleType handleType)
         {
             switch (handleType)

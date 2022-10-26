@@ -2,7 +2,7 @@
 using Parameters.Enums;
 using Parameters.Enums.Extensions;
 
-namespace TestParameters
+namespace ParameterTests.EnumExtensionTests
 {
     /// <summary>
     /// Класс, содержащий модульные тесты для класса
@@ -29,11 +29,11 @@ namespace TestParameters
 
         #region Method Tests
 
-        [TestCase(DeskParameterType.LegBaseDiameter, LegType.Round, 
+        [TestCase(DeskParameterType.LegBaseDiameter, LegType.Round,
             TestName = TestGetLegBaseType_ReturnsValue_TestName)]
-        [TestCase(DeskParameterType.LegBaseLength, LegType.Square, 
+        [TestCase(DeskParameterType.LegBaseLength, LegType.Square,
             TestName = TestGetLegBaseType_ReturnsValue_TestName)]
-        public void TestGetLegBaseType_ReturnsValue(DeskParameterType expected, 
+        public void TestGetLegBaseType_ReturnsValue(DeskParameterType expected,
             LegType legType)
         {
             // Act

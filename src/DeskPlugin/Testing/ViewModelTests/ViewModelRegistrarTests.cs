@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using ViewModels.Registration;
 
-namespace TestViewModels
+namespace ViewModelTests
 {
     /// <summary>
     /// Класс, содержащий модульные тесты для класса <see cref="ViewModelRegistrar"/>.

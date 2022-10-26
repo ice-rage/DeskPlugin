@@ -9,7 +9,7 @@ using Rhino.Mocks;
 using ViewModels;
 using Wrappers.Interfaces;
 
-namespace TestViewModels
+namespace ViewModelTests
 {
     ///<summary>
     /// Класс, содержащий модульные тесты для класса

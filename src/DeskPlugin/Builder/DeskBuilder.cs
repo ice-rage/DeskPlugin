@@ -65,7 +65,7 @@ namespace Builder
             var drawerHandleType = parameters.HandleType;
             var drawerHandleDimension =
                 parameters[DeskParameterGroupType.Drawers, parameters.HandleType
-                    .GetHandleDimensionType()].Value;
+                    .GetHandleMutableParameterType()].Value;
 
             BuildWorktop(worktopLength, worktopWidth, worktopHeight);
 

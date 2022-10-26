@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Parameters;
 using Parameters.Enums;
 
-namespace TestParameters
+namespace ParameterTests
 {
     /// <summary>
     /// Класс, содержащий модульные тесты для класса <see cref="DeskParameters"/>.

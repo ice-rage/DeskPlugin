@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Parameters.Enums;
 using Parameters.Enums.Extensions;
 
-namespace TestParameters
+namespace ParameterTests.EnumExtensionTests
 {
     /// <summary>
     /// Класс, содержащий модульные тесты для класса
@@ -31,7 +31,7 @@ namespace TestParameters
         #region Method Tests
 
         [TestCaseSource(nameof(GetDescriptionTestCases))]
-        public void TestGetDescription_ReturnsValue(DeskParameterType parameterType, 
+        public void TestGetDescription_ReturnsValue(DeskParameterType parameterType,
             string expected)
         {
             // Act
@@ -53,30 +53,30 @@ namespace TestParameters
         /// </returns>
         private static IEnumerable<TestCaseData> GetDescriptionTestCases()
         {
-            yield return new TestCaseData(DeskParameterType.WorktopLength, 
+            yield return new TestCaseData(DeskParameterType.WorktopLength,
                 "Length (L1)").SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.WorktopWidth, 
+            yield return new TestCaseData(DeskParameterType.WorktopWidth,
                 "Width (B)").SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.WorktopHeight, 
+            yield return new TestCaseData(DeskParameterType.WorktopHeight,
                 "Height (H1)").SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.LegBaseDiameter, 
+            yield return new TestCaseData(DeskParameterType.LegBaseDiameter,
                 "Base Diameter (D)")
                 .SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.LegBaseLength, 
+            yield return new TestCaseData(DeskParameterType.LegBaseLength,
                 "Base Length (A)")
                 .SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.LegHeight, 
+            yield return new TestCaseData(DeskParameterType.LegHeight,
                 "Height (H2)").SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.DrawerNumber, 
+            yield return new TestCaseData(DeskParameterType.DrawerNumber,
                 "Drawer Number").SetName(TestGetDescription_ReturnsValue_TestName);
 
-            yield return new TestCaseData(DeskParameterType.DrawerLength, 
+            yield return new TestCaseData(DeskParameterType.DrawerLength,
                 "Length (L2)").SetName(TestGetDescription_ReturnsValue_TestName);
         }
 

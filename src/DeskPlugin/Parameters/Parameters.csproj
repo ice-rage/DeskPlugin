@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\DrawerHandleType.cs" />
-    <Compile Include="Enums\Extensions\DrawerHandleTypeExtensions.cs" />
+    <Compile Include="Enums\Extensions\DrawerHandleTypeExtension.cs" />
     <Compile Include="Enums\Extensions\LegTypeExtension.cs" />
     <Compile Include="Enums\Extensions\DeskParameterTypeExtension.cs" />
     <Compile Include="Enums\LegType.cs" />
