@@ -249,11 +249,19 @@ namespace ParameterTests
         #region Validator Tests
 
         [TestCase(null, 500, 
-            TestGetErrors_ValueLessThanMin_ErrorMessage)]
+            TestGetErrors_ValueLessThanMin_ErrorMessage, 
+            TestName = "При значении параметра, меньшем минимально допустимого, " +
+                       "должно возвращаться соответствующее сообщение об ошибке")]
         [TestCase(null, 1500, 
-            TestGetErrors_ValueGreaterThanMax_ErrorMessage)]
-        [TestCase(null, 1050, "")]
-        [TestCase(nameof(DeskParameter.Max), 500, "")]
+            TestGetErrors_ValueGreaterThanMax_ErrorMessage,
+            TestName = "При значении параметра, большем максимально допустимого, " +
+                       "должно возвращаться соответствующее сообщение об ошибке")]
+        [TestCase(null, 1050, "", 
+            TestName = "При значении параметра, входящем в диапазон допустимых " +
+                       "значений, должна возвращаться пустая строка")]
+        [TestCase(nameof(DeskParameter.Max), 500, "", 
+            TestName = "При попытке валидации свойства, отличного от Value, должна " +
+                       "возвращаться пустая строка")]
         public void TestGetErrors_ReturnsValue(string propertyName, int value, 
             string expected)
         {

@@ -46,7 +46,7 @@ namespace Wrappers
             new Dictionary<Entity, RevolutionInfo>();
 
         /// <summary>
-        /// Словарь, сопоставляющий сущность (2D-объект) и данные о скруглении ребер
+        /// Словарь, сопоставляющий сущность (2D-объект) и данные о закруглении ребер
         /// 3D-объекта, который будет получен из данной сущности.
         /// </summary>
         private readonly Dictionary<Entity, FilletEdgesInfo>
@@ -310,13 +310,13 @@ namespace Wrappers
                         CreateBlock(blockTableId);
 
                         // Применяем операцию выдавливания (и, при необходимости,
-                        // операцию скругления ребер).
+                        // операцию закругления ребер).
                         _extrusionInfoByEntity.Keys
                             .ToList()
                             .ForEach(CreateSolid);
 
                         // Применяем операцию вращения (и, при необходимости, операцию
-                        // скругления ребер).
+                        // закругления ребер).
                         _revolutionInfoByEntity.Keys
                             .ToList()
                             .ForEach(CreateSolid);
@@ -467,13 +467,13 @@ namespace Wrappers
         }
 
         /// <summary>
-        /// Метод для скругления ребер 3D-объекта.
+        /// Метод для закругления ребер 3D-объекта.
         /// </summary>
-        /// <param name="obj"> Объект, для которого применяется скругление.</param>
-        /// <param name="radius"> Радиус скругления.</param>
-        /// <param name="startSetback"> Начало отступа ("задержки") скругления
+        /// <param name="obj"> Объект, для которого применяется закругление.</param>
+        /// <param name="radius"> Радиус закругления.</param>
+        /// <param name="startSetback"> Начало отступа ("задержки") закругления
         /// относительно ребра объекта.</param>
-        /// <param name="endSetback"> Конец отступа ("задержки") скругления
+        /// <param name="endSetback"> Конец отступа ("задержки") закругления
         /// относительно ребра объекта.</param>
         private void FilletEdges(object obj, double radius, double startSetback,
             double endSetback) => _filletEdgesInfoByEntity.Add((Entity)obj,
@@ -802,7 +802,7 @@ namespace Wrappers
 
                             AddObjectInBlock(solid, BlockName);
 
-                            // Проверяем, нужно ли скруглять ребра полученного 
+                            // Проверяем, нужно ли закруглять ребра полученного 
                             // твердого тела.
                             if (_filletEdgesInfoByEntity.ContainsKey(entity))
                             {
@@ -823,13 +823,13 @@ namespace Wrappers
         }
 
         /// <summary>
-        /// Метод, выполняющий скругление ребер 3D-объекта.
+        /// Метод, выполняющий закругление ребер 3D-объекта.
         /// </summary>
         /// <param name="solid"> Указанный 3D-объект.</param>
-        /// <param name="radius"> Радиус скругления.</param>
-        /// <param name="startSetback"> Начальная задержка (отступ) скругления.
+        /// <param name="radius"> Радиус закругления.</param>
+        /// <param name="startSetback"> Начальная задержка (отступ) закругления.
         /// </param>
-        /// <param name="endSetback"> Конечная задержка (отступ) скругления.</param>
+        /// <param name="endSetback"> Конечная задержка (отступ) закругления.</param>
         private static void FilletEdges(Solid3d solid, double radius, 
             double startSetback, double endSetback)
         {
@@ -850,7 +850,7 @@ namespace Wrappers
             // (в данном случае - ребер).
             var solidEdgeIds = new List<SubentityId>();
 
-            // Определяем числовые коллекции радиусов скругления ребер твердого тела,
+            // Определяем числовые коллекции радиусов закругления ребер твердого тела,
             // а также начальной и конечной точки отступа от края ребра.
             var filletRadius = new DoubleCollection();
             var filletStartSetback = new DoubleCollection();
@@ -858,7 +858,7 @@ namespace Wrappers
 
             using (var brep = new Brep(solidSubentityPath))
             {
-                // Выбираем из всех ребер твердого тела нужные для скругления (только
+                // Выбираем из всех ребер твердого тела нужные для закругления (только
                 // те, которые относятся к передней грани тела относительно оси xOz).
                 brep.Edges.Where((edge, index) => index != 0 && index % 2 == 0)
                     .Select(edge => edge.SubentityPath.SubentId)
@@ -868,7 +868,7 @@ namespace Wrappers
                         solidEdgeIds.Add(subentityId);
 
                         // Добавляем в соответствующие числовые коллекции радиус
-                        // скругления данного ребра, начало и конец отступа скругления.
+                        // закругления данного ребра, начало и конец отступа закругления.
                         //
                         filletRadius.Add(radius);
                         filletStartSetback.Add(startSetback);

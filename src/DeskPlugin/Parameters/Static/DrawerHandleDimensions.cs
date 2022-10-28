@@ -56,17 +56,17 @@ namespace Parameters.Static
         public static int KnobHandleBaseWidth => 10;
 
         /// <summary>
-        /// Радиус скругления ребер для основания ручки-кнопки.
+        /// Радиус закругления ребер для основания ручки-кнопки.
         /// </summary>
         public static int KnobHandleBaseFilletEdgeRadius => 10;
 
         /// <summary>
-        /// Начальный отступ скругления ребер для основания ручки-кнопки.
+        /// Начальный отступ закругления ребер для основания ручки-кнопки.
         /// </summary>
         public static int KnobHandleBaseFilletEdgeStartSetback => 1;
 
         /// <summary>
-        /// Конечный отступ скругления ребер для основания ручки-кнопки.
+        /// Конечный отступ закругления ребер для основания ручки-кнопки.
         /// </summary>
         public static int KnobHandleBaseFilletEdgeEndSetback => 5;
 
@@ -86,17 +86,17 @@ namespace Parameters.Static
         public static int KnobHandleCapBaseWidth => 5;
 
         /// <summary>
-        /// Радиус скругления ребер для основания шляпки ручки-кнопки.
+        /// Радиус закругления ребер для основания шляпки ручки-кнопки.
         /// </summary>
         public static int KnobHandleCapBaseFilletEdgeRadius => 10;
 
         /// <summary>
-        /// Начальный отступ скругления ребер для основания шляпки ручки-кнопки.
+        /// Начальный отступ закругления ребер для основания шляпки ручки-кнопки.
         /// </summary>
         public static int KnobHandleCapBaseFilletEdgeStartSetback => 1;
 
         /// <summary>
-        /// Конечный отступ скругления ребер для основания шляпки ручки-кнопки.
+        /// Конечный отступ закругления ребер для основания шляпки ручки-кнопки.
         /// </summary>
         public static int KnobHandleCapBaseFilletEdgeEndSetback => 5;
 
@@ -118,17 +118,17 @@ namespace Parameters.Static
         public static int KnobHandleCapWidth => 20;
 
         /// <summary>
-        /// Радиус скругления ребер для шляпки ручки-кнопки.
+        /// Радиус закругления ребер для шляпки ручки-кнопки.
         /// </summary>
         public static int KnobHandleCapFilletEdgeRadius => 20;
 
         /// <summary>
-        /// Начальный отступ скругления ребер для шляпки ручки-кнопки.
+        /// Начальный отступ закругления ребер для шляпки ручки-кнопки.
         /// </summary>
         public static int KnobHandleCapFilletEdgeStartSetback => 5;
 
         /// <summary>
-        /// Конечный отступ скругления ребер для шляпки ручки-кнопки.
+        /// Конечный отступ закругления ребер для шляпки ручки-кнопки.
         /// </summary>
         public static int KnobHandleCapFilletEdgeEndSetback => 10;
 

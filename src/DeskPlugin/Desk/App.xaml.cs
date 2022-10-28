@@ -40,7 +40,6 @@ namespace Desk
 
                 // Выполняем необходимую настройку сервисов.
                 ConfigureServices(services);
-
                 _serviceProvider = services.BuildServiceProvider();
 
                 return _serviceProvider;
@@ -58,7 +57,8 @@ namespace Desk
         /// работать.</param>
         private static void ConfigureServices(IServiceCollection services)
         {
-            // Регистрируем окна, модели представления и классы-оболочки.
+            // Регистрируем окна плагина, модели-представления и классы-оболочки
+            // используемых САПР.
             services
                 .AddSingleton<MainWindow>()
                 .RegisterViewModels()

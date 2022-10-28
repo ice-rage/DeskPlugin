@@ -111,11 +111,13 @@ namespace ViewModels
         /// соответствующего метода установки значений по умолчанию.</param>
         private void SetDefaultParameters(Action<DeskParameter> action)
         {
-            foreach (var parameter in Parameters.ParametersByGroup.Values
-                .SelectMany(parameters => parameters.ToList()))
+            foreach (var parameters in Parameters.ParametersByGroup.Values)
             {
-                action?.Invoke(parameter);
-                parameter.DataValidChanged += OnDataValidChanged;
+                for (var i = 0; i < parameters.Count; i++)
+                {
+                    action?.Invoke(parameters[i]);
+                    parameters[i].DataValidChanged += OnDataValidChanged;
+                }
             }
 
             OnDataValidChanged(this, EventArgs.Empty);

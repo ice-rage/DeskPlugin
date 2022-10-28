@@ -113,9 +113,11 @@ namespace Parameters
 
             set
             {
-                var previousHandleDimensionType = HandleType.GetHandleMutableParameterType();
+                var previousHandleDimensionType = HandleType
+                    .GetHandleMutableParameterType();
                 SetProperty(ref _handleType, value);
-                var updatedHandleDimensionType = HandleType.GetHandleMutableParameterType();
+                var updatedHandleDimensionType = HandleType
+                    .GetHandleMutableParameterType();
 
                 UpdateGeneralParameter(DeskParameterGroupType.Drawers,
                     previousHandleDimensionType, updatedHandleDimensionType);

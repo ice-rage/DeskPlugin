@@ -145,10 +145,10 @@ namespace Wrappers.Interfaces
         /// <param name="isDirectionPositive"> Показывает, в каком направлении
         /// выполнять операцию выдавливания. По умолчанию выдавливание выполняется
         /// в положительном направлении.</param>
-        /// <param name="filletRadius"> Радиус скругления ребер цилиндра.</param>
-        /// <param name="filletStartSetback"> Начало отступа ("задержки") скругления
+        /// <param name="filletRadius"> Радиус закругления ребер цилиндра.</param>
+        /// <param name="filletStartSetback"> Начало отступа ("задержки") закругления
         /// относительно ребра цилиндра.</param>
-        /// <param name="filletEndSetback"> Конец отступа ("задержки") скругления
+        /// <param name="filletEndSetback"> Конец отступа ("задержки") закругления
         /// относительно ребра цилиндра.</param>
         void BuildCylinder(
             PlaneType planeType,
@@ -175,10 +175,10 @@ namespace Wrappers.Interfaces
         /// <param name="displacementPoint"> Конечная точка, в которую необходимо
         /// переместить цилиндр.</param>
         /// <param name="extrusionHeight"> Высота выдавливания цилиндра.</param>
-        /// <param name="filletRadius"> Радиус скругления ребер цилиндра.</param>
-        /// <param name="filletStartSetback"> Начало отступа ("задержки") скругления
+        /// <param name="filletRadius"> Радиус закругления ребер цилиндра.</param>
+        /// <param name="filletStartSetback"> Начало отступа ("задержки") закругления
         /// относительно ребра цилиндра.</param>
-        /// <param name="filletEndSetback"> Конец отступа ("задержки") скругления
+        /// <param name="filletEndSetback"> Конец отступа ("задержки") закругления
         /// относительно ребра цилиндра.</param>
         void BuildCylinder(
             PlaneType planeType,
@@ -194,7 +194,8 @@ namespace Wrappers.Interfaces
 
         /// <summary>
         /// Строит сложный 3D-объект путем вращения 2D-объекта, образованного ломаной
-        /// линией, по оси, которая проходит через данный 2D-объект.
+        /// линией, вокруг оси, которая определяется проекцией линии в пределах двух
+        /// указанных точек на плоскость, содержащую данный 2D-объект.
         /// </summary>
         /// <param name="planeType"> Плоскость, в которой необходимо построить
         /// объект.</param>

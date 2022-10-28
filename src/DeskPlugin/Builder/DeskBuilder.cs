@@ -257,13 +257,13 @@ namespace Builder
 
                 // Строим ящик для канцелярии.
                 _wrapper.BuildCuboid(
-                    PlaneType.XoZ, 
+                    PlaneType.XoZ,
                     drawerX,
                     drawerZ,
                     drawerLength,
-                    drawerHeight, 
-                    worktopWidth, 
-                    false, 
+                    drawerHeight,
+                    worktopWidth,
+                    false,
                     true);
 
                 // Вырезаем отверстие (внутреннее пространство) в ящике.
@@ -284,8 +284,8 @@ namespace Builder
                     drawerZ,
                     doorLength,
                     doorHeight,
-                    DeskParameters.DoorWidth, 
-                    false, 
+                    DeskParameters.DoorWidth,
+                    false,
                     true);
 
                 // Строим ручку ящика в зависимости от выбранного типа.
