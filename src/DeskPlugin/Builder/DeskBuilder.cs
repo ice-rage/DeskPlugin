@@ -23,6 +23,11 @@ namespace Builder
         /// </summary>
         private readonly ICadWrapper _wrapper;
 
+        /// <summary>
+        /// Параметры, необходимые для построения 3D-модели.
+        /// </summary>
+        private DeskParameters _parameters;
+
         #endregion
 
         #region Constructors
@@ -38,47 +43,28 @@ namespace Builder
         #region Methods
 
         /// <summary>
-        /// Метод для построения 3D-модели письменного стола.
+        /// Метод для построения 3D-модели.
         /// </summary>
-        /// <param name="parameters"> Параметры, необходимые для построения
-        /// 3D-модели.</param>
+        /// <param name="parameters"> </param>
         public void BuildDesk(DeskParameters parameters)
         {
-			var worktopLength = parameters[DeskParameterGroupType.Worktop,
+            _parameters = parameters;
+			var worktopLength = _parameters[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopLength].Value;
-            var worktopWidth = parameters[DeskParameterGroupType.Worktop,
+            var worktopWidth = _parameters[DeskParameterGroupType.Worktop,
                 DeskParameterType.WorktopWidth].Value;
-            var worktopHeight = parameters[DeskParameterGroupType.Worktop,
-                DeskParameterType.WorktopHeight].Value;
-            var legHeight = parameters[DeskParameterGroupType.Legs,
+            
+            var legHeight = _parameters[DeskParameterGroupType.Legs,
                 DeskParameterType.LegHeight].Value;
-            var drawerNumber = parameters[DeskParameterGroupType.Drawers,
+            var drawerNumber = _parameters[DeskParameterGroupType.Drawers,
                 DeskParameterType.DrawerNumber].Value;
-            var drawerLength = parameters[DeskParameterGroupType.Drawers,
-                DeskParameterType.DrawerLength].Value;
             var drawerHeight = (double)legHeight / drawerNumber;
+            
+            BuildWorktop(worktopLength, worktopWidth);
 
-            var legType = parameters.LegType;
-            var legBaseValue = parameters[DeskParameterGroupType.Legs,
-                parameters.LegType.GetLegBaseType()].Value;
+            BuildLegs(legHeight, worktopWidth);
 
-            var drawerHandleType = parameters.HandleType;
-            var drawerHandleDimension =
-                parameters[DeskParameterGroupType.Drawers, parameters.HandleType
-                    .GetHandleMutableParameterType()].Value;
-
-            BuildWorktop(worktopLength, worktopWidth, worktopHeight);
-
-            BuildLegs(legType, legBaseValue, legHeight, worktopWidth);
-
-            BuildDrawers(
-                drawerNumber, 
-                drawerLength, 
-                drawerHeight, 
-                drawerHandleType,
-                drawerHandleDimension,
-                worktopLength, 
-                worktopWidth);
+            BuildDrawers(drawerNumber, drawerHeight, worktopLength, worktopWidth);
 
             _wrapper.Build();
         }
@@ -88,30 +74,37 @@ namespace Builder
         /// </summary>
         /// <param name="worktopLength"> Длина столешницы.</param>
         /// <param name="worktopWidth"> Ширина столешницы.</param>
-        /// <param name="worktopHeight"> Высота столешницы.</param>
-        private void BuildWorktop(int worktopLength, int worktopWidth, 
-            int worktopHeight) => _wrapper.BuildCuboid(
-            PlaneType.XoY, 
-            0, 
-            0, 
-            worktopLength, 
-            worktopWidth, 
-            worktopHeight, 
-            false, 
-            true);
+        private void BuildWorktop(int worktopLength, int worktopWidth)
+        {
+            // Получаем высоту столешницы.
+            var worktopHeight = _parameters[DeskParameterGroupType.Worktop,
+                DeskParameterType.WorktopHeight].Value;
+
+            _wrapper.BuildCuboid(
+                PlaneType.XoY,
+                0,
+                0,
+                worktopLength,
+                worktopWidth,
+                worktopHeight,
+                false,
+                true);
+        }
 
         /// <summary>
         /// Метод для построения ножек письменного стола.
         /// </summary>
-        /// <param name="legType"> Тип ножек, описанный в перечислении
-        /// <see cref="DeskParameterType"/>.</param>
-        /// <param name="legBase"> Значение основания ножек.</param>
         /// <param name="legHeight"> Высота ножек.</param>
         /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета
         /// положения ножек относительно краев стола.</param>
-        private void BuildLegs(LegType legType, int legBase, int legHeight, 
-            int worktopWidth)
+        private void BuildLegs(int legHeight, int worktopWidth)
         {
+            // Получаем параметры, необходимые для построения ножек стола.
+            //
+            var legType = _parameters.LegType;
+            var legBaseValue = _parameters[DeskParameterGroupType.Legs,
+                _parameters.LegType.GetLegBaseType()].Value;
+
             // Создаем словари, содержащие в качестве ключа порядковый номер ножки,
             // а в качестве значения - одну из координат ее основания.
             var x = new Dictionary<int, double>();
@@ -119,8 +112,8 @@ namespace Builder
 
             // Строим основания ножек.
             var legBases = legType == LegType.Round
-                ? CreateRoundLegBases(legBase, worktopWidth, x, y)
-                : CreateSquareLegBases(legBase, worktopWidth, x, y);
+                ? CreateRoundLegBases(legBaseValue, worktopWidth, x, y)
+                : CreateSquareLegBases(legBaseValue, worktopWidth, x, y);
 
             // Выполняем операцию выдавливания для основания каждой ножки.
             foreach (var leg in legBases)
@@ -214,27 +207,23 @@ namespace Builder
         /// Метод, который строит ящики для канцелярии письменного стола.
         /// </summary>
         /// <param name="drawerNumber"> Количество ящиков для канцелярии.</param>
-        /// <param name="drawerLength"> Длина ящиков для канцелярии.</param>
         /// <param name="drawerHeight"> Высота ящиков для канцелярии.</param>
-        /// <param name="handleType"> Тип ручек ящика для канцелярии.</param>
-        /// <param name="handleDimension"> Числовой параметр ручки ящика
-        /// для канцелярии (расстояние между крепежными элементами для ручек типа
-        /// <see cref="DrawerHandleType.Grip"/> и <see cref="DrawerHandleType.Railing"/>
-        /// либо диаметр основания для ручек типа <see cref="DrawerHandleType.Knob"/>.
-        /// </param>
         /// <param name="worktopLength"> Длина столешницы, необходимая для расчета
         /// размеров и положения ящиков для канцелярии, их дверц и ручек.</param>
         /// <param name="worktopWidth"> Ширина столешницы, необходимая для расчета
         /// размеров и положения ящиков для канцелярии, их дверц и ручек.</param>
-        private void BuildDrawers(
-            int drawerNumber,
-            int drawerLength,
-            double drawerHeight,
-            DrawerHandleType handleType,
-            int handleDimension,
-            int worktopLength,
-            int worktopWidth)
+        private void BuildDrawers(int drawerNumber, double drawerHeight, 
+            int worktopLength, int worktopWidth)
         {
+            // Получаем все параметры письменного стола, необходимые, чтобы построить
+            // ящики для канцелярии.
+            //
+            var drawerLength = _parameters[DeskParameterGroupType.Drawers,
+                DeskParameterType.DrawerLength].Value;
+            var drawerHandleType = _parameters.HandleType;
+            var drawerHandleDimension = _parameters[DeskParameterGroupType.Drawers,
+                _parameters.HandleType.GetHandleMutableParameterType()].Value;
+
             // Вычисляем все размерности, необходимые для построения ящиков.
             //
             var drawerX = worktopLength - drawerLength;
@@ -290,7 +279,7 @@ namespace Builder
 
                 // Строим ручку ящика в зависимости от выбранного типа.
                 //
-                switch (handleType)
+                switch (drawerHandleType)
                 {
                     case DrawerHandleType.Railing:
                     {
@@ -299,7 +288,7 @@ namespace Builder
                             drawerLength,
                             drawerHeight,
                             drawerZ, 
-                            handleDimension);
+                            drawerHandleDimension);
                         break;
                     }
                     case DrawerHandleType.Knob:
@@ -309,7 +298,7 @@ namespace Builder
                             drawerLength,
                             drawerHeight,
                             drawerZ,
-                            handleDimension);
+                            drawerHandleDimension);
                         break;
                     }
                     case DrawerHandleType.Grip:
@@ -320,7 +309,7 @@ namespace Builder
                             drawerLength,
                             drawerHeight,
                             drawerZ,
-                            handleDimension);
+                            drawerHandleDimension);
                         break;
                     }
                 }
@@ -347,10 +336,10 @@ namespace Builder
             // Вычисляем все размерности, необходимые для построения ручки-рейлинг.
             //
             var railingZ = locationAlongZ + drawerHeight / 2 - 
-                (double)DrawerHandleDimensions.HandleHeight / 2;
+                (double)DeskParameters.HandleHeight / 2;
 
             var crossbeamLength = distanceBetweenFasteners + 
-                DrawerHandleDimensions.RailingCrossbeamFastenersLengthDifference;
+                RailingHandleDimensions.CrossbeamFastenersLengthDifference;
             var crossbeamX = worktopLength - drawerLength / 2;
             var crossbeamRotationAxis = new Vector3D(0, 0, 1);
             var crossbeamHalfLength = (double)crossbeamLength / 2;
@@ -365,18 +354,18 @@ namespace Builder
             //
             _wrapper.BuildCylinder(
                 PlaneType.XoZ,
-                DrawerHandleDimensions.RailingCrossbeamDiameter,
+                RailingHandleDimensions.CrossbeamDiameter,
                 crossbeamX,
                 railingZ,
                 crossbeamRotationAxis,
-                DrawerHandleDimensions.RailingCrossbeamRotationAngleInDegrees,
+                RailingHandleDimensions.CrossbeamRotationAngleInDegrees,
                 crossbeamRotationPoint,
                 crossbeamLength);
 
             // Строим левую крепежную ножку.
             _wrapper.BuildCylinder(
                 PlaneType.XoZ,
-                DrawerHandleDimensions.RailingFasteningLegDiameter,
+                RailingHandleDimensions.FasteningLegDiameter,
                 leftFasteningLegX,
                 railingZ,
                 crossbeamHalfLength,
@@ -385,7 +374,7 @@ namespace Builder
             // Строим правую крепежную ножку.
             _wrapper.BuildCylinder(
                 PlaneType.XoZ,
-                DrawerHandleDimensions.RailingFasteningLegDiameter,
+                RailingHandleDimensions.FasteningLegDiameter,
                 rightFasteningLegX,
                 railingZ,
                 crossbeamHalfLength,
@@ -409,16 +398,19 @@ namespace Builder
             double locationAlongZ,
             int distanceBetweenFasteners)
         {
+            // Разница в длине между внешним и внутренним пространством ручки-скобы.
+            const int gripHandleOuterInnerHandleLengthDifference = 40;
+
             // Вычисляем все размерности, необходимые для построения ручки-скобы.
             //
             var gripX = worktopLength - drawerLength / 2 - distanceBetweenFasteners / 2;
             var gripZ = locationAlongZ + drawerHeight / 2 - 
-                (double)DrawerHandleDimensions.HandleHeight / 2;
+                (double)DeskParameters.HandleHeight / 2;
 
             var outerGripX = gripX - 
-                DrawerHandleDimensions.GripOuterInnerHandleLengthDifference / 2;
+                gripHandleOuterInnerHandleLengthDifference / 2;
             var outerGripLength = distanceBetweenFasteners + 
-                DrawerHandleDimensions.GripOuterInnerHandleLengthDifference;
+                gripHandleOuterInnerHandleLengthDifference;
             var outerGripWidth = (double)distanceBetweenFasteners / 2;
 
             var innerGripWidth = outerGripWidth - 
@@ -430,7 +422,7 @@ namespace Builder
                 outerGripX,
                 gripZ,
                 outerGripLength,
-                DrawerHandleDimensions.HandleHeight,
+                DeskParameters.HandleHeight,
                 outerGripWidth,
                 false, 
                 false);
@@ -442,7 +434,7 @@ namespace Builder
                 gripX,
                 gripZ,
                 distanceBetweenFasteners,
-                DrawerHandleDimensions.HandleHeight,
+                DeskParameters.HandleHeight,
                 innerGripWidth,
                 true,
                 false);
@@ -468,23 +460,23 @@ namespace Builder
             //
             var knobX = worktopLength - drawerLength / 2;
             var knobZ = locationAlongZ + drawerHeight / 2 - 
-                (double)DrawerHandleDimensions.HandleHeight / 2;
+                (double)DeskParameters.HandleHeight / 2;
 
             var knobLegX = knobX - baseDiameter / 2.5;
-            var knobLegY = -(DrawerHandleDimensions.KnobHandleBaseWidth + 
-                DrawerHandleDimensions.KnobHandleLegWidth);
+            var knobLegY = -(KnobHandleDimensions.HandleBaseWidth + 
+                KnobHandleDimensions.HandleLegWidth);
             var knobLegSketchBulgeByVertex = new Dictionary<Point, double>
             {
                 {
                     new Point(knobLegX, knobLegY),
-                    DrawerHandleDimensions.KnobHandleLegBulgeAngleInDegrees
+                    KnobHandleDimensions.HandleLegBulgeAngleInDegrees
                 },
                 {
-                    new Point(knobLegX, -DrawerHandleDimensions.KnobHandleBaseWidth),
+                    new Point(knobLegX, -KnobHandleDimensions.HandleBaseWidth),
                     0.0
                 },
                 {
-                    new Point(knobX, -DrawerHandleDimensions.KnobHandleBaseWidth),
+                    new Point(knobX, -KnobHandleDimensions.HandleBaseWidth),
                     0.0
                 },
                 {
@@ -493,26 +485,26 @@ namespace Builder
             };
 
             var knobLegDisplacementStartPoint = new Point3D(knobX,
-                -DrawerHandleDimensions.KnobHandleBaseWidth, 0);
+                -KnobHandleDimensions.HandleBaseWidth, 0);
             var knobLegDisplacementEndPoint = new Point3D(knobX,
-                -DrawerHandleDimensions.KnobHandleBaseWidth, -knobZ);
+                -KnobHandleDimensions.HandleBaseWidth, -knobZ);
             var knobLegRevolutionAxisStartPoint = new Point3D(knobX,
-                -DrawerHandleDimensions.KnobHandleBaseWidth, -knobZ);
+                -KnobHandleDimensions.HandleBaseWidth, -knobZ);
             var knobLegRevolutionAxisEndPoint = new Point3D(knobX, knobLegY, -knobZ);
 
             var knobCapBaseDiameter = baseDiameter + 
-                DrawerHandleDimensions.KnobHandleCapBaseHandleBaseDiameterDifference;
-            var knobCapBaseY = -(DrawerHandleDimensions.KnobHandleBaseWidth + 
-                DrawerHandleDimensions.KnobHandleLegWidth);
+                KnobHandleDimensions.HandleCapBaseHandleBaseDiameterDifference;
+            var knobCapBaseY = -(KnobHandleDimensions.HandleBaseWidth + 
+                KnobHandleDimensions.HandleLegWidth);
             var knobCapBaseDisplacementStartPoint = new Point3D(knobX, 0, knobZ);
             var knobCapBaseDisplacementEndPoint = new Point3D(knobX, knobCapBaseY, 
                 knobZ);
 
             var knobCapDiameter = baseDiameter + 
-                DrawerHandleDimensions.KnobHandleCapHandleBaseDiameterDifference;
-            var knobCapY = -(DrawerHandleDimensions.KnobHandleBaseWidth + 
-                DrawerHandleDimensions.KnobHandleLegWidth +
-                DrawerHandleDimensions.KnobHandleCapBaseWidth);
+                KnobHandleDimensions.HandleCapHandleBaseDiameterDifference;
+            var knobCapY = -(KnobHandleDimensions.HandleBaseWidth + 
+                KnobHandleDimensions.HandleLegWidth + 
+                KnobHandleDimensions.HandleCapBaseWidth);
             var knobCapDisplacementStartPoint = new Point3D(knobX, 0, knobZ);
             var knobCapDisplacementEndPoint = new Point3D(knobX, knobCapY, knobZ);
 
@@ -521,11 +513,11 @@ namespace Builder
                 baseDiameter,
                 knobX,
                 knobZ, 
-                DrawerHandleDimensions.KnobHandleBaseWidth, 
+                KnobHandleDimensions.HandleBaseWidth, 
                 false,
-                DrawerHandleDimensions.KnobHandleBaseFilletEdgeRadius,
-                DrawerHandleDimensions.KnobHandleBaseFilletEdgeStartSetback,
-                DrawerHandleDimensions.KnobHandleBaseFilletEdgeEndSetback);
+                KnobHandleDimensions.HandleBaseFilletEdgeRadius,
+                KnobHandleDimensions.HandleBaseFilletEdgeStartSetback,
+                KnobHandleDimensions.HandleBaseFilletEdgeEndSetback);
 
             // Строим ножку с изгибом, соединяющую основание всей ручки-кнопки
             // с основанием шляпки.
@@ -545,10 +537,10 @@ namespace Builder
                 knobZ,
                 knobCapBaseDisplacementStartPoint,
                 knobCapBaseDisplacementEndPoint,
-                DrawerHandleDimensions.KnobHandleCapBaseWidth,
-                DrawerHandleDimensions.KnobHandleCapBaseFilletEdgeRadius,
-                DrawerHandleDimensions.KnobHandleCapBaseFilletEdgeStartSetback,
-                DrawerHandleDimensions.KnobHandleCapBaseFilletEdgeEndSetback);
+                KnobHandleDimensions.HandleCapBaseWidth,
+                KnobHandleDimensions.HandleCapBaseFilletEdgeRadius,
+                KnobHandleDimensions.HandleCapBaseFilletEdgeStartSetback,
+                KnobHandleDimensions.HandleCapBaseFilletEdgeEndSetback);
 
             // Строим шляпку, закругляя ее ребра.
             _wrapper.BuildCylinder(
@@ -558,10 +550,10 @@ namespace Builder
                 knobZ,
                 knobCapDisplacementStartPoint,
                 knobCapDisplacementEndPoint,
-                DrawerHandleDimensions.KnobHandleCapWidth,
-                DrawerHandleDimensions.KnobHandleCapFilletEdgeRadius,
-                DrawerHandleDimensions.KnobHandleCapFilletEdgeStartSetback,
-                DrawerHandleDimensions.KnobHandleCapFilletEdgeEndSetback);
+                KnobHandleDimensions.HandleCapWidth,
+                KnobHandleDimensions.HandleCapFilletEdgeRadius,
+                KnobHandleDimensions.HandleCapFilletEdgeStartSetback,
+                KnobHandleDimensions.HandleCapFilletEdgeEndSetback);
         }
 
         #endregion

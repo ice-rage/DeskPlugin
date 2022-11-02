@@ -260,6 +260,9 @@ namespace ParameterTests
             yield return new TestCaseData(
                 nameof(DeskParameters.DrawerDoorHeightDifference), 20)
                 .SetName(TestStaticProperties_GoodScenario_TestName);
+
+            yield return new TestCaseData(nameof(DeskParameters.HandleHeight), 20)
+                .SetName(TestStaticProperties_GoodScenario_TestName);
         }
 
         #endregion

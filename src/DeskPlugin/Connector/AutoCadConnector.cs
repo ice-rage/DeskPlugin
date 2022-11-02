@@ -29,7 +29,7 @@ namespace Connector
         #region Methods
 
         /// <summary>
-        /// Метод для запуска плагина из среды AutoCAD.
+        /// Командный метод для запуска плагина из среды AutoCAD.
         /// </summary>
         [CommandMethod("StartDeskPlugin")]
         public static void StartDeskPlugin()

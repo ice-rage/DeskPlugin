@@ -77,6 +77,11 @@ namespace Parameters
         /// </summary>
         public static int DrawerDoorHeightDifference => 20;
 
+        /// <summary>
+        /// Высота ручек ящиков для канцелярии.
+        /// </summary>
+        public static int HandleHeight => 20;
+
         #endregion
 
         /// <summary>
