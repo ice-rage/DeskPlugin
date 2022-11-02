@@ -12,11 +12,12 @@ namespace Parameters.Enums.Extensions
         #region Methods
 
         /// <summary>
-        /// Статический метод для получения описания параметра письменного стола.
+        /// Статический метод для получения текстового описания параметра письменного
+        /// стола.
         /// </summary>
         /// <param name="parameter"> Параметр, описание которого необходимо
         /// получить.</param>
-        /// <returns> Строковое описание параметра.</returns>
+        /// <returns> Текстовое описание параметра.</returns>
         public static string GetDescription(this DeskParameterType parameter)
         {
             var description = parameter.ToString();
