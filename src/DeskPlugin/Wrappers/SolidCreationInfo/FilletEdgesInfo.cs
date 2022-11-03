@@ -8,7 +8,7 @@
         #region Properties
 
         /// <summary>
-        /// Радиус закругления.
+        /// Радиус закругления ребер 3D-объекта.
         /// </summary>
         public double Radius { get; }
 

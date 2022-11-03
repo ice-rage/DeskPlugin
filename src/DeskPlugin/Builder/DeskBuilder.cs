@@ -45,7 +45,8 @@ namespace Builder
         /// <summary>
         /// Метод для построения 3D-модели.
         /// </summary>
-        /// <param name="parameters"> </param>
+        /// <param name="parameters"> Параметры, необходимые для построения 3D-модели.
+        /// </param>
         public void BuildDesk(DeskParameters parameters)
         {
             _parameters = parameters;

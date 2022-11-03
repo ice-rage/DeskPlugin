@@ -17,7 +17,7 @@ namespace Wrappers.Interfaces
         /// прямоугольник.</param>
         /// <param name="x"> Х-координата базовой точки прямоугольника.</param>
         /// <param name="y"> Y-координата базовой точки прямоугольника.</param>
-        /// <param name="width"> Ширина прямоугольника (длина стороны).</param>
+        /// <param name="width"> Ширина прямоугольника.</param>
         /// <param name="height"> Высота прямоугольника.</param>
         /// /// <returns> Полученный прямоугольник.</returns>
         object CreateRectangle(
@@ -67,10 +67,8 @@ namespace Wrappers.Interfaces
         /// параллелепипед.</param>
         /// <param name="x"> Х-координата базовой точки параллелепипеда.</param>
         /// <param name="y"> Y-координата базовой точки параллелепипеда.</param>
-        /// <param name="baseWidth"> Ширина основания параллелепипеда (длина стороны).
-        /// </param>
-        /// <param name="baseHeight"> Высота выдавливания основания параллелепипеда.
-        /// </param>
+        /// <param name="baseWidth"> Ширина основания параллелепипеда.</param>
+        /// <param name="baseHeight"> Высота основания параллелепипеда.</param>
         /// <param name="extrusionHeight"> Высота выдавливания основания
         /// для образования параллелепипеда.</param>
         /// <param name="isExtrusionCuttingOut"> Показывает, выполнять ли вырезание
